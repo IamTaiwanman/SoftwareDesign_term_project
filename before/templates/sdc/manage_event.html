@@ -1,0 +1,169 @@
+{% include 'header.html' %}
+
+<body>
+    {% with navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar %} {% endwith %}
+    <div class="container">
+        <div class="row" style="margin-top: 50px">
+            <div class="col-lg-6" style="height: 400px;">
+                <h3  style="display: inline; font-weight: 700;">
+                    <span class="label label-primary" style="margin-right: 15px;" id="EventLabel">活動</span>{{event.Event_name}}
+                </h3>
+                {% if check_leader %}
+                <button id="modify_event" class="btn" style="background-color: transparent;padding: 0px 10px 0px 0px;
+                margin-bottom: 10px;" data-toggle="modal" data-target="#event_modal">
+                    <img src="/static/images/gear.png" style="width:20px;" title="編輯">
+                </button> 
+                {%endif%}
+                <p style="margin-top: 20px; width:100%; height:300px; padding:15px 15px 15px 15px; background-color: #f8ffda;">
+                    <span id="event_description1" class="label label-info">活動描述</span>
+                    <br>
+                    <span style="font-size: 20px;">{{event.Event_info}}</span>
+                </p>
+            </div>
+            <div class="col-lg-6">
+                <span class="label label-success mana_member">成員</span>
+                <ul class="list-group" style="margin-top: 20px;">
+                    {% for m in member%} {% ifchanged %}
+                    <li class="list-group-item" id="member{{m.user_id.user_id}}" style="font-size: 20px;">
+                        {% if m.user_id.nickname %} {{m.user_id.nickname}} {% else %} {{m.user_id.user_name}} {% endif %} ({{m.identifier}}) {% if check_leader and m.user_id.user_name != username %}
+                        <button id="kicked" class="btn btn-danger" style="float: right; margin-right: 10px;" onclick="Kickout({{event.Event_id}},{{m.user_id.user_id}})">踢出</button>
+                        <!-- <button class="btn btn-warning" style="float: right; margin-right: 10px" data-toggle="modal" data-target="#history-modal"
+                            data-username="{{m.user_id.user_name}}">歷史紀錄</button> -->
+                        {% endif %} {% if m.user_id.user_name == username %}
+                        <!-- <button class="btn btn-warning" style="float: right; margin-right: 10px" data-toggle="modal" data-target="#history-modal"
+                            data-username="{{m.user_id.user_name}}">歷史紀錄</button> -->
+                        {% endif %}
+                    </li>
+                    {% endifchanged %} {% endfor %}
+                </ul>
+            </div>
+            
+        </div>
+    </div>
+    <div class="modal fade" id="item_info" role="dialog" style="margin-top:200px">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <ul id="manage_event_info">
+                        <li>活動Leader可編輯活動資訊</li>
+                        <li>活動Leader可踢出Member</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button id="event_info_close" type="button" class="btn btn-danger" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if check_leader %}
+    <div class="modal fade" id="event_modal" role="dialog" style=" top:7.5%;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title manage_edit_event" style="font-weight: bold;">修改活動資訊</h4>
+                </div>
+                <div class="modal-body">
+                    <input id="edit_title" type="text" value="{{event.Event_name}}" />
+                   
+                    <p id="public_private" style="margin-top: 25px;">公開/不公開</p>
+                    <select id="event-open">
+                        <option id="event_public" value="1">公開</option>
+                        <option id="event_private" value="0">不公開</option>
+                    </select>
+
+                    <p id="event_description" style="margin-top: 25px;">活動描述</p>
+                    <textarea id="event_info" style="margin-bottom: 20px;">{{event.Event_info}}</textarea>
+
+                    <p style="display: inline;">設定活動時間 :</p><br>
+                            
+                    
+                            <label>從</label>
+                            <input type="datetime-local" id="event_start_time" value="{{event.start_time|date:'Y-m-d\TH:i'}}">
+                            <label>開始，到</label>
+                            <input type="datetime-local" id="event_end_time" value="{{event.end_time|date:'Y-m-d\TH:i'}}"> 
+                            <label>結束</label>
+                    <p>設定私有活動之授權群組 <img src="/static/images/question.png" data-toggle="modal" data-target="#PPSettingIntro"></p>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#PPsetting" id="privateSetting" {% if event.open %}disabled {% endif %}>
+                          設定
+                        </button>
+                </div>
+                <div class="modal-footer">
+                    <button id="edit_info_event" class="btn btn-info maana_event_edit" onclick="modify_event()">修改</button>
+                    <button id="edit_info_closed" type="button" class="btn btn-danger" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div class="modal fade" id="PPSettingIntro" role="dialog" style="margin-top:7.5%">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <ul>
+                            <li>若該活動設定為公開，則所有玩家都可以搜尋的到該活動。</li>
+                            <li>若該活動設定為私有，則該活動只有授權之群組可以搜尋的到。</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">關閉</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="PPsetting" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:5%">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">設定私有活動之授權群組</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form>
+                    
+                    <h3 style="margin-top: 0px;margin-bottom: 15px;">選擇欲授權之群組 :</h3>
+                    
+                    {% for g in group_list %}
+                        {% ifchanged %}
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" name="selectedGroup" type="checkbox" id="inlineCheckbox{{g.foreignkey.group_id}}" value="{{g.foreignkey.group_id}}" {{ g.checked }}>
+                              <label class="form-check-label" for="inlineCheckbox{{g.foreignkey.group_id}}">{{g.foreignkey.group_name}}</label>
+                            </div>
+                        {% endifchanged %}
+                    {% endfor %}
+
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="selectedGroupSubmit" onclick="selectedGroupSubmit({{event.Event_id}})">保存</button>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endif %}
+
+    
+
+    
+
+    <input type="hidden" id="search_user"> {% load static %}
+    <script src="{% static 'js/manage_event.js' %}"></script>
+    <script>
+        var open = "{{event.open}}";
+        var event_id = "{{event.Event_id}}";
+        const COI_NAME = '';
+        const COI_URL = '/';
+        if (open == 'True') {
+            $("#event-open").val(1);
+        } else {
+            $("#event-open").val(0);
+        }
+    </script>
+    
+</body>
+
+
+
+</html>

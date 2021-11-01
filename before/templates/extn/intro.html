@@ -1,0 +1,571 @@
+{% include 'header.html' %}
+<html>
+<style>
+    .panel-heading >h3 {
+        color:#31708f;
+    }
+</style>
+    {% with navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar %} {% endwith %}
+    <body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    <!-- <img src="/static/images/logo.png"> -->
+                </h1>
+            </div>
+            <div class="col-lg-12">
+                <h1 id="classify" class="page-header">使用手冊</h1>
+            </div>
+            <div class="col-lg-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 id="intro_category_header">使用手冊下載</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="intro_category_body">
+                            <li><a class="link-2" href="/static/activites/EXTN-DEH_網站使用手冊.pptx">EXTN-DEH_網站使用手冊</a></li>
+                            <li><a class="link-2" href="/static/activites/踏溯台南工作坊Android使用手冊.pptx">踏溯台南工作坊Android使用手冊</a></li>
+                            <li><a class="link-2" href="/static/activites/踏溯台南工作訪iOS使用手冊.pptx">踏溯台南工作訪iOS使用手冊</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div id = "extn-video">
+                <div class="col-lg-12">
+                    <h1 id="classify" class="page-header">情境影片</h1>
+                </div>
+                <div class="col-lg-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 id="intro_category_header">使用情境影片</h3>
+                        </div>
+                        <div class="panel-body">
+                            <ul id="intro_category_body">
+                                <li><a class="link-2" href="https://www.youtube.com/watch?v=ht5Y4-xPxT4" target="_blank">文史脈流－踏溯台南之歡樂篇</a></li>
+                                <li><a class="link-2" href="https://www.youtube.com/watch?v=yFi8ueKYpC8" target="_blank">文史脈流－踏溯台南之邂逅篇</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id = "intro_category">
+                <div class="col-lg-12">
+                    <h1 id="classify" class="page-header">文化資產行動數位內容分類</h1>
+                </div>
+                <div class="col-lg-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 id="intro_category_header">文化資產行動數位內容的型態 (Category)</h3>
+                        </div>
+                        <div class="panel-body">
+                            <ul id="intro_category_body">
+                                <li>景點 (Point Of Interest, POI):
+                                    <br> 單一的景點介紹,導覽的最基本單位.
+                                </li>
+                                <li> 景線 (Line Of Interest, LOI):
+                                    <br>以導覽情境為考量,設計出有地域關聯性的一條導覽景點路線(A sequence of POIs),為一有參訪先後次序規劃的景線.</li>
+                                <li>景區 (Area Of Interest, AOI):
+                                    <br> 以一特定區域之文化資產為主軸,設計出有地域關聯性的一組導覽景點區域(A set of POIs),得為一有故事性的景區.
+                                </li>
+                                <li>主題故事/場域(Story/Site of Interest, SOI):
+                                    <br>針對一(i)跨越多個時間/空間之相關人/事/物的故事或(ii)某個特定場域之相關人/事/物的故事,設計出的一個包涵許多景點(POIs),景線(LOIs)和景區(AOI)的主題故事；
+                                    <br>一個主題故事 (SOI)可由多個(1)景點(POIs),(2)景線(LOIs), (3)景區(AOI), (4)景點(POIs)和景線(LOIs), (5)景點(POIs)和景區(AOI), (6)景線(LOIs)和景區(AOI), 或 (7)景點(POIs),景線(LOIs)和景區(AOI)組成。
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3">
+                <div class="panel panel-info">
+                    <div class="panel-heading" id = "Title_class">
+                        <h3 id="intro_class">文化資產行動數位內容的級別 (Class)</h3>
+                    </div>
+                    <div class="panel-body" id = "Content_class">
+                        <ul id="intro_class_body">
+                            <li>專家</li>
+                            <li>玩家</li>
+                            <li>導覽解說員</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 id="intro_Lang">文化資產行動數位內容的語言 (Language)</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="intro_Lang_body">
+                            <li>中文</li>
+                            <li>英文</li>
+                            <li>日文</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="panel panel-info" id = "Region_info">
+                    <div class="panel-heading">
+                        <h3 id="intro_region">中文版文化資產行動數位內容的地區 (Region)</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="intro_region_body">
+                            <li>可使用中文製作及導覽全世界國家及地區的景點/景線/景區(手機設定為中文模式)</li>
+                            <li>台灣: 以縣/市-鄉/鎮/區為單位區域</li>
+                            <li>世界各國: 以國家為單位區域</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="panel panel-info" id ="Region_info_2">
+                    <div class="panel-heading">
+                        <h3 id="intro_foreign">外文版文化資產行動數位內容的地區 (Region)</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="intro_foreign_body">
+                            <li>可使用英/日文製作及導覽全世界國家及地區的景點/景線/景區 (手機設定為英/日文模式)</li>
+                            <li> 英文: 台灣: 以縣/市-鄉/鎮/區為單位區域
+                                <br>世界各國: 以國家為單位區域</li>
+                            <li>日文: 台灣: 以縣/市-鄉/鎮/區為單位區域
+                                <br>日本:</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+        <!-- Portfolio Section -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 id="poi_class" class="page-header">景點(POI)內容分類</h1>
+            </div>
+            <div class="col-lg-12">
+                <div class="panel panel-info" id = "Subject_info">
+                    <div class="panel-heading">
+                        <h3 id="intro_subject">景點主題 (Subject)</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="intro_subject_body">
+                            <li>消逝的: 表示該景點已經不復存在，僅剩下歷史文獻記載當作參考。如台南府城的大/小城門和台北舊火車站。</li>
+                            <li>體驗的: 表示該景點仍然存在，並沒有因為時間的流逝而消失。如現存的歷史文化地景(台南府城的大南門)、產業(度小月)、文物(翠玉白菜)等。</li>
+                            <li>活化與再造的: 表示該景點的景觀是被還原過或重新修復的，再度賦予新的用途。如台南仁德十鼓文創園區(過去為台糖糖廠)和台北松山文創園區(過去為松山菸廠)。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2.5">
+                <div class="panel panel-info" id = "type_info">
+                    <div class="panel-heading">
+                        <h3 id="intro_type">景點類型 (Type)</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="intro_type_body">
+                            <li>自然景觀</li>
+                            <li>人文景觀</li>
+                            <li>事件</li>
+                            <li>人物</li>
+                            <li>產業</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2.5">
+                <div class="panel panel-info" id = "Format_info">
+                    <div class="panel-heading">
+                        <h3 id="intro_format">景點範疇 (Format)</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="intro_format_body">
+                            <li>古蹟,歷史建築,聚落</li>
+                            <li>遺址</li>
+                            <li>文化景觀</li>
+                            <li>自然景觀</li>
+                            <li>民俗及有關文物</li>
+                            <li>古物</li>
+                            <li>傳統藝術</li>
+                            <li>食衣住行育樂</li>
+                            <li>其它</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="panel panel-info" id = "Media_Type_info">
+                    <div class="panel-heading">
+                        <h3 id="intro_media">景點媒體類別 (Media Type)</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="intro_media_body">
+                            <li>照片 (Picture) + 文字</li>
+                            <li>影片 (Movie) + 文字</li>
+                            <li>聲音 (Audio) + 文字</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="panel panel-info" id = "Guide_info">
+                    <div class="panel-heading">
+                        <h3 id="poi_audio">景點語音導覽解說</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="poi_audio_body">
+                            <li>景點製作者得附加相關之語音導覽解說，讓使用者可更深入得了解相關景點。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="panel panel-info" id = "Permission_info">
+                    <div class="panel-heading">
+                        <h3 id="intro_right">景點使用權限</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="intro_right_body">
+                            <li>公開</li>
+                            <li>不公開(私有)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-lg-12">
+                <h5 class="page-header intro_link">此平台所提供的網站, 請輸入<a href="http://deh.csie.ncku.edu.tw">http://deh.csie.ncku.edu.tw</a> 系統會自動導入</h5>
+                <ul class="intro_link_body">
+                    <li>桌機版</li>
+                    <li>手機及平板電腦版</li>
+                </ul>
+            </div> -->
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 id="intro_dehApp" class="page-header">EXTN平台所提供的APP</h1>
+            </div>
+            <div class="col-lg-12">
+                <h4 class="page-header">Android</h4>
+            </div>
+            <div id = "android_app">
+                <div class="col-lg-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="intro_pure">純導覽</h3>
+                        </div>
+                        <div class="panel-body">
+                            <ul id="intro_pure_body">
+                                
+                                <li><strong>EXTN-DEH Mini</strong>:<br>
+                                展現附近/我的相片(image)、聲音(audio)和影片(video)景點(POIs)及附近/我的景線(Line Of Interests , LOIs)和景區(Area Of Interests, AOIs);播放景點(POI)內含之語音導覽解說;使用FB, Line及其它工具分享相關景點(POI)。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 id="intro_pureMake">純製作POIs</h3>
+                        </div>
+                        <div class="panel-body">
+                            <ul id="intro_pureMake_body">
+                                <li><strong>DEH Make II</strong>:<br>
+                                製作相片(image)、影片(video)和聲音(audio)景點(POI);錄製景點(POI)之相關語音導覽解說;使用FB, Line及其它工具分享製作好之景點(POI)。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <!-- <div class="col-lg-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 id="intro_make">導覽及製作POIs</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="intro_make_body">
+                            <li><strong>DEH Image</strong>:<br>
+                            製作相片(image)、影片(video)和聲音(audio)景點(POI);錄製景點(POI)之相關語音導覽解說;使用FB, Line及其它工具分享製作好之景點(POI)。</li>
+                            <li><strong>DEH Video</strong>:<br>
+                            製作影片(video)景點(POI)及錄製景點(POI)之相關語音導覽解說;展現我的影片(video)景點(POI);使用FB, Line及其它工具分享製作好之影片(video)景點(POI)。</li>
+                            <li><strong>DEH Audio</strong>:<br>
+                            製作聲音(audio)景點(POI)及錄製景點(POI)之相關語音導覽解說;展現我的聲音(audio)景點(POI);使用FB, Line及其它工具分享製作好之聲音(audio)景點(POI)。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div> -->
+            <!-- <div class="col-lg-12">
+                <h4 class="page-header">IOS</h4>
+            </div>
+            <div class="col-lg-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="intro_pure">純導覽</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="intro_pure_body2">
+                            <li><strong>DEH Micro</strong>:<br>
+                            展現附近相片(image)景點(POIs)、景線(Line Of Interests , LOIs)和景區(Area Of Interests, AOIs);使用FB, Line及其它工具分享相關景點(POI)。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div> -->
+             <div class="col-lg-12" id = "use_scenario">
+                <h1 id="intro_exp" class="page-header">平台可能使用對象及情境(不限定,不限制,請使用者發想)</h1>
+                <ul id="intro_exp_body">
+                    <li> 庶民生活圈:<br>
+                    社區發展協會存放其社區文史和自然景觀資料<br>
+                    原住民部落存放其文史紀錄和自然景觀資料</li>
+                    <li>場域:<br>
+                    農/林/漁/牧園區及民宿<br>
+                    自然景觀園區<br>
+                    博物館/文物館文資園區</li>
+                    <li>文史工作者/室:<br>
+                    數位化及存放其在地文史資料</li>
+                    <li>國家公園和國家風景區:<br>
+                    數位化及存放其自然景觀資內容</li>
+                    <li>文化資產導覽解說員</li>
+                    <li>出租車/計程車包車旅遊之司機導覽解說員</li>
+                    <li>傳統文化資產保留與運用:<br>
+                    古蹟<br>
+                    歷史建築<br>
+                    聚落<br>
+                    遺址<br>
+                    文化景觀</li>
+                    <li>學校教育:<br>
+                    高/中/小學數位行動/戶外/鄉土教學<br>
+                    大學文/史/觀光/休憩等學系之台灣古蹟文化資產相關課程<br>
+                    社區大學課程<br>
+                    大學通識課程</li>
+                    <li>普羅大眾深度旅遊日記</li>
+                    <li>場域主題故事</li>
+                </ul>
+            </div>
+            <div class="col-lg-12">
+                <h1 id="intro_status" class="page-header">平台使用情境列舉</h1>
+            </div>
+            <div class="col-lg-6">
+                <div class="panel panel-info" id = "intro_status1_info">
+                    <div class="panel-heading">
+                        <h3 id="intro_status1">情境 1: 社區發展協會/原住民部落導覽/場域/民宿</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="intro_status1_body">
+                            <li> 規劃景區(AOI)及製作景點(POIs):<br>
+                            古蹟,歷史建築,聚落<br>
+                            遺址<br>
+                            文化景觀<br>
+                            自然景觀<br>
+                            民俗及有關文物<br>
+                            消逝的/體驗的/活化與再造的自然景觀/人文景觀/事件/人物/產業之相片/影片/聲音各類POIs<br>
+                            </li>
+                            <li>自製景線(LOIs):<br>
+                            依各個主題特性，規劃及設計出相關之數條景線</li>
+                            <li>現地解說及導覽 - 社區,部落和場域解說員</li>
+                            <li>自助旅遊 – 利用手機或平板電腦之自助解說導覽</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="panel panel-info" id = "intro_status2_info">
+                    <div class="panel-heading">
+                        <h3 id="intro_status2">情境2:大/高/中/小學數位行動/戶外/鄉土教學&社區大學在地文化資產課程</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="intro_status2_body">
+                            <li>導覽課程一:<br>
+                            現有景點(POIs)=>設製景區(AOI)/景線(LOI)</li>
+                            <li>導覽課程二:<br>
+                            現有景點+老師/學生自製景點(POIs)(導覽前先製)<br>
+                            =>設製景區(AOI)/景線(LOI)</li>
+                            <li>導覽課程三:<br>
+                            現有景點(POIs)=>設製景區(AOI)/景線(LOI)+  老師/學生on-touring時收集內容 (調查,紀錄,照相, 錄影, 錄音)<br>
+                             =>導覽後製作景點(POIs)/景區(AOI)/景線(LOI) (家庭作業)</li>
+                            <li>Pure家庭作業 without現地導覽:<br>
+                            行動數位化在地鄉土文化資產製作景點(POIs)/景區(AOI)/景線(LOI)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="panel panel-info" id = "intro_status3_info">
+                    <div class="panel-heading">
+                        <h3 id="intro_status3">情境3:行動文化資產導覽解說員</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="intro_status3_body">
+                            <li>古蹟,歷史建築,聚落<br>
+                            遺址<br>
+                            文化景觀<br>
+                            自然景觀<br>
+                            民俗及有關文物<br>
+                            消逝的/體驗的/活化與再造的自然景觀/人文景觀/事件/人物/產業之相片/影片/聲音各類POIs</li>
+                            <li>公開景點及私房景點</li>
+                            <li>設計各類景線(LOIs) for 不同類之旅由個人或團體:<br>
+                            公開景線及私房景線</li>
+                            <li>現地解說及導覽</li>
+                            <li>可以一(或多)個旗艦(Flag-Ship)景點搭配周邊其它景點組成各類景線(LOI)和景區(AOI)</li>
+                            <li>可為解說員/場域廣告行銷之方法:<br>
+                            網路廣告 (藉由FB):全由公開景點組成<br>
+                            實際導覽:含一些公開景點及一些不公開之私房景點 (自己開發出私藏景點)</li>
+                            <li>分成春夏秋冬4種POIs/LOIs/AOIs</li>
+                            <li>每年更新內容:<br>
+                            同樣的場域: 不同的人/事/物<br>
+                            開發不同的場域:不同的人/事/地/物<br>
+                            去年的私房景點變成今年自己或他人的公開景點<br>
+                            今年再開發自己的不公開之私房景點<br>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="panel panel-info" id = "intro_status4_info">
+                    <div class="panel-heading">
+                        <h3 id="intro_status4">情境4: 文史工作者/室</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="intro_status4_body">
+                            <li>依擁有之文史資料及知識擇定目標文化資產景區(AOI)及製作景點(POIs):<br>
+                            古蹟,歷史建築,聚落<br>
+                            遺址<br>
+                            文化景觀<br>
+                            自然景觀<br>
+                            民俗及有關文物<br>
+                            消逝的/體驗的/活化與再造的自然景觀/人文景觀/事件/人物/產業之相片/影片/聲音各類POIs<br>
+                            </li>
+                            <li>設計各類主題景線(LOIs)</li>
+                            <li>目的:<br>
+                            文化資產保留及傳習<br>
+                            現地解說及導覽<br>
+                            來訪之自助旅遊人士</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="panel panel-info" id = "Platform_use_scenario5">
+                    <div class="panel-heading">
+                        <h3>情境5:普羅大眾深度旅遊</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul>
+                            <li> 旅行前:路線規劃(在DEH web site(http://deh.csie.ncku.edu.tw)<br>
+                            搜尋景點, 建立旅遊景線/景區 (LOI /AOI)<br>
+                            選擇專家或玩家景線/景區(LOI /AOI)<br>
+                            參考專家或玩家景線/景區(LOI /AOI),建立旅遊景線/景區 (LOI /AOI)</li>
+                            <li>旅行中:實地導覽(使用DEH Mini II)<br>
+                            及時景點介紹<br>
+                            目的地導航<br>
+                            實地導覽<br>
+                            使用DEH Make II照相,錄影,及錄音,製作POIs,上傳至DEH server</li>
+                            <li>旅行後:<br>
+                            在回程的車上或回家後, 到DEH web site(http://deh.csie.ncku.edu.tw) 整理完成上傳之相片/影片/聲音各類POIs<br>
+                            撰製景區和景線<br>
+                            完成旅遊日記, 放送至FB, Line, 微博, etc.,分享親朋好友 </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="panel panel-info" id = "Platform_use_scenario6">
+                    <div class="panel-heading">
+                        <h3>情境6:場域主題故事</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul>
+                            <li>目的:<br>
+                                打造及行銷特定場域，活動或故事
+                            </li>
+                            <li>原則:<br>
+                                依場域之實際或傳說的在地人物/事件/景觀/產業, 選定目標國內/外目標人士,打造主題場域或故事 (Site/Story Of Interest, SOI)<br>
+                            </li>
+                            <li>內容:<br>
+                                撰寫主題故內容(SOI);設計及規劃景線(LOIs)和景區(AOIs);製作景點(POIs)。<br>
+                            </li>
+                            <li>目標:<br>
+                                保留及宣傳在地文化資產;增加導覽解說員之工作機會及收入;提升在地產業、增加/創造在地工作機會。
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id = "app_download">
+            <div class="col-lg-12">
+                <h2 class="page-header">APP 下載</h2>
+            </div>
+            <div class="col-md-12">
+                <img class="android-1" src="/static/images/android.png">
+                <ul class="android-app-1">
+                    <li><a class="link-1" href="https://play.google.com/store/apps/details?id=com.mmlab.coi_mini">在Google Play上取得EXTN-DEH Mini(景點導覽)</a></li>
+                    <li><a class="link-1" href="https://play.google.com/store/apps/details?id=edu.deh.make_II">在Google Play上取得DEH Make II(景點製作)</a></li>
+                </ul>
+                <br>
+                <img class="apple-1" src="/static/images/apple.png">
+                <ul class="ios-app-1">
+                    <li><a class="link-1" href="https://itunes.apple.com/tw/app/extn-deh-mini/id1372654336?mt=8">在Apple Store上取得EXTN-DEH Mini(景點導覽)</a></li>
+                    <li><a class="link-1" href="https://itunes.apple.com/tw/app/deh-make-ii/id1324053125?mt=8">在Apple Store上取得DEH Make II(景點製作)</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- /.row -->
+        <hr>
+        <!-- Call to Action Section -->
+<!--        <div class="well">
+            <div class="row">
+                <div class="col-md-8">
+                    <ul class="handout-1">
+                        <li><a class="link-2" href="activites/DEH_Audio版_使用手冊.pptx">DEH_Audio版_使用手冊</a></li>
+                        <li><a class="link-2" href="activites/DEH_IMAGE_版_使用手冊.pptx">DEH_IMAGE_版_使用手冊</a></li>
+                        <li><a class="link-2" href="activites/DEH_lite版_使用手冊.pptx">DEH_lite版_使用手冊</a></li>
+                        <li><a class="link-2" href="activites/DEH_Make版_使用手冊.pptx">DEH_Make版_使用手冊</a></li>
+                        <li><a class="link-2" href="activites/DEH_Micro版_使用手冊.pptx">DEH_Micro版_使用手冊</a></li>
+                        <li><a class="link-2" href="activites/DEH_Mini版_使用手冊.pptx">DEH_Mini版_使用手冊</a></li>
+                        <li><a class="link-2" href="activites/DEH_Video版_使用手冊.pptx">DEH_Video版_使用手冊</a></li>
+                        <li><a class="link-2" href="activites/DEH_Narrator版_使用手冊.pdf">DEH_Narrator版_使用手冊</a></li>
+                        <li><a class="link-2" href="activites/DEH_行動裝置版網站_使用手冊.pptx">DEH_行動裝置版網站_使用手冊</a></li>
+                        <li><a class="link-2" href="activites/DEH_桌機版網站_使用手冊.pptx">DEH_桌機版網站_使用手冊</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <a class="btn btn-lg btn-default btn-block" id="handout-2">使用手冊下載</a>
+                </div>
+            </div>
+        </div>
+        <hr>
+-->
+    </div>
+    <script src="../static/bootstrap/js/jquery.js"></script>
+    <script src="../static/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    is_edit = false;
+    $(document).ready(function() {
+    $('.android-app-1').hide();
+    $('.ios-app-1').hide();
+    $('.handout-1').hide();
+    $('#sel_option').hide();
+    $('.check_login').hide();
+
+
+    $('.android-1').click(function() {
+        $('.android-app-1').toggle();
+    });
+    $('.apple-1').click(function() {
+        $('.ios-app-1').toggle();
+    });
+    $('#handout-2').click(function() {
+        $('.handout-1').toggle();
+    });
+    $('#go_browse').click(function() {
+        $('#sel_option').toggle();
+    });
+});
+
+    </script>
+</body>
+
+</html>

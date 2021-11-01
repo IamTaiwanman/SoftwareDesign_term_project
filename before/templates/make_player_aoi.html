@@ -1,0 +1,237 @@
+{% include 'header.html' %}
+<style>
+    .choose_aoi {
+        background-color: Transparent;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+    }
+</style>
+
+<body>
+    {% include 'navbar.html' %} {% include 'sidebar.html' %}
+    <div class="container">
+        <div class="col-lg-12">
+            <h2 id="aoi_make">景區製作</h2>
+            <br>
+            <div id="makeAOI">
+                <form id="make_aoiform">
+                    <!-- enctype="multipart/form-data" novalidate -->
+                    {% csrf_token %}
+                    <div id="map_aoi" class="col-lg-4" style="width:300px;height:500px;display: inline-block;"></div>
+                    <div id="select_aoi" class="col-lg-4" style="text-align: center; display: inline-block;height:400px; ">
+                        <p id="mySelf" style="display: inline;">我的創作 :</p>
+                        <select id="myOwn" style="width: 50px">
+                            <option value="-1" selected>否</option>
+                            <option value="{{username}}" >是</option>
+                        </select>
+                        <p style="display: inline;">我的群組 :</p>
+                        <select id="MyselfGroup" style="width: 100px">
+                            <option selected value="-1">未指定群組</option>
+                            {% for g in group %}                            
+                            <option value="{{g.group_id}}" >{{g.group_name}}</option>
+                            {% endfor %}
+                        </select>
+                        <img src="../static/images/question.png" data-toggle="modal" data-target="#filter_notes" style="display: inline;">
+                        
+                        <br>
+                        <p id="Region-1" style="display: inline;">地區</p>
+                        <select id="city" style="width: 150px">
+                            <option class="sel_option-1" selected disabled hidden value="NoValue">請選擇</option>
+                            {% for x in areas %} {% if language == '英文'%}
+                            <option value="{{x.area_country}}">{{x.area_country_en}}</option>
+                            } {% else %}
+                            <option value="{{x.area_country}}">{{x.area_country}}</option>
+                            {%endif%} {% endfor %}
+                        </select>
+                        <select id="areas" name="my_areas"></select>
+                        <img src="../static/images/question.png" data-toggle="modal" data-target="#subject_notes" style="display: inline;">
+                        <br>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="filter_key">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary" id="filter_btn">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </div>
+                            <img src="../static/images/question.png" data-toggle="modal" data-target="#search_notes" style="display: inline;">
+                        </div>
+                        <p id="poi_choose" style="background-color: #eef; text-align: center;">請選擇POI地區</p>
+                        <div class="poi_detail" style="height:450px;overflow-y: scroll;">
+                        </div>
+                        <br>
+                    </div>
+                    <div id="content_aoi" class="col-lg-4">
+                        <div class="col-lg-12" id="aoi_list" style="height: 300px;width: 400px;border:1px solid #abb; overflow-y: scroll">
+                            <ul id="items-list" class="moveable" style="list-style: none;margin: 0px;">
+                                
+                            </ul>
+                        </div>
+                        <div class="col-lg-12" style="height: 400px;width: 400px;background-color:#FFF0AC;">
+                            <label style="margin-top: 20px;">
+                                <p id="title:" style="display: inline;">標題:</p>
+                                <input name="aoi_title" id="aoi_title">
+                            </label>
+                            <p style="display: inline; float: inherit; margin-right: 5px;">
+                                <b id="description:">描述:</b>
+                                <textarea id="aoi_description" name="aoi_description" style="width: 250px; height: 150px;"></textarea>
+                            </p>
+                            <label style="margin-top: 20px;">
+                                <p id="aoi_contributor:" style="display: inline;">景區製作貢獻者:</p>
+                                <input name="contributor" id="contributor">
+                            </label>
+                            <br>
+                            <label>
+                                <p id="tool:" style="display: inline;">交通工具:</p>
+                                <select id="transportation" class="selectTool" name="transportation">
+                                    <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                                    <option id="car-1" value="開車">開車</option>
+                                    <option id="bike-1" value="騎腳踏車">騎腳踏車</option>
+                                    <option id="foot-1" value="走路">走路</option>
+                                </select>
+                            </label>
+                            <br>
+                            <label>
+                                <p id="public:" style="display: inline;">是否公開:</p>
+                                <select id="open" class="selectPublic" name="open">
+                                    <option id="yes" value="1">公開</option>
+                                    <option id="no" value="0">不公開</option>
+                                </select>
+                            </label>
+                            <img src="../static/images/question.png" data-toggle="modal" data-target="#open_notes" style="display: inline;">
+                            <br>
+                            <button type="submit" class="btn btn-default" style="margin:0 auto;" id="aoi_button">
+                                <p id="btn_confirm" style="display: inline;">確認</p>
+                            </button>
+                            <button type="button" class="btn btn-danger" style="margin:0 auto;" id="refresh" onclick="Refresh();">重選</button>
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: none">
+                        <input type="text" name="identifier" id="identifier" value={{role}}>
+                        <input type="text" name="aoi_make" id="a_make" value="make">
+                        <input type="text" name="aoi_owner" id="aoi_owner" value={{username}}>
+                    </div>
+                </form>
+                <div class="modal fade" id="aoi_modal" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>你登入的是玩家角色,製作景線/景區選擇公開時,只能包含公開景點!若要包含不公開景點,請以導覽解說員角色登入;或是刪除不公開景點!!</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="loading" hidden>
+                    <img src="../static/images/loading.gif" style="display: block; margin:380px 500px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="subject_notes" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content subject_notes-1">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="first_area" class="first_aoi_area">景區之行政區域為第一個景點之所在的行政區域</p>
+                    <p>- 點擊已選的景點即可刪除</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="search_notes" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content subject_notes-1">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <p>輸入關鍵字</p>
+                    <p>列表將會列出
+                        <ul>
+                            <li>標題</li>
+                            <li>製作者</li>
+                            <li>貢獻者</li>
+                            <li>所屬群組名稱</li>
+                        </ul>
+                        <p>以及內容與關鍵字相關的POIs</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="filter_notes" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content subject_notes-1">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <p>根據我的創作/我的群組選擇的結果，</p>
+                    <p>列表將會列出自己所創作的景點/屬於該群組的景點</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="open_notes" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content subject_notes-1">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <p>若選擇公開，則當該創作驗證通過時，所有使用者都可以查看到該創作的內容。</p>
+                    <p>若選擇不公開，則只有您自己可以查看該創作的內容。</p>
+                    <br>
+                    <p>注意 : 若您的創作包含 私有/尚未驗證/驗證不通過 之內容，則只能設定為不公開!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const AOI_URL = '/ajax_aoi';
+        const POI_URL = '/ajax_makeloi';
+        const HOME_URL = '/make_player';
+    </script> {% load static%}
+    {% if role == "docent" %}    
+        <script src="{% static 'js/docent_make_player_aoi.js' %}"></script>
+    {% else %} 
+        <script src="{% static 'js/make_player_aoi.js' %}"></script>
+    {% endif %} 
+    <script id="language_script"></script>
+    <script src="{% static 'js/navi.js' %}"></script>
+</body>
+
+</html>

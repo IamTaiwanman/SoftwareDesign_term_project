@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>文史脈流網站</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="/static/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/bootstrap/css/modern-business.css" rel="stylesheet">
+    <link href="/static/bootstrap/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/css/style.css" rel="stylesheet" type="text/css">
+    <script src="/static/bootstrap/js/jquery.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<style>
+.choose_soi {
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+}
+</style>
+
+<body>
+    {% include 'navbar.html' %} {% include 'sidebar.html' %}
+    <div class="container">
+        <div class="col-lg-12">
+            <h2 id="soi_edit-1">主題故事編輯</h2>
+            <br>
+            <div id="makeSOI">
+                <form id="make_soiform">
+                    <!-- enctype="multipart/form-data" novalidate -->
+                    {% csrf_token %}
+                    <div id="map_soi" class="col-lg-4" style="width:300px;height:500px;display: inline-block;"></div>
+                    <div id="select_soi" class="col-lg-4" style="text-align: center; display: inline-block;height:400px; ">
+                        <p id="mySelf" style="display: inline;">我的創作 :</p>
+                        <select id="myOwn" style="width: 50px">
+                            <option value="-1" selected>否</option>
+                            <option value="{{username}}" >是</option>
+                        </select>
+                        <p style="display: inline;">我的群組 :</p>
+                        <select id="MyselfGroup" style="width: 100px">
+                            <option selected value="-1">未指定群組</option>
+                            {% for g in group %}                            
+                            <option value="{{g.group_id}}" >{{g.group_name}}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <p id="Region-1" style="display: inline;">地區</p>
+                        <select id="city" style="width: 150px">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            {% for x in areas %} {% if language == '英文'%}
+                            <option value="{{x.area_country}}">{{x.area_country_en}}</option>
+                            {% else %}
+                            <option value="{{x.area_country}}">{{x.area_country}}</option>
+                            {%endif%} {% endfor %}
+                        </select>
+                        <select id="areas" name="my_areas"></select>
+                        <img src="../../static/images/question.png" data-toggle="modal" data-target="#subject_notes" style="display: inline;">
+                        <br>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="filter_key">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary" id="filter_btn">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </div>
+                            <img src="../../static/images/question.png" data-toggle="modal" data-target="#search_notes" style="display: inline;">
+                        </div>
+                        <p id="poi_choose" style="background-color: #eef; text-align: center;">請選擇POI地區</p>
+                        <div class="poi_detail" style="height:450px;overflow-y: scroll;">
+                        </div>
+                        <p id="loi_choose" style="background-color: #eef; text-align: center;">請選擇LOI地區</p>
+                        <div class="loi_detail" style="height:450px;overflow-y: scroll;">
+                        </div>
+                        <p id="aoi_choose" style="background-color: #eef; text-align: center;">請選擇AOI地區</p>
+                        <div class="aoi_detail" style="height:450px;overflow-y: scroll;">
+                        </div>
+                        <br>
+                    </div>
+                    <div id="content_soi" class="col-lg-4">
+                        <div class="col-lg-12" id="soi_list" style="height: 300px;width: 400px;border:1px solid #abb; overflow-y: scroll">
+                             <ul id="items-list" class="moveable" style="list-style: none;margin: 0px;">
+                            {% for id , type , values in xoi_list %}
+                                <li id="choosen_title{{type}}{{id}}" class="test" style="list-style-image: none;margin: 10px;border: 1px solid #ccc;padding: 4px;border-radius: 4px;color: #666;cursor: move;user-select: none; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;" onclick="removeXoi({{id}},'{{type}}',this);" draggable="true">
+                                    {{values.0}}
+                                    {% if values.3 == 0 %}
+                                        (尚未驗證/
+                                    {% elif values.3 == -1 %}
+                                        (驗證不通過/
+                                    {% else %}
+                                        (已驗證通過/
+                                    {% endif %}
+                                    {% if values.4 == true %}
+                                        公開)
+                                    {% elif values.4 == false %}
+                                        不公開)
+                                    {% else %}
+                                        公開)
+                                    {% endif %}
+                                    <input name="pid" id="pid{{ forloop.counter0 }}" type="hidden" value="{{id}}">
+                                    <input name="pid_type" id="pid_type{{ forloop.counter0 }}" type="hidden" value="{{type}}">
+                                    <p hidden="" name="choose_order" class="choose_order" id="choosen_id{{id}}">{{ forloop.counter }}</p>
+                                    <input type="hidden" name="final_valid_or_not" value="{{values.3}}">
+                                    <p hidden="" name="mylist_order" id="mylist_order{{id}}">{{ forloop.counter }}</p>
+                                    <input name="poi{{id}}" value="{{values.1}},{{values.2}}" type="hidden">
+                                    <input class="inputId{{id}}" id="{{type|slice:"0:1"}}id{{ forloop.counter0 }}" type="hidden" value="{{id}}" />
+                                    <input id="latlng{{forloop.counter0}}" type="hidden" value="{{values.1}},{{values.2}},{{type}}">
+                                </li>
+
+                                <!-- <div id="list{{type}}{{id}}" onclick="removeXoi({{id}},'{{type}}',this);" value="{{type}}{{id}}">
+                                    <p class="choose_order" style="display:inline;" id="choosen_id{{type}}{{id}}">{{ forloop.counter }}:</p>
+                                    <p style="margin-botton:0px; font-size:15px;display:inline; color:#00F; " id="choosen_title{{id}}">{{values.0}}</p>
+                                    <input class="inputId{{id}}" id="{{type|slice:"0:1"}}id{{ forloop.counter0 }}" type="hidden" value="{{id}}" />
+                                    <input id="latlng{{forloop.counter0}}" type="hidden" value="{{values.1}},{{values.2}},{{type}}">
+                                    <br>
+                                </div> -->
+                            {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-lg-12" style="height: 400px;width: 400px;background-color:#FFF0AC;">
+                            <label style="margin-top: 20px;"><p id="title:" style="display: inline;">標題:</p>
+                                <input name="soi_title" id="soi_title" value="{{edit_soi.soi_title}}">
+                            </label>
+                            <p style="display: inline; float: inherit; margin-right: 5px;"><b id="description:">描述:</b>
+                                <textarea id="soi_description" name="soi_description" style="width: 250px; height: 150px;">{{edit_soi.soi_description}}</textarea>
+                            </p>
+                            <label style="margin-top: 20px;"><p id="soi_contributor:" style="display: inline;">主題故事製作貢獻者:</p>
+                                <input name="contributor" id="contributor" value="{{edit_soi.contributor}}">
+                            </label>
+                            <br>
+                            <label><p id="public:" style="display: inline;">是否公開:</p>
+                                <select id="open" class="selectPublic" name="open">
+                                    <option id="yes" value="1">公開</option>
+                                    <option id="no" value="0">不公開</option>
+                                </select>
+                            </label>
+                            <br>
+                            <button type="submit" class="btn btn-default" style="margin:0 auto;" id="soi_button"><p id="btn_confirm" style="display: inline;">確認</p></button>
+                            <button type="button" class="btn btn-danger" style="margin:0 auto;" id="refresh" onclick="Refresh();">重選</button>
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: none">
+                        <input type="text" name="identifier" id="identifier" value={{role}}>
+                        <input type="text" name="soi_id" id="soi_id" value={{soi_id}}>
+                        <input type="text" name="soi_owner" id="soi_owner" value={{username}}>
+                    </div>
+                </form>
+                <div class="modal fade" id="soi_modal" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>你登入的是玩家角色,製作主題故事選擇公開時,只能包含公開景點/景線/景區!若要包含不公開景點景線/景區,請以導覽解說員角色登入;或是刪除不公開景點/景線/景區!!</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="loading" hidden><img src="/static/images/loading.gif" style="position: fixed; display: block; top:40%; right: 50%;"></div>
+            </div>
+        </div>
+    </div>
+    {% load static%}
+    <script src="{% static 'js/edit_player_soi.js' %}"></script>
+    <script id="language_script"></script>
+    <script type="text/javascript">
+    areas = "{{edit_soi.area_name_en}}";
+    languages = "{{language}}";
+    var area_list = []; //keep tracking of area user has choosen
+    $(document).ready(function() {
+        is_edit = true;
+        var open = "{{edit_soi.open}}";
+        var transportation = "{{edit_soi.transportation}}";
+        $("#transportation").val(transportation);
+        if (open == "True") {
+            $("#open").val(1);
+        } else {
+            $("#open").val(0);
+        }
+        $.ajax({
+            method: "POST",
+            data: {
+                area: areas
+            },
+            url: "/get_area",
+            success: function(data) {
+                $('#city').val(data.area[0].area_country);
+                if ($('#city').val()) {
+                    $('#city').trigger('change');
+                }
+                $('#areas').val(data.area[0].area_name_en);
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+    });
+    function GetXoi() {
+        var count = "{{edit_soixoi.count}}";
+        count = parseInt(count);
+        for (var i = 0; i < count; i++) {
+            area_list.push(areas);   //pretent the area with first area.
+            soi_num++;
+        }
+        initialMapMarker();
+    }
+    </script>
+    <script>
+        const SOI_URL = '/ajax_soi';
+        const XOI_URL = '/ajax_makesoi'
+        const HOME_URL = '/make_player';
+    </script>
+</body>
+
+</html>

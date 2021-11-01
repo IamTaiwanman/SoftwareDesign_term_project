@@ -1,0 +1,41 @@
+{
+  "name": "table2csv",
+  "version": "1.1.1",
+  "description": "A simple jQuery plugin to convert HTML tables to CSV",
+  "main": "src/table2csv.js",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmbraDiFenice/table2csv.git"
+  },
+  "keywords": [
+    "jquery-plugin",
+    "ecosystem:jquery"
+  ],
+  "author": "OmbraDiFenice",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/OmbraDiFenice/table2csv/issues"
+  },
+  "homepage": "https://ombradifenice.github.io/table2csv/",
+  "dependencies": {
+    "jquery": "^3.3.1"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "coverageDirectory": "coverage",
+    "coverageThreshold": {
+      "./src/table2csv.js": {
+        "branches": 98,
+        "statements": 98
+      }
+    }
+  }
+}

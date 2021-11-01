@@ -1,0 +1,106 @@
+{% include 'header.html' %}
+
+<body>
+    {% include 'navbar.html' %} {% include 'sidebar.html' %}
+    <div class="container">
+        <div class="row">
+            <hr>
+            <ul id="history_nav" class="nav nav-tabs">
+                <li class="active">
+                    <a id="historyIntro" href="#history_intro" data-toggle="tab">歷史記錄</a>
+                </li>
+                <li>
+                    <a id="webHistory" href="#web_history" data-toggle="tab">瀏覽軌跡</a>
+                </li>
+                <li>
+                    <a id="mobileHistory" href="#mobile_history" data-toggle="tab">行動軌跡</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="tab-content">
+
+            <div id="history_intro" class="tab-pane fade in active">
+                <h3>歷史記錄:記錄在DEH上所瀏覽過的POIs/LOIs/AOIs/SOIs</h3>
+                <ul id="history_intros">
+                    <li>瀏覽軌跡:在DEH網頁上所瀏覽過的POIs/LOIs/AOIs/SOIs資訊
+                    </li>
+                    <li>行動軌跡:在DEH APPs上所瀏覽過的POIs/LOIs/AOIs/SOIs資訊
+                    </li>
+                </ul>
+            </div>
+
+            <div id="web_history" class="tab-pane fade">
+                <div class="his_contents" style="margin-top: 5px">
+                    <select id="web_contents">
+                        <option id="w_poi" value="poi" selected>景點</option>
+                        <option id="w_loi" value="loi">景線</option>
+                        <option id="w_aoi" value="aoi">景區</option>
+                        <option id="w_soi" value="soi">主題故事</option>
+                    </select>
+                    <input type="date" id="wstart_date" required>
+                    <input type="time" id="wstart_time" required>
+                    <input type="date" id="wend_date" required>
+                    <input type="time" id="wend_time" required>
+                    <button type="button" id="web_search" class="btn btn-info">查詢</button>
+                </div>
+                <div class="col-lg-6" id="web-history-map" style="width: 50%; height: 400px"></div>
+                <div id="web_search_result" style="margin-left: 51%; height: 400px; overflow: auto">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <td style="width: 30%">時間</td>
+                                <td>標題</td>
+                            </tr>
+                        </thead>
+                        <tbody id="web_table">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="mobile_history" class="tab-pane fade">
+                <div class="his_contents" style="margin-top: 5px">
+                    <input type="hidden" id="mobile_contents" value="mobile">
+                    <input type="date" id="mstart_date" required>
+                    <input type="time" id="mstart_time" required>
+                    <input type="date" id="mend_date" required>
+                    <input type="time" id="mend_time" required>
+                    <button type="button" id="mobile_search" class="btn btn-info">查詢</button>
+                </div>
+                <div class="col-lg-6" id="mobile-history-map" style="width: 50%; height: 400px"></div>
+                <div id="mobile_search_result" style="margin-left: 51%; height: 400px; overflow: auto">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <td style="width: 30%">時間</td>
+                                <td>標題</td>
+                            </tr>
+                        </thead>
+                        <tbody id="mobile_table">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<input type="hidden" id="search_user" value="{{username}}">
+
+<script>
+    is_edit = false;
+    const COI_NAME = '';
+    const COI_URL = '/';
+    $(document).ready(function () {
+        if ($(window).width() < 1025) {
+            $("#web_search_result").css("margin-left", "0");
+            $("#mobile_search_result").css("margin-left", "0");
+            $("#web-history-map").css("width", "100%");
+            $("#mobile-history-map").css("width", "100%");
+        }
+    });
+</script> {% load static %}
+<script src="{% static 'js/my_history.js' %}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqPYQN7x5wDi_hOIoS0DiOHSC4i66IcDY&callback=initMap"></script>
+</html>

@@ -1,0 +1,84 @@
+{% include 'header.html' %}
+<html>
+	{% with navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar %} {% endwith %}
+	<body>
+	    <div class="container">
+	    	<div class="row">
+	    		<div class="col-md-12" style="margin-top: 50px">
+	    			<div class="panel panel-info">
+		    			<div class="panel panel-heading" align=center style="padding: 0">
+		    				<h2 >使用者資訊</h2>
+		    			</div>
+		    			<div class="panel panel-body">
+	                        <p id="user_name" style="display: inline;">用戶名稱:</p>
+	                        	<p style="display: inline;">{{ username }}</p>
+	                        <br>
+	                        <p id="user_nickname" style="display: inline;">姓名/暱稱:</p>
+	                        	<p style="display: inline;">{{ profile.nickname }}</p>
+	                        <br>
+	                        <p id="gender" style="display: inline;">性別:</p>
+		                        {%if profile.gender == 1%}
+		                        <p id="boy" style="display: inline;">男</p>
+		                        {% endif %}
+		                        {%if profile.gender == 0%}
+		                        <p id="girl" style="display: inline;">女</p>
+		                        {% endif %}
+		                    <br>
+	                        <p style="display: inline;">Email:{{ profile.email}}</p>
+	                        <br>
+	                        <p id="user_address" style="display: inline;">地址:</p>
+	                        	<p style="display: inline;">{{ profile.user_address }}</p>
+	                        <br>
+	                        <p id="birthday" style="display: inline;">生日:</p>
+	                        	<p style="display: inline;">{{ profile.birthday|date:"M d, Y" }}</p>
+	                        <br>
+	                        <p id="education" style="display: inline;">學歷:</p>
+	                        	<p style="display: inline;">{{ profile.education }}</p>
+	                        <br>
+	                        <p id="career" style="display: inline;">職業:</p>
+	                        	<p style="display: inline;">{{ profile.career }}</p>
+	                        <br>
+	                        <p id="homewebsite" style="display: inline;">網站:</p>
+	                        	<p style="display: inline;">{{ profile.homepage }}</p>
+	                        <br>
+	                        <p id="loginuser" style="display: inline;">登入角色:</p>
+	                            <b style="color:#00f">
+	                                {% if profile.role == "user" or profile.role == "leader" %}
+	                                <p id="user_role" style="display: inline;">玩家</p>
+	                                {% elif profile.role == "expert" or profile.role == "leader" %}
+	                                <p id="expert_role" style="display: inline;">專家</p>
+	                                {% endif %}
+	                                {% if profile.role == "docent" %}
+	                                <p id="docent_role" style="display: inline;">解說員</p>
+	                                {% endif %}
+	                                {% if profile.role == "identifier" %}
+	                                <p id="identifier_role" style="display: inline;">驗證者</p>
+	                                {% endif %}
+	                            </b>
+	                        </p>
+	                </div>
+	    		</div>
+	    		<button class="btn btn-default" id="edit_info" style="display: inline;">編輯個人資訊</button>
+	    		<input type="button" class="btn btn-warning" onclick="location.href='/{{coi}}/userpwd';" value="變更密碼" style="display: inline; margin-left: 20px " >
+                <br>
+                <br>
+                <div id="editinfo" hidden>
+                    <form name='myname' action='.' method='POST'>
+                        {% csrf_token %}
+                        <table>
+                            {{ profile_form.as_table }}
+                        </table>
+                        <input class="btn btn-success" type='submit' value='修改個人資料'>
+                    </form>
+                </div>
+
+	    	</div>
+	    </div>
+	<script>
+	    is_edit = false;
+	    $('#edit_info').click(function(event) {
+	        $('#editinfo').toggle();
+	    });
+    </script>
+	</body>
+</html>

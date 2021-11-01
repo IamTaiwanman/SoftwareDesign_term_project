@@ -1,0 +1,77 @@
+{% include 'header.html' %}
+
+<body>
+    {% include 'navbar.html' %} {% include 'sidebar.html' %}
+    <div class="container" style="font-family: Microsoft JhengHei;">
+        <div class="row">
+            <h1 id="logo_content" class="page-header">
+                <img id="logo" src="/static/images/logo.png">
+            </h1>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <h2 style="display: inline" id = "Title_group">走讀群組</h2>
+                        <img src="../static/images/question.png" data-toggle="modal" data-target="#walk_read" style="display: inline;">
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        {% for g in group_list %}
+            <table class="table" id = "group_table">
+                <thead>
+                    <tr>
+                        <th>
+                            <p style="color:#00F; display:inline;">{{g.foreignkey.group_name}}</p>
+                            <p style="color:#00F; display:inline;">(
+                                {% if g.foreignkey.verification == 0  %}
+                                    <b id = "Not_verified">尚未驗證 / </b>
+                                {% elif g.foreignkey.verification == 1  %}
+                                    <b id = "verified">已驗證通過 / </b>
+                                {% else %}
+                                    <b id = "Verification_failed">驗證不通過 / </b>
+                                {% endif %} 
+
+                                {% if g.foreignkey.open == 1 %}
+                                    <b id = "public">公開</b>
+                                {% else %}
+                                    <b id = "private">不公開</b>
+                                {% endif %}
+                            )</p>
+                            <input type = "button" id = "select_group" value = "選擇群組" class="btn btn-success" style="float: right; margin-right: 10px;" onclick="document.location='game_room/{{g.foreignkey.group_id}}'">
+                            <!--div class="btn btn-success" style="float: right; margin-right: 10px;" onclick="document.location='game_room/{{g.foreignkey.group_id}}'">選擇群組</div-->
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        {% endfor %}
+    </div>
+    <div class="modal fade" id="walk_read" role="dialog">
+        <div class="modal-dialog" style="width: 60vw!important">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">走讀群組介紹</h4>
+                </div>
+                <div class="modal-body" >
+                    <p>群組成員可點選相關群組查看個人之相關學堂紀錄;<br>
+                    群組建立者, 及組頭,老師, 頭目, …, 可點選相關群組進行出題、場次時間設定、檢視成員答題狀況…。<br>
+                    <b>功能介紹：</b><br>
+                    1.允許組頭在出題時以文字+語音解說+多媒體檔案(圖片/音訊/影片)的方式呈現題目，讓題目更加多樣化。<br>
+                    2.題型可分成是非題、選擇題、問答題和闖關尋奇；是非題、單選題和闖關尋奇方面，系統能即時比對正確答案，自動計算得分； 在問答題方面，組頭能在活動結束後透過網站批閱每位成員的答題 ，輸入一個客觀的評分給予成員們 ; 所有題目皆批改完畢後，系統會自動統計總分和計算排名以供線上查詢 。<br>
+                    3.提供組頭能夠選擇(i)要透過APP手動觸發走讀開始，或是(ii)預先設定走讀開始時間，使系統會自動在設定時間開始「文資學堂」活動。<br>
+                    4.成員們可以使用智慧型手機打開APP (DEH Mini II)，於設定之地理範圍與時段透過「文資學堂」功能，與其他成員進行寶箱搶答活動；成員們將在接近寶箱一定距離時發現寶箱，每個寶箱皆有一道題目和積分，點擊寶箱圖示即可開始進行答題。<br>
+                    5.每個成員也可以在進行搶答過後，透過APP中的答題歷史，來檢視自己在該場「文資學堂」搶答的紀錄，畫面上也會即時更新成員所獲得的總積分。
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button id="make_poi_close" type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+ {% load static %}
+</html>

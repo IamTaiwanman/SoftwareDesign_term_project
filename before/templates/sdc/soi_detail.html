@@ -1,0 +1,329 @@
+{% include 'header.html' %}
+<html>
+{% with navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar %} {% endwith %}
+<body>
+    <div class="container">
+        <div class="row">
+            <h1 class="page-header">
+                <img src="/static/images/logo.png">
+            </h1>
+            <!-- <h1><a id="soi_list-2" href="/player">主題故事列表</a></h1> -->
+            <div class="col-lg-6" style="height: 400px; overflow-y:scroll;">
+                <h2 id="title-1" class="page-header" style="display: inline; font-weight: 700;">標題</h2>
+                <h3 id="soi_title" style="display: inline; color: #0E7771; margin-left: 20px;">{{soi.soi_title}}</h3>
+                <input id="back" type=button class="btn btn-link" value="返回上一頁" onClick="javascript:history.go(-1);">
+                <hr>
+                <h4 id="soi_description" style="margin-top:10px;">{{soi.soi_description}}</h4>
+                <hr>
+            </div>
+            <div class="col-lg-6" id="googleMap" style="width: 50%; height: 400px"></div>
+            <div class="col-lg-6" style="height: 400px;">
+                {% if soi.identifier == 'docent' %}
+                <table class="table table-hover">
+                    <tr>
+                        <th id="docent_info-1">導覽員資訊</th>
+                        <td>
+                            <button type="button" class="choose_loi" style="margin-botton:0px; font-size:15px;" data-toggle="modal" data-target="#docent_modal">{{info.user_name}}</button>
+                        </td>
+                    </tr>
+                </table>
+                {% elif soi.identifier == 'user' %}
+                <table class="table table-hover">
+                    <tr>
+                        <th id="soi_contributor">主題故事製作貢獻者</th>
+                        <td>{{soi.contributor}}</td>
+                    </tr>
+                </table>
+                {% endif %}
+                <p id="poi_count" hidden>{{poi_count}}</p>
+                <div id="arrange_result"></div>
+                {% for p in all_poi %}
+                <p id="p_lati_{{ forloop.counter0 }}" hidden>{{p.latitude}}</p>
+                <p id="p_long_{{ forloop.counter0 }}" hidden>{{p.longitude}}</p>
+                <p id="p_loca_{{ forloop.counter0 }}" hidden>{{p.poi_address}}</p>
+                {% endfor %}{% for p in soi_list %} {% if p.poi_id %}
+                <table class="table table-hover" id="poi_table{{forloop.counter0}}">
+                    <tr>
+                        {% if p.poi_id.open|cut:" " == '1' or p.poi_id.identifier == "docent" or p.rights == username%}
+                        {% if p.poi_id.verification == 1 or p.poi_id.rights == username%}
+                        <th>
+                            <a id="title_{{ forloop.counter0 }}" href="/{{coi}}/poi_detail/{{p.poi_id.poi_id}}">{{p.poi_id.poi_title}}</a>(景點)</th>
+                        <!-- <th hidden><a id="p_loca_{{ forloop.counter0 }}" href="#">{{p.poi_id.poi_address}}</a></th> -->
+                        {% else %}
+                        <th>
+                            <a id="title_{{ forloop.counter0 }}" data-toggle="modal" href="#soi_unverification_modal">{{p.poi_id.poi_title}}</a>(景點)</th>
+                        <!-- <th hidden><a id="p_loca_{{ forloop.counter0 }}" href="#">{{p.poi_id.poi_address}}</a></th> -->
+                        {% endif %}
+                        {% else %}
+                        <th>
+                            <a id="title_{{ forloop.counter0 }}" data-toggle="modal" href="#soi_modal">{{p.poi_id.poi_title}}</a>(景點)</th>
+                        <!-- <th hidden><a id="p_loca_{{ forloop.counter0 }}" href="#">{{p.poi_id.poi_address}}</a></th> -->
+                        {% endif %}
+                    </tr>
+                </table>
+                {% endif %}
+                {% endfor %}
+                <div class="modal fade" id="soi_unverification_modal" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>此景點/景線/景區還未驗證</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="soi_modal" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>此為私有景點/景線/景區，請洽製作者</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <h4 id="loi_list-1">LOI 列表</h4> -->
+                <p id="loi_count" hidden>{{loi_count}}</p>
+                {% for lp in loi_poi %}
+                <p id="l_lati_{{ forloop.counter0 }}" hidden>{{lp.poi_id.latitude}}</p>
+                <p id="l_long_{{ forloop.counter0 }}" hidden>{{lp.poi_id.longitude}}</p>
+                <p id="l_loca_{{ forloop.counter0 }}" hidden>{{lp.poi_id.poi_address}}</p>
+                {%endfor%} {% for l in soi_list %} {% if l.loi_id %}
+                <table class="table table-hover" id="loi_table{{forloop.counter0}}">
+                    <tr>
+                        {% if l.loi_id.open == True or l.loi_id.identifier == "docent" or l.loi_id.route_owner == username %}
+                        {% if l.loi_id.verification == 1 or l.loi_id.route_owner == username %}
+                        <th>
+                            <a id="title_{{ forloop.counter0 }}" href="/{{coi}}/loi_detail/{{l.loi_id.route_id}}">{{l.loi_id.route_title}}</a>(景線)</th>
+                        {% else %}
+                        <th>
+                            <a id="title_{{ forloop.counter0 }}" data-toggle="modal" href="#soi_unverification_modal">{{l.loi_id.route_title}}</a>(景線)</th>
+                        {% endif %}
+                        {% else %}
+                        <th>
+                            <a id="title_{{ forloop.counter0 }}" data-toggle="modal" href="#soi_modal">{{l.loi_id.route_title}}</a>(景線)</th>
+                        {% endif %}
+                    </tr>
+                </table>
+                {% endif %}
+                {% endfor %}
+                <!-- <h4 id="aoi_list-1">AOI 列表</h4> -->
+                <p id="aoi_count" hidden>{{aoi_count}}</p>
+                {% for ap in aoi_poi %}
+                <p id="a_lati_{{ forloop.counter0 }}" hidden>{{ap.poi_id.latitude}}</p>
+                <p id="a_long_{{ forloop.counter0 }}" hidden>{{ap.poi_id.longitude}}</p>
+                <p id="a_loca_{{ forloop.counter0 }}" hidden>{{ap.poi_id.poi_address}}</p>
+                {% endfor %} {% for a in soi_list %} {% if a.aoi_id %}
+                <table class="table table-hover" id="aoi_table{{forloop.counter0}}">
+                    <tr>
+                        {% if a.aoi_id.open == True or a.aoi_id.identifier == "docent" or a.aoi_id.owner %}
+                        {% if a.aoi_id.verification == 1 or a.aoi_id.owner == username %}
+                        <th>
+                            <a id="title_{{ forloop.counter0 }}" href="/{{coi}}/aoi_detail/{{a.aoi_id.aoi_id}}">{{a.aoi_id.title}}</a>(景區)</th>
+                        <!-- <th hidden><a id="loca_{{ forloop.counter0 }}" href="#">{{a.aoi_id.address}}</a></th> -->
+                        {% else %}
+                        <th>
+                            <a id="title_{{ forloop.counter0 }}" data-toggle="modal" href="#soi_unverification_modal">{{a.aoi_id.title}}</a>(景區)</th>
+                        <!-- <th hidden><a id="loca_{{ forloop.counter0 }}" href="#">{{a.aoi_id.address}}</a></th> -->
+                        {% endif%}
+                        {% else %}
+                        <th>
+                            <a id="title_{{ forloop.counter0 }}" data-toggle="modal" href="#soi_modal">{{a.aoi_id.title}}</a>(景區)</th>
+                        <!-- <th hidden><a id="loca_{{ forloop.counter0 }}" href="#">{{a.aoi_id.address}}</a></th> -->
+                        {% endif %}
+                    </tr>
+                </table>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="modal fade" id="poi_not_in_coi" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>此景點未在COI</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="docent_modal" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="name" style="display: inline;">姓名:</p>{{soi_docent.name}}</p>
+                        <p id="telphone" style="display: inline;">電話:</p>{{soi_docent.telphone}}</p>
+                        <p id="cellphone" style="display: inline;">手機:</p>{{soi_docent.cellphone}}</p>
+                        <p>email:{{info.email}}</p>
+                        <p id="social_id" style="display: inline;">FB/LINE或其他帳號:</p>{{soi_docent.social_id}}</p>
+                        <p id="user_address" style="display: inline;">地址:</p>{{info.user_address}}</p>
+                        <p id="docent_language" style="display: inline;">導覽解說使用語言:</p>{{soi_docent.docent_language}}</p>
+                        <p id="charge" style="display: inline;">收費標準:</p>{{soi_docent.charge}}</p>
+                        <p id="docent_intro" style="display: inline;">自我介紹:</p>{{soi_docent.introduction}}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            var type_arr = "{{xoi_type}}";
+            type_arr = JSON.parse(type_arr); //string to array
+            var last_append = 0;
+            var poi_idx = 0;
+            var loi_idx = 0;
+            var aoi_idx = 0;
+            var arrange_result = document.getElementById('arrange_result');
+
+            {% for x in check_list %}
+            {% if x == 0 %}
+            $('#title_{{forloop.counter0}}').attr('data-toggle', 'modal');
+            $('#title_{{forloop.counter0}}').attr('href', '#poi_not_in_coi');
+            {% endif %}
+            {% endfor %}
+
+            for (var i = 0; i < type_arr.length; i++) {
+                if (type_arr[i] == 1) { //loi
+                    if (i == 0) {
+                        $('#loi_table' + i).appendTo('#arrange_result');
+                    } else {
+                        if (last_append == 0) {
+                            $('#loi_table' + i).insertAfter($('#poi_table' + (i - 1)));
+                        } else if (last_append == 2) {
+                            $('#loi_table' + i).insertAfter($('#aoi_table' + (i - 1)));
+                        } else {
+                            $('#loi_table' + i).insertAfter($('#loi_table' + (i - 1)));
+                        }
+                    }
+                    loi_idx++;
+                } else if (type_arr[i] == 2) { //aoi
+                    if (i == 0) {
+                        $('#aoi_table' + i).appendTo('#arrange_result');
+                    } else {
+                        if (last_append == 0) {
+                            $('#aoi_table' + i).insertAfter($('#poi_table' + (i - 1)));
+                        } else if (last_append == 2) {
+                            $('#aoi_table' + i).insertAfter($('#aoi_table' + (i - 1)));
+                        } else {
+                            $('#aoi_table' + i).insertAfter($('#loi_table' + (i - 1)));
+                        }
+                    }
+                    aoi_idx++;
+                } else if (type_arr[i] == 0) { //poi
+                    if (i == 0) {
+                        $('#poi_table' + i).appendTo('#arrange_result');
+                    } else {
+                        if (last_append == 0) {
+                            $('#poi_table' + i).insertAfter($('#poi_table' + (i - 1)));
+                        } else if (last_append == 2) {
+                            $('#poi_table' + i).insertAfter($('#aoi_table' + (i - 1)));
+                        } else {
+                            $('#poi_table' + i).insertAfter($('#loi_table' + (i - 1)));
+                        }
+                    }
+                    poi_idx++
+                }
+                last_append = type_arr[i];
+            }
+        });
+
+        function SoiMap() {
+            is_edit = false;
+            var title = $("#aoi_title").text();
+            var p_count = parseFloat($("#poi_count").text());
+            var l_count = parseFloat($("#loi_count").text());
+            var a_count = parseFloat($("#aoi_count").text());
+            var locations = [];
+            p_conf_lati = parseFloat($("#p_lati_" + 0).text()); //第一個poi經緯度
+            p_conf_long = parseFloat($("#p_long_" + 0).text());
+
+            for (var i = 0; i < p_count; i++) {
+                p_loca = $("#p_loca_" + i).text();
+                p_lati = parseFloat($("#p_lati_" + i).text()); //各點poi經緯度
+                p_long = parseFloat($("#p_long_" + i).text());
+                locations.push([p_loca, p_lati, p_long]);
+            }
+            for (var i = 0; i < l_count; i++) {
+                l_loca = $("#l_loca_" + i).text();
+                l_lati = parseFloat($("#l_lati_" + i).text());
+                l_long = parseFloat($("#l_long_" + i).text());
+                locations.push([l_loca, l_lati, l_long]);
+            }
+            for (var i = 0; i < a_count; i++) {
+                a_loca = $("#a_loca_" + i).text();
+                a_lati = parseFloat($("#a_lati_" + i).text());
+                a_long = parseFloat($("#a_long_" + i).text());
+                locations.push([a_loca, a_lati, a_long]);
+            }
+            if (!p_count) {
+                if (l_count) {
+                    p_conf_lati = parseFloat($("#l_lati_" + 0).text());
+                    p_conf_long = parseFloat($("#l_long_" + 0).text());
+                } else {
+                    p_conf_lati = parseFloat($("#a_lati_" + 0).text());
+                    p_conf_long = parseFloat($("#a_long_" + 0).text());
+                }
+            }
+            var map = new google.maps.Map(document.getElementById('googleMap'), {
+                zoom: 10,
+                center: new google.maps.LatLng(p_conf_lati, p_conf_long),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+            var infowindow = new google.maps.InfoWindow();
+            var marker;
+            for (var i = 0; i < (p_count + l_count + a_count); i++) {
+                if (i < p_count) { //poi
+                    var icon_type = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (i + 1) + '|FE6256|000000';
+                } else if (i >= p_count && i < p_count + l_count) {
+                    var icon_type = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (i + 1) + '|58ABFE|000000';
+                } else {
+                    var icon_type = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (i + 1) + '|1AFD9C|000000';
+                }
+                marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(locations[i][1], locations[i][2], locations[i][3]),
+                    map: map,
+                    icon: icon_type
+                });
+                google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                    return function () {
+                        infowindow.setContent(locations[i][0]);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+            }
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqPYQN7x5wDi_hOIoS0DiOHSC4i66IcDY&callback=SoiMap"></script>
+</body>
+
+</html>

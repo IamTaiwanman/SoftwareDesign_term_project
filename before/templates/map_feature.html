@@ -1,0 +1,429 @@
+{% include 'header.html' %}
+
+<body>
+    {% include 'navbar.html' %}
+    <div class="container">
+        <div class="row">
+            <h1 class="page-header">
+                <img src="../static/images/logo.png">
+            </h1>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="inline_opt">內容型態</h3>
+                    <h3 class="inline_opt">地區</h3>
+                    <h3 class="inline_opt">主題</h3>
+                    <h3 class="inline_opt">類型</h3>
+                    <h3 class="inline_opt">範疇</h3>
+                    <h3 class="inline_opt">媒體類別</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-xs-2" style="position: relative;left: -10px;">
+                        <select id="content">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            <option value="s_poi">景點</option>
+                            <option value="s_loi">景線</option>
+                            <option value="s_aoi">景區</option>
+                            <option value="s_soi">故事</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-2" style="position: relative;left: -50px;">
+                        <select id="city">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            {% for x in areas %}
+                            <option value="{{x.area_country}}">{{x.area_country}}</option>
+                            {% endfor %}
+                        </select>
+                        <select id="areas">
+                        </select>
+                    </div>
+                    <div class="col-xs-2" style="position: relative;left: -25px;">
+                        <select id="topic">
+                            <option value="all">全部</option>
+                            <option value="體驗的">體驗的</option>
+                            <option value="活化再造的">活化再造的</option>
+                            <option value="消逝的">消逝的</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-2" style="position: relative;left: -47px;">
+                        <select id="type">
+                            <option value="all">全部</option>
+                            <option value="人文">人文</option>
+                            <option value="事件">事件</option>
+                            <option value="人文景觀">人文景觀</option>
+                            <option value="自然景觀">自然景觀</option>
+                            <option value="產業">產業</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-2" style="position: relative;left: -70px;">
+                        <select id="category">
+                            <option value="all">全部</option>
+                            <option value="古蹟、歷史建築、聚落">古蹟、歷史建築、聚落</option>
+                            <option value="遺址">遺址</option>
+                            <option value="文化景觀">文化景觀</option>
+                            <option value="傳統藝術">傳統藝術</option>
+                            <option value="民俗及相關文物">民俗及相關文物</option>
+                            <option value="古物">古物</option>
+                            <option value="自然景觀">自然景觀</option>
+                            <option value="食衣住行育樂">食衣住行育樂</option>
+                            <option value="其它">其它</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-2" style="position: relative;left: -80px;">
+                        <select id="media">
+                            <option value="all">全部</option>
+                            <option value="相片">相片</option>
+                            <option value="聲音">聲音</option>
+                            <option value="影片">影片</option>
+                        </select>
+                    </div>
+                </div>
+                <!--panel body-->
+            </div>
+            <div class="poi_show" hidden>
+                <div class="col-lg-12">
+                    <h2 class="poi_detail">景點列表</h2>
+                </div>
+            </div>
+            <div class="loi_show" hidden>
+                <div class="col-lg-12">
+                    <h2 class="loi_detail">景線列表</h2>
+                </div>
+            </div>
+            <div class="aoi_show" hidden>
+                <div class="col-lg-12">
+                    <h2 class="aoi_detail">景區列表</h2>
+                </div>
+            </div>
+            <div class="soi_show" hidden>
+                <div class="col-lg-12">
+                    <h2 class="soi_detail">故事列表</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    var poi_update = true;
+    var loi_update = true;
+    var aoi_update = true;
+    var soi_update = true;
+    var poi_filter = false; //topic type category media can't filter.
+    var topic,type,category,media;
+    $(window).on('beforeunload', function() {
+        localStorage.setItem('content', $("#content").val());
+        localStorage.setItem('city', $("#city").val());
+        localStorage.setItem('area', $("#areas").val());
+    });
+    window.onload = function() {
+        var old_content = localStorage.getItem('content');
+        var old_city = localStorage.getItem('city');
+        var old_area = localStorage.getItem('area');
+        if (old_content != null) {
+            $('#content').val(old_content);
+            $("#content").trigger("change");
+            $('#city').trigger("change");
+            $('#areas').trigger("change");
+        }
+        if(old_city != null){
+            $('#city').val(old_city);
+            $("#city").trigger("change");
+        }
+    }
+    $("#content").change(function() {      //景點景線景區故事篩選
+        content = $(this).val();
+        if (content == 's_loi' || content == 's_aoi' || content == 's_soi') {
+            $('#topic').hide();
+            $('#type').hide();
+            $('#category').hide();
+            $('#media').hide();
+        } else {
+            $('#topic').fadeIn();
+            $('#type').fadeIn();
+            $('#category').fadeIn();
+            $('#media').fadeIn();
+        }
+        var urls = "{% url 'ajax_player' %}";
+        var data = {
+            content: content
+        }
+        $.ajax({
+            method: "POST",
+            data: data,
+            url: urls,
+            success: function(data) {
+                res = Object.keys(data)[0]; //key name
+                if (res == 'all_poi') {
+                    $(".poi_show").show();
+                    $(".loi_show").hide();
+                    $(".aoi_show").hide();
+                    $(".soi_show").hide();
+                    var counts = data.all_poi.length;
+                    if (poi_update) {
+                        for (var i = 0; i < counts; i++) {
+                            $('.poi_detail').append(
+                                '<table class="table table-hover" style="margin-bottom:0px;"><th><a style="font-size:15px;" href="/poi_detail/' + data.all_poi[i].poi_id + '">' + data.all_poi[i].poi_title + '</a></th></table>'
+                            );
+                        }
+                        poi_object = data;
+                        poi_update = false;
+                    }
+                } else if (res == 'all_loi') {
+                    $(".loi_show").show();
+                    $(".poi_show").hide();
+                    $(".aoi_show").hide();
+                    $(".soi_show").hide();
+                    var counts = data.all_loi.length;
+                    if (loi_update) {
+                        for (var i = 0; i < counts; i++) {
+                            $('.loi_detail').append(
+                                '<table class="table table-hover" style="margin-bottom:0px;"><th><a style="font-size:15px;" href="/loi_detail/' + data.all_loi[i].route_id + '">' + data.all_loi[i].route_title + '</a></th></table>'
+                            );
+                        }
+                        loi_object = data;
+                        loi_update = false;
+                    }
+                } else if (res == 'all_aoi') {
+                    $(".aoi_show").show();
+                    $(".loi_show").hide();
+                    $(".poi_show").hide();
+                    $(".soi_show").hide();
+                    var counts = data.all_aoi.length;
+                    if (aoi_update) {
+                        for (var i = 0; i < counts; i++) {
+                            $('.aoi_detail').append(
+                                '<table class="table table-hover" style="margin-bottom:0px;"><th><a style="font-size:15px;" href="/aoi_detail/' + data.all_aoi[i].aoi_id + '">' + data.all_aoi[i].title + '</a></th></table>'
+                            );
+                        }
+                        aoi_object = data;
+                        aoi_update = false;
+                    }
+                } else if (res == 'all_soi') {
+                    var counts = data.all_soi.length;
+                    $(".soi_show").show();
+                    $(".loi_show").hide();
+                    $(".aoi_show").hide();
+                    $(".poi_show").hide();
+                    if (soi_update) {
+                        for (var i = 0; i < counts; i++) {
+                            $('.soi_detail').append(
+                                '<table class="table table-hover" style="margin-bottom:0px;"><th><a style="font-size:15px;" href="/soi_detail/' + data.all_soi[i].soi_id + '">' + data.all_soi[i].soi_title + '</a></th></table>'
+                            );
+                        }
+                        soi_object = data;
+                        soi_update = false;
+                    }
+                }
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+    });
+    $('#city').change(function() {         //抓地區資料
+        var city = $(this).val();
+        var urls = "{% url 'feed_area' %}";
+        var data = {
+            city: city
+        }
+        $.ajax({
+            method: "POST",
+            data: data,
+            url: urls,
+            success: function(data) {
+                var area_count = data.area.length;
+                var area_select = $('#areas').empty();
+                area_select.append('<option vlaue="all">全部</option>');
+                for (var i = 0; i < area_count; i++) {
+                    area_select.append(
+                        $('<option></option>').val(data.area[i].area_name_en).html(data.area[i].area_name_ch)
+                    );
+                }
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+    });
+    $('#areas').change(function() {        //地區分類篩選
+        var areas = $(this).val();
+        var category = $('#category').val();
+        var citys = $('#city').val();
+        var topic = $('#topic').val();
+        var type = $('#type').val();
+        var contents = $("#content").val();
+        if (contents == '') {
+            event.preventDefault();
+            alert("請先選擇景點景線景區");
+        }
+        var urls = "{% url 'ajax_area' %}";
+        var data = {
+            citys: citys,
+            areas: areas,
+            topic:topic,
+            type:type,
+            category:category,
+            contents: contents
+        }
+        $.ajax({
+            method: "POST",
+            data: data,
+            url: urls,
+            success: function(data) {
+                if (content == 's_poi') {
+                    $('.poi_detail').empty();
+                    var counts = data.all_poi.length;
+                    for (var i = 0; i < counts; i++) {
+                        $('.poi_detail').append(
+                            '<table class="table table-hover" style="margin-bottom:0px;"><th><a style="font-size:15px;" href="/poi_detail/' + data.all_poi[i].poi_id + '">' + data.all_poi[i].poi_title + '</a></th></table>'
+                        );
+                    }
+                    poi_filter = true;
+
+                } else if (content == 's_loi') {
+                    $('.loi_detail').empty();
+                    var counts = data.all_loi.length;
+                    for (var i = 0; i < counts; i++) {
+                        $('.loi_detail').append(
+                            '<table class="table table-hover" style="margin-bottom:0px;"><th><a style="font-size:15px;" href="/loi_detail/' + data.all_loi[i].route_id + '">' + data.all_loi[i].route_title + '</a></th></table>'
+                        );
+                    }
+                    poi_filter = false;
+                } else if (content == 's_aoi') {
+                    $('.aoi_detail').empty();
+                    var counts = data.all_aoi.length;
+                    for (var i = 0; i < counts; i++) {
+                        $('.aoi_detail').append(
+                            '<table class="table table-hover" style="margin-bottom:0px;"><th><a style="font-size:15px;" href="/aoi_detail/' + data.all_aoi[i].aoi_id + '">' + data.all_aoi[i].title + '</a></th></table>'
+                        );
+                    }
+                    poi_filter = false;
+                } else{
+                    $('.soi_detail').empty();
+                    var counts = data.all_soi.length;
+                    for (var i = 0; i < counts; i++) {
+                        $('.soi_detail').append(
+                            '<table class="table table-hover" style="margin-bottom:0px;"><th><a style="font-size:15px;" href="/soi_detail/' + data.all_soi[i].soi_id + '">' + data.all_soi[i].soi_title + '</a></th></table>'
+                        );
+                    }
+                    poi_filter = false;
+                }
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+
+    });
+    $('#topic').change(function(){
+        topic = $(this).val();
+        var category = $('#category').val();
+        var type = $('#type').val();
+        var citys = $('#city').val();
+        var areas = $('#areas').val();
+        var contents = $("#content").val();
+        var urls = "{% url 'ajax_area' %}";
+        if(poi_filter){
+            var data = {
+                topic: topic,
+                type:type,
+                category:category,
+                citys: citys,
+                areas: areas,
+                contents:contents
+            }
+            $.ajax({
+                method: "POST",
+                data: data,
+                url: urls,
+                success: function(data) {
+                    $('.poi_detail').empty();
+                        var counts = data.all_poi.length;
+                        for (var i = 0; i < counts; i++) {
+                            $('.poi_detail').append(
+                                '<table class="table table-hover" style="margin-bottom:0px;"><th><a style="font-size:15px;" href="/poi_detail/' + data.all_poi[i].poi_id + '">' + data.all_poi[i].poi_title + '</a></th></table>'
+                            );
+                        }
+                    },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        }
+    });
+    $('#type').change(function(){
+        var type = $(this).val();
+        var category = $('#category').val();
+        var topic = $('#topic').val();
+        var citys = $('#city').val();
+        var areas = $('#areas').val();
+        var contents = $("#content").val();
+        var urls = "{% url 'ajax_area' %}";
+        if(poi_filter){
+            var data = {
+                topic: topic,
+                type: type,
+                category:category,
+                citys: citys,
+                areas: areas,
+                contents:contents
+            }
+            $.ajax({
+                method: "POST",
+                data: data,
+                url: urls,
+                success: function(data) {
+                    $('.poi_detail').empty();
+                        var counts = data.all_poi.length;
+                        for (var i = 0; i < counts; i++) {
+                            $('.poi_detail').append(
+                                '<table class="table table-hover" style="margin-bottom:0px;"><th><a style="font-size:15px;" href="/poi_detail/' + data.all_poi[i].poi_id + '">' + data.all_poi[i].poi_title + '</a></th></table>'
+                            );
+                        }
+                    },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        }
+    });
+    $('#category').change(function(){
+        var category = $(this).val();
+        var type = $('#type').val();
+        var topic = $('#topic').val();
+        var citys = $('#city').val();
+        var areas = $('#areas').val();
+        var contents = $("#content").val();
+        var urls = "{% url 'ajax_area' %}";
+        console.log(category);
+        if(poi_filter){
+            var data = {
+                topic: topic,
+                type: type,
+                category: category,
+                citys: citys,
+                areas: areas,
+                contents:contents
+            }
+            $.ajax({
+                method: "POST",
+                data: data,
+                url: urls,
+                success: function(data) {
+                    $('.poi_detail').empty();
+                        var counts = data.all_poi.length;
+                        for (var i = 0; i < counts; i++) {
+                            $('.poi_detail').append(
+                                '<table class="table table-hover" style="margin-bottom:0px;"><th><a style="font-size:15px;" href="/poi_detail/' + data.all_poi[i].poi_id + '">' + data.all_poi[i].poi_title + '</a></th></table>'
+                            );
+                        }
+                    },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        }
+
+    });
+    </script>
+</body>
+
+</html>

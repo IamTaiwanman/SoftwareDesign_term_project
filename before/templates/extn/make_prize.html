@@ -1,0 +1,103 @@
+{% include 'header.html' %}
+<html>
+    {% with navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar %} {% endwith %}
+    <body>
+    <div class="container" style="margin-bottom: 250px;">
+        <div class="col-lg-12" id="makePOI" style="margin-left: 50px;"> <br>
+            <input type="hidden" value="chinese" class="lang-1">
+            <h2 id="make_prizeform-1">獎品製作</h2>
+            <form id="make_prizeform" enctype="multipart/form-data">
+                <div class="myprize_make">
+                    <div class="form-group">
+                        <label id="prizetitle">獎品名稱</label>
+                        <input type="" name="prize_title" id="prize_title">
+                    </div>
+                    <div class="form-group">
+                        <label id="prizenum">獎品數量</label>
+                        <input type="" name="prize_num" id="prize_num">
+                        
+                    </div>
+                    
+                    <div class="form-group">
+                        <label id="description">描述</label>
+                        <textarea name="prize_description" id="prize_description"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="radio" id="public" name="isPublic"  class="selectPublic" value="1" checked> <label id="poi_public" for="public">公開</label>
+                        <input type="radio" id="private" name="isPublic" class="selectPublic" value="0">  <label id="poi_private" for="private">不公開</label>
+                        <input type="hidden" value="1" id="open">
+                    </div>
+                    <div class="form-group" style="display: none">
+                        <input type="text" name="prize_make" id="prize_make" value="make">
+                        <input type="text" name="language" id="language" value="chinese">
+                        <input type="text" name="identifier" id="identifier" value="{{role}}">
+                        <input type="text" name="rights" id="rights" value={{username}}>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label id="upload_media">上傳照片/聲音/影片</label>
+                        <br>
+                        <input type="radio" name="media" value="none" hidden>
+                        <!-- 無 -->
+                        <input type="radio" id="img_file-1" name="media" value="image">
+                        <label id="img_file" class="img_file" for="img_file-1">相片</label>
+                        
+                        <br>
+                        <p id="restrict"></p>
+                        <div class="upload_none" hidden></div>
+                        <div class="upload_image"></div>
+                        
+                    </div>
+                    <input type="hidden" name="user" value="{{username}}">
+                    <button type="submit" class="btn btn-default">
+                        <p id="btn_confirm" style="display: inline;">確認</p>
+                    </button>
+                    <button type="reset" class="btn btn-danger " id="clear">
+                        <p id="btn_reset" style="display: inline;">清除</p>
+                    </button>
+                    <div class="alert alert-danger" hidden></div>
+                    <div class="alert alert-success" hidden></div>
+                </div>
+            </form>
+            <div id="loading" hidden><img src="/static/images/loading.gif" style="display: block; margin:1500px 400px;"></div>
+            <!--div class="modal fade" id="poi_msg" role="dialog">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content" style="margin-top:100px">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title" style="font-weight: bold;">Poi 製作需知</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p style="display: inline;">景點設定為
+                                <p style="color:#00f; display: inline;">公開</p>時，經驗證通過後可予大眾觀看</p>
+                            <p style="display: inline;">景點設定為
+                                <p style="color:#f00; display: inline;">不公開</p>(私有景點)時，則不驗證</p>
+                            <p style="display: inline;"><b>地區</b>與<b>地址</b>需一致</p>
+                            <p>按住鍵盤<b>Ctrl</b>同時點選圖片即可選取多張(最多五張)圖片</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div-->
+        </div>
+    </div>
+    </div>
+    <script>
+        const POI_URL = '/{{coi}}/ajax_prize';
+        const HOME_URL = '/{{coi}}/list_prize';
+        const COI_NAME = '{{coi}}';
+    </script>
+    {% load static %}
+    <script src="{% static 'js/extn/make_prize.js' %}"></script>
+    <script src="{% static 'js/get_year.js' %}"></script>
+    <script src="{% static 'js/exif.js' %}"></script>
+    <script id="language_script"></script>
+    {% with js=coi|stringformat:"s"|add:"/nav.js" %}
+    <script src="{% static 'js/'|add:js %}"></script>
+    {% endwith %}
+</body>
+
+</html>

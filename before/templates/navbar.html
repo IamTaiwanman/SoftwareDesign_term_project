@@ -1,0 +1,87 @@
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top" id="draw-1" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">DEH</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="input-group">
+                    <form action="/search_bar" class="navbar-form" role="search">
+                        <input type="text" class="form-control" placeholder="Search" name="srch_term" id="srch_term">
+                        <div class="input-group">
+                            <button class="btn btn-primary" type="submit" onclick="modifyInput()">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </li>
+                <li>
+                    <a href="/make_player" id="make_navbar" class="make">創作</a>
+                </li>
+                {% if username %}
+                <li>
+                    <a onclick="confirm_logout()" id="logout-1">登出</a>
+                </li>
+                <li>
+                    <a href="/userinfo" id="username">
+                        {% if nickname %} {{nickname}} {% else %} {{username}} {% endif %} {% if role == "user" or role == "leader"%}
+                        <p id="(user)" class="role" style="display: inline">(玩家)</p>
+                        {%　elif role == "expert" or role == "leader"%}
+                        <p id="(Expert)" class="role" style="display: inline">(專家)</p>
+                        {%　elif role == "docent" %}
+                        <p id="(Narrator)" class="role" style="display: inline">(導覽員)</p>
+                        {%　elif role == "identifier" %}
+                        <p id="(Verifier)" class="role" style="display: inline">(驗證者)</p>
+                        {% elif role == "admin" %}
+                        <p id="(Admin)" class="role" style="display: inline">(Admin)</p>
+                        {% endif %}
+                    </a>
+                </li>
+                {%if role == "identifier" or role == "admin" or is_leader == "is_leader" %}
+                <li>
+                    <a id="verifier" href="/verification">驗證系統</a>
+                </li>
+                {% if role == 'admin'%}
+                <li>
+                    <a id="contents_cal" href="/contents_cal/all">Contents統計表</a>
+                </li>
+                {% endif %} {% endif %} {% else %}
+                <li>
+                    <a id="login" href="/login">登入</a>
+                </li>
+                {% endif %}
+                <li>
+                    <a href="/intro" id="deh_in">平台使用簡介</a>
+                </li>
+                <li>
+                    <select class="lang-1" id="language">
+                        <option value="chinese">中文(繁體)</option>
+                        <option value="english">English</option>
+                        <option value="japanese">日本語</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<!-- Header Carousel -->
+{% load static %}
+<script src="{% static 'js/navi.js' %}"></script>
+<script type="text/javascript">
+    function modifyInput(){
+        document.getElementById("srch_term").value = document.getElementById("srch_term").value.replaceAll("'","");
+        document.getElementById("srch_term").value = document.getElementById("srch_term").value.replaceAll('"',"");
+    }
+</script>

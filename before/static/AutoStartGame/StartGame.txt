@@ -1,0 +1,106 @@
+USE MOE3
+GO
+
+IF OBJECT_ID('StartGame', 'P') IS NOT NULL
+    DROP PROCEDURE StartGame
+GO
+
+CREATE PROCEDURE dbo.StartGame @room_id int = 0
+AS
+BEGIN
+	SET NOCOUNT ON;
+	DECLARE @current_time datetime2;
+	DECLARE @table_start table(
+		game_id int,
+		room_id int
+	);
+	DECLARE @table_finish table(
+		game_id int,
+		new_state int
+	);
+	DECLARE @table_chest table(
+		ID_From_GameChestHistory int,
+		ID_From_GameChestSetting int
+	);
+
+
+	IF @room_id <> 0
+	BEGIN
+	
+		SET @current_time = SYSDATETIME();
+	
+		INSERT INTO GameHistory (room_id_id, start_time, end_time, play_time, state)
+		OUTPUT INSERTED.id, INSERTED.room_id_id INTO @table_start
+		SELECT id, @current_time, DATEADD(MINUTE, play_time, @current_time), play_time, 0
+		FROM GameSetting
+		WHERE id = @room_id;
+
+	END
+	ELSE
+	BEGIN
+
+		SET @current_time = SYSDATETIME();
+
+		INSERT INTO @table_finish 
+		SELECT DISTINCT game_id_id, 1
+		FROM GameRecordHistory
+		WHERE game_id_id IN (
+			SELECT id FROM GameHistory WHERE state <> 2 AND end_time <= @current_time
+		) AND correctness IS NULL;
+
+		INSERT INTO @table_finish 
+		SELECT DISTINCT game_id_id, 2
+		FROM GameRecordHistory
+		WHERE game_id_id IN (
+			SELECT id FROM GameHistory WHERE state <> 2 AND end_time <= @current_time
+		) AND game_id_id NOT IN (
+			SELECT game_id FROM @table_finish
+		)
+		
+		INSERT INTO @table_finish 
+		SELECT id, 2 FROM GameHistory WHERE state <> 2 AND end_time <= @current_time AND
+		id NOT IN ( SELECT game_id FROM @table_finish )
+
+		UPDATE GameHistory
+		SET state = new_state
+		FROM @table_finish
+		WHERE id = game_id;
+
+		UPDATE GameSetting
+		SET is_playing = 0
+		WHERE is_playing IN ( 
+			SELECT game_id FROM @table_finish
+		);	
+		
+		SET @current_time = DATEADD(MINUTE, DATEDIFF(MINUTE, 0, @current_time), 0);
+
+		INSERT INTO GameHistory (room_id_id, start_time, end_time, play_time, state)
+		OUTPUT INSERTED.id, INSERTED.room_id_id INTO @table_start
+		SELECT id, @current_time, DATEADD(MINUTE, play_time, @current_time), play_time, 0
+		FROM GameSetting
+		WHERE start_time = @current_time and auto_start = 1 and is_playing = 0;
+
+	END
+
+	INSERT INTO GameChestHistory (game_id_id, poi_id_id, src_id, lat, lng, num, remain, point, distance, question_type, question, option1, option2, option3, option4, hint1, hint2, hint3, hint4, answer)
+	OUTPUT INSERTED.id, INSERTED.src_id INTO @table_chest
+	SELECT game_id, poi_id_id, id, lat, lng, num, num, point, distance, question_type, question, option1, option2, option3, option4, hint1, hint2, hint3, hint4, answer
+	FROM GameChestSetting, @table_start
+	WHERE room_id_id = room_id;
+
+	INSERT INTO GameATTHistory (chest_id_id, ATT_url, ATT_upload_time, ATT_format)
+	SELECT ID_From_GameChestHistory, ATT_url, ATT_upload_time, ATT_format
+	FROM GameATT, @table_chest
+	WHERE chest_id_id = ID_From_GameChestSetting;
+
+	UPDATE GameSetting
+	SET is_playing = game_id
+	FROM @table_start
+	WHERE id = room_id;
+	
+	SET NOCOUNT OFF;
+
+	RETURN SELECT COUNT(*) FROM @table_start;
+
+END
+GO

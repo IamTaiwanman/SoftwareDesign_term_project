@@ -1,0 +1,434 @@
+{% include 'header.html' %}
+<html>
+    {% with navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar %} {% endwith %}
+<body>
+    {% include 'navbar.html' %}
+    <div class="container" style="margin-bottom: 250px;">
+        <div class="col-lg-12" id="makePOI" style="margin-left: 50px;">
+            <h2 id="poi_edit">景點編輯</h2>
+            <form id="make_poiform" enctype="multipart/form-data" style="margin-bottom: 30px;">
+                {% csrf_token %}
+                <br>
+                <div class="mypoi_make">
+                    <div class="form-group">
+                        <label id="title-1">標題</label>
+                        <input type="" name="poi_title" id="poi_title" value="{{edit_poi.poi_title}}">
+                    </div>
+                    <!--div class="form-group">
+                        <label id="Subject-1" style="display: inline;">主題</label>
+                        <select id="subject" name="subject" style="width: 15%; display: inline;">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            <option id="disappeared" value="消逝的">消逝的</option>
+                            <option id="experiential" value="體驗的">體驗的</option>
+                            <option id="activation" value="活化與再造的">活化與再造的</option>
+                        </select>
+                    </div-->
+                    <div class="form-group">
+                    
+                        <b id="Region-1" style="display: inline;">地區</b>
+                        <select id="city" name="city" style="width: 14%; display: inline;">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            <option value="宜蘭縣">宜蘭縣</option>
+                            <option value="花蓮縣">花蓮縣</option>
+                            <option value="金門縣">金門縣</option>
+                            <option value="南投縣">南投縣</option>
+                            <option value="南海諸島">南海諸島</option>
+                            <option value="屏東縣">屏東縣</option>
+                            <option value="苗栗縣">苗栗縣</option>
+                            <option value="桃園市">桃園市</option>
+                            <option value="高雄市">高雄市</option>
+                            <option value="基隆市">基隆市</option>
+                            <option value="連江縣">連江縣</option>
+                            <option value="雲林縣">雲林縣</option>
+                            <option value="新北市">新北市</option>
+                            <option value="新竹市">新竹市</option>
+                            <option value="新竹縣">新竹縣</option>
+                            <option value="嘉義市">嘉義市</option>
+                            <option value="嘉義縣">嘉義縣</option>
+                            <option value="彰化縣">彰化縣</option>
+                            <option value="臺中市">臺中市</option>
+                            <option value="臺北市">臺北市</option>
+                            <option value="臺東縣">臺東縣</option>
+                            <option value="臺南市">臺南市</option>
+                            <option value="澎湖縣">澎湖縣</option>
+                        </select>
+                        <select id="areas" name="my_areas" style="width: 35%; display: inline;"></select>
+                    </div>
+                    <!--div class="form-group">
+                        <label id="Type-1">類型</label>
+                        <select id="type1" name="type1">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            <option class="natural" value="自然景觀">自然景觀</option>
+                            <option id="human" value="人文景觀">人文景觀</option>
+                            <option id="event" value="事件">事件</option>
+                            <option id="figure" value="人物">人物</option>
+                            <option id="industry" value="產業">產業</option>
+                        </select>
+                    </div-->
+                    <div class="form-group">
+                        <label id="docent_period">時期</label>
+                        <select id="period" name="period">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            <option id="Prehistory-1" value="史前時期">史前時期</option>
+                            <option id="Dutch-1" value="荷西時期">荷西時期</option>
+                            <option id="Ming-1" value="明鄭時期">明鄭時期</option>
+                            <option id="Qing-1" value="清朝時期">清朝時期</option>
+                            <option id="japanese_Occ-1" value="日本時期">日本時期</option>
+                            <option id="Modem-1" value="現代台灣">現代台灣</option>
+                            <option id="BC-1" value="西元前~0">西元前~0</option>
+                            <option value="0~99">0~99</option>
+                            <option value="100~199">100~199</option>
+                            <option value="200~299">200~299</option>
+                            <option value="300~399">300~399</option>
+                            <option value="400~499">400~499</option>
+                            <option value="500~599">500~599</option>
+                            <option value="600~699">600~699</option>
+                            <option value="700~799">700~799</option>
+                            <option value="800~899">800~899</option>
+                            <option value="900~999">900~999</option>
+                            <option value="1000~1099">1000~1099</option>
+                            <option value="1100~1199">1100~1199</option>
+                            <option value="1200~1299">1200~1299</option>
+                            <option value="1300~1399">1300~1399</option>
+                            <option value="1400~1499">1400~1499</option>
+                            <option value="1500~1599">1500~1599</option>
+                            <option value="1600~1699">1600~1699</option>
+                            <option value="1700~1799">1700~1799</option>
+                            <option value="1800~1899">1800~1899</option>
+                            <option value="1900~1999">1900~1999</option>
+                            <option value="2000~">2000~</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label id="year-1">年份</label>
+                        <select type="number" name="year" id="year"></select>
+                    </div>
+                    <div class="form-group">
+                        <label id="keyword-1">關鍵字</label>
+                        <input type="" name="keyword1" id="keyword1" value="{{edit_poi.keyword1}}">
+                        <input type="" name="keyword2" id="keyword2" value="{{edit_poi.keyword2}}">
+                        <input type="" name="keyword3" id="keyword3" value="{{edit_poi.keyword3}}">
+                        <input type="" name="keyword4" id="keyword4" value="{{edit_poi.keyword4}}">
+                    </div>
+                    <div class="form-group">
+                        <label id="docent_address">地址</label>
+                        <input type="text" name="poi_address" id="poi_address" value="{{edit_poi.poi_address}}">
+                        <br>
+                        <small id="Changhua_map">(ex:彰化縣鹿港鎮民族路228號)可利用地圖自動取得地址與經緯度(在地圖上按左鍵)</small>
+                        <div id="map_poi" style="width:500px;height:500px"></div>
+                        <div style="margin-top: 5px;">
+                            <p style="display: inline;" id="lati">緯度:</p>
+                            <input type="number" name="latitude" id="latitude" value="{{edit_poi.latitude}}" step="0.0000000000000001">
+                            <p style="display: inline;" id="long">經度:</p>
+                            <input type="number" name="longitude" id="longitude" value="{{edit_poi.longitude}}" step="0.0000000000000001">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label id="description">描述</label>
+                        <textarea name="poi_description_1" id="poi_description_1">{{edit_poi.poi_description_1}}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label id="Format-1">範疇</label>
+                        <select id="format" name="format">
+                            <option class="all" value="all">全部</option>
+                            <option id="Historical" value="古蹟">古蹟</option>
+                            <option id="historical_buildings" value="歷史建築">歷史建築</option>
+                            <option id="Memorial_building" value="紀念建築">紀念建築</option>
+                            <option id="Settlement_buildings" value="聚落建築群">聚落建築群</option>
+                            <option id="Ruins" value="考古遺址">考古遺址</option>
+                            <option id="Historical_site" value="史蹟">史蹟</option>
+                            <option id="Cultural-1" value="文化景觀">文化景觀</option>
+                            <option id="Antique" value="古物">古物</option>
+                            <option class="natural" value="自然景觀">自然景觀</option>
+                            <option id="Traditional" value="傳統表演藝術">傳統表演藝術</option>
+                            <option id="Traditional2" value="傳統工藝">傳統工藝</option>
+                            <option id="Traditional3" value="口述傳統">口述傳統</option>
+                            <option id="Folk" value="民俗">民俗</option>
+                            <option id="Traditional-knowledge" value="傳統知識與實踐">傳統知識與實踐</option>
+                            <option id="General_landscape" value="一般景觀(建築/人工地景/自然地景)">一般景觀(建築/人工地景/自然地景)</option>
+                            <option id="Plants" value="植物">植物</option>
+                            <option id="Animals" value="動物">動物</option>
+                            <option id="biological" value="生物">生物</option>
+                            <option id="Food" value="食衣住行育樂">食衣住行育樂</option>
+                            <option id="Others" value="其他">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        
+                        <input type="checkbox" id="poi_source_check" name="option_check"><label for="poi_source_check">參考來源</label>
+                        <input type="text" name="poi_source" id="poi_source" style="display:none" placeholder="請填入參考來源" value="{{edit_poi.poi_source}}">
+
+                        <input type="checkbox" id="creator_check" name="option_check"><label for="creator_check">參考來源作者</label>
+                        <input type="text" name="creator" id="creator" style="display:none" placeholder="請填入參考來源作者" value="{{edit_poi.creator}}">
+
+                        <input type="checkbox" id="publisher_check" name="option_check"><label for="publisher_check">參考來源出版者</label><br>
+                        <input type="text" name="publisher" id="publisher" style="display:none" placeholder="請填入參考來源出版者" value="{{edit_poi.publisher}}">
+                        
+                    </div>
+                    <div class="form-group">
+                        <label id="contributor-1">景點製作貢獻者</label>
+                        <input type="text" name="contributor" id="contributor" value="{{edit_poi.contributor}}">
+                    </div>
+                    <div class="form-group">
+                        <input type="radio" id="public" name="isPublic"  class="selectPublic" value="1" checked> <label id="poi_public" for="public">公開</label>
+                        <input type="radio" id="private" name="isPublic" class="selectPublic" value="0">  <label id="poi_private" for="private">不公開</label>
+                        <input type="hidden" id="open">
+                    </div>
+                    <div class="form-group" style="display: none">
+                        <input type="text" name="poi_id" id="poi_id" value="{{poi_id}}">
+                        <input type="text" name="language" id="language" value="中文">
+                        <input type="text" name="identifier" id="identifier" value="{{role}}">
+                        <input type="text" name="rights" id="rights" value={{username}}>
+                    </div>
+                    <div class="form-group">
+                        <label id="upload_guide">上傳語音導覽解說</label>
+                        <br>
+                        <div class="upload_sound">
+                            <input id="sound" type="radio" name="sounds" value="sound">
+                            <p id="audio_guide-1" style="display: inline;">語音導覽</p>
+                            <p id="3gpp">允許上傳amr/3gpp/aac格式的錄音檔，檔案大小不能超過5M</p>
+                            <input class="sound_val" name="sounds" value="0" hidden>
+                            <input type="file" name="sound_file" accept=".amr,.3gpp,.aac,.mp3" id="sound_file">
+                            <audio controls id="disp_sound"></audio>
+                        </div>
+                        <!--div class="upload_nothing">
+                            <input id="nothing" type="radio" name="sounds" value="none">
+                            <p id="none_file" style="display: inline;">無</p>
+                            <input class="sound_val" name="sounds" value="0" hidden>
+                            <p id="restrict1">
+                                <p id="none_guide" style="display: inline;">無語音導覽檔案</p>
+                        </div-->
+                        <br>
+                    </div>
+                    <div class="form-group">
+                        <label id="upload_media">上傳照片/聲音/影片</label>
+                        <br> {% if mpeg_format.format == 1 %}
+                        <div class="upload_image">
+                            <input id="image" type="radio" name="media" value="image">
+                            <p class="img_file" style="display: inline;">相片
+                            
+                            <p id="gif_jpg_png" style="display: inline;">允許上傳gif/jpg/png/jpeg格式的圖片，圖片檔案大小不能超過2M(可上傳5張照片)</p>
+                            <input class="media_val" name="media" value="0" hidden>
+                            <input type="file" name="image_file" accept=".gif,.jpg,.png,.jpeg" id="image_file" multiple>
+                            <output id="image_list">
+                        </div>
+                        {% elif mpeg_format.format == 2 %}
+                        <input id="audio" type="radio" name="media" value="audio"> 聲音
+                        
+                        <p id="3ggp" style="display: inline;">允許上傳amr/3gpp/aac格式的錄音檔，檔案大小不能超過5M</p>
+                        <div class="upload_audio">
+                            <input class="media_val" name="media" value="0" hidden>
+                            <input type="file" name="audio_file" accept=".amr,.3gpp,.aac,.mp3" id="audio_file">
+                            <audio controls id="disp_audio"></audio>
+                        </div>
+                        {% elif mpeg_format.format == 4 %}
+                        <input id="video" type="radio" name="media" value="video"> 影片
+                        
+                        <p id="mp4_avi" style="display: inline;">允許上傳mp4/avi格式的影片，影片檔案大小不能超過15M</p>
+                        <div class="upload_video">
+                            <input class="media_val" name="media" value="0" hidden>
+                            <input type="file" name="video_file" accept=".mp4,.api" id="video_file">
+                            <video controls id="disp_video"></video>
+                        </div>
+                        {%else%}
+                            <input type="radio" name="new_media" value="none" hidden>
+                            <!-- 無 -->
+                            <input type="radio" id="img_file-1" name="new_media" value="image">
+                            <label id="img_file" class="img_file" for="img_file-1">相片</label>
+                            <input type="radio" id="video_file-1" name="new_media" value="video">
+                            <label id="video_file-1" for="video_file-1">影片</label>
+                            <input type="radio" id="audio_file-1" name="new_media" value="audio">
+                            <label id="audio_file-1" for="audio_file-1">聲音</label>
+                            <br>
+                            <p id="restrict"></p>
+                            <div class="upload_none" hidden></div>
+                            <div class="upload_image"></div>
+                            <div class="upload_video"></div>
+                            <div class="upload_audio"></div>
+                        <!--p id="restrict">無多媒體檔案</p>
+                        <div class="upload_none" hidden>
+                            <input class="media_val" name="media" value="0" hidden>
+                        </div-->
+                        {% endif %}
+                    </div>
+                    <input id="user_id" type="text" name="user" value="{{username}}" hidden>
+                    <button type="submit" class="btn btn-default" id="btn_confirm">確認</button>
+                    <button type="reset" class="btn btn-danger " id="clear">清除</button>
+                    <div class="alert alert-danger" hidden></div>
+                    <div class="alert alert-success" hidden></div>
+                </div>
+            </form>
+            {% for m in edit_sound %} {% if m.format == 8 %}
+            <span class="label label-success sound_guide">語音導覽</span>
+            <div class="edit_sound" id="edit_{{m.picture_id}}">
+                <audio controls src="/player_pictures/media/audio/{{m.picture_name}}"></audio>
+                <button id="{{m.picture_id}}" onclick="delete_confirm({{m.picture_id}},'{{m.picture_name}}','{{m.format}}')">
+                    <p class="delete_file" style="display: inline;">刪除</p>
+                </button>
+            </div>
+            {% endif %} {% endfor %} {% for m in edit_mpeg %} {% if m.format == 1 %}
+            <span class="label label-success"><p class="img_file" style="display: inline;">圖片</p></span>
+            <div class="edit_image" id="edit_{{m.picture_id}}">
+                {%if 'http' not in m.picture_url %}<img style="width:200px; height: 200px;" src="/player_pictures/media/{{m.picture_name}}">
+                {%else%}<img style="width:200px; height: 200px;" src={{m.picture_url}}>{% endif %}
+                <button id="{{m.picture_id}}" onclick="delete_confirm({{m.picture_id}},'{{m.picture_name}}','{{m.format}}')">
+                    <p class="delete_file" style="display: inline;">刪除</p>
+                </button>
+            </div>
+            {% elif m.format == 2 %}
+            <span class="label label-success sound_file">聲音</span>
+            <div class="edit_audio" id="edit_{{m.picture_id}}">
+                {%if 'http' not in m.picture_url %}<audio controls src="/player_pictures/media/audio/{{m.picture_name}}"></audio>
+                {%else%}<audio controls src={{m.picture_url}}></audio>{% endif %}
+                <button id="{{m.picture_id}}" onclick="delete_confirm({{m.picture_id}},'{{m.picture_name}}','{{m.format}}')">
+                    <p class="delete_file" style="display: inline;">刪除</p>
+                </button>
+            </div>
+            {% elif m.format == 4 %}
+            <span class="label label-success video_file">影片</span>
+            <div class="edit_video" id="edit_{{m.picture_id}}">
+                {%if 'http' not in m.picture_url %}<video controls src="/player_pictures/media/video/{{m.picture_name}}"></video>
+                {%else%}<video controls src={{m.picture_url}}></video>{% endif %}
+                <button id="{{m.picture_id}}" onclick="delete_confirm({{m.picture_id}},'{{m.picture_name}}','{{m.format}}')">
+                    <p class="delete_file" style="display: inline;">刪除</p>
+                </button>
+            </div>
+            {%else%}
+            <div class="edit_none"></div>
+            {% endif %} {% endfor%}
+            <div id="loading" hidden><img src="/static/images/loading.gif" style="display: block; margin:1080px 400px;"></div>
+        </div>
+    </div>
+    {% load static %}
+    <script src="{% static 'js/sdc/edit_player_poi.js' %}"></script>
+    <script src="{% static 'js/get_year.js' %}"></script>
+    {% with js=coi|stringformat:"s"|add:"/nav.js" %}
+    <script src="{% static 'js/'|add:js %}"></script>
+    {% endwith %}
+    <script type="text/javascript">
+    is_edit = true;
+    areas = "{{edit_poi.area_name_en}}";
+    image_count = "{{edit_mpeg.count}}";
+    sound_count = "{{edit_sound.count}}";
+    image_count = parseInt(image_count);
+    sound_count = parseInt(sound_count);
+    orig_count = parseInt(image_count);
+    chk = "{{mpeg_format.format}}";
+    chk_sound = "{{sound_format.format}}";
+    languages ="{{language}}"
+    $(document).ready(function() {
+        $.ajax({
+            method: "POST",
+            data: {
+                area: areas
+            },
+            url: "/get_area",
+            success: function(data) {
+                $('#city').val(data.area[0].area_country);
+                if ($('#city').val()) {
+                    $('#city').trigger('change');
+                }
+                $('#areas').val(data.area[0].area_name_en);
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+        var subject = "123456";
+        var type1 = "{{edit_poi.type1}}";
+        var period = "{{edit_poi.period}}";
+        var year = "{{edit_poi.year}}";
+        var format = "{{edit_poi.format}}";
+        var open = "{{edit_poi.open}}";
+        if (chk == 1) {
+            $('#image').prop("checked", true);
+            $('input[type=radio][name=media]').val('image');
+        } else if (chk == 2) {
+            $('#audio').prop("checked", true);
+            $('input[type=radio][name=media]').val('audio');
+        } else if (chk == 4) {
+            $('#video').prop("checked", true);
+            $('input[type=radio][name=media]').val('video');
+        } else {
+            $('#none').prop("checked", true);
+            $('input[type=radio][name=media]').val('none');
+        }
+        if (chk_sound == 8) {
+            $('#sound').prop("checked", true);
+            $('input[type=radio][name=sounds]').val('sound');
+        } else {
+            $('#nothing').prop("checked", true);
+            $('input[type=radio][name=sounds]').val('none');
+        }
+        $("#subject").val(subject);
+        $("#type1").val(type1);
+        $("#period").val(period);
+        if (period) {
+            $("#period").trigger('change');
+            $("#year").val(year);
+        }
+        $("#format").val(format);
+        if (open.trim() == '1') {
+            $("#open").val(1);
+        } else {
+            $("#open").val(0);
+        }
+    });
+    $('#city').change(function() {
+        var city = $(this).val();
+        var urls = "/feed_area";
+        var data = {
+            city: city
+        }
+        $.ajax({
+            method: "POST",
+            data: data,
+            url: urls,
+            success: function(data) {
+                var area_count = data.area.length;
+                var area_select = $('#areas').empty();
+                console.log(languages)
+                for (var i = 0; i < area_count; i++) {
+                    if (areas == data.area[i].area_name_en) {
+                        if (languages == '中文' || languages == '日文') {
+                            area_select.append(
+                                $('<option></option>').val(data.area[i].area_name_en).html(data.area[i].area_name_ch)
+                            );
+                        } else {
+                            area_select.append(
+                                $('<option></option>').val(data.area[i].area_name_en).html(data.area[i].area_name_en)
+                            );
+                        }
+                        area_select.val(areas);
+                    } else {
+                        if (languages == '中文' || languages == '日文') {
+                            area_select.append(
+                                $('<option></option>').val(data.area[i].area_name_en).html(data.area[i].area_name_ch)
+                            );
+                        } else {
+                            area_select.append(
+                                $('<option></option>').val(data.area[i].area_name_en).html(data.area[i].area_name_en)
+                            );
+                        }
+                    }
+                }
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+    });
+    </script>
+    <script>
+        $("#user_id").hide();
+    </script>
+    <script id="language_script"></script>
+    <script src="{% static 'js/exif.js' %}"></script>
+    <script>
+        const POI_URL = '/{{coi}}/ajax_dublincore';
+        const HOME_URL = '/{{coi}}/make_player';
+    </script>
+</body>
+
+
+</html>
