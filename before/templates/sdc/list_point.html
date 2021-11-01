@@ -1,0 +1,556 @@
+{% include 'header.html' %}
+<html>
+    {% with navbar=coi|stringformat:"s"|add:"/navbar.html" %}
+        {% include navbar %}
+    {% endwith %}
+    <body>
+    <div class="container">
+        <div class="row">
+
+            <h1 id="logo_content" class="page-header">
+                <!-- <img id="logo" src="/static/images/logo.png" style="padding-right: 100px;"> -->
+            </h1>
+
+            <div class="stats-switcher-wrapper" >
+                <ul class="numbers-summary" style="background:lightgray">
+                    <li class="commits">
+                    <a id='list_poi' style='cursor:pointer'>
+                        <svg aria-hidden="true" class="octicon octicon-tag" height="16" version="1.1" viewBox="0 0 14 16" width="14"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"></path></svg>
+                        <span class="num text-emphasized">
+                            ●
+                        </span>
+                        我的景點
+                    </a>
+                    </li>
+
+                    <li>
+                    <a id='list_loi' style='cursor:pointer'>
+                        <svg aria-hidden="true" class="octicon octicon-tag" height="16" version="1.1" viewBox="0 0 14 16" width="14"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"></path></svg>
+                        <span class="num text-emphasized">
+                        ●
+                        </span>
+                        我的景線
+                    </a>
+                    </li>
+
+                    <li>
+                    <a id='list_aoi' style='cursor:pointer'>
+                        <svg aria-hidden="true" class="octicon octicon-tag" height="16" version="1.1" viewBox="0 0 14 16" width="14"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"></path></svg>
+                        <span class="num text-emphasized">
+                        ●
+                        </span>
+                        我的景區
+                    </a>
+                    </li>
+
+                    <li>
+                        <a id='list_soi' style='cursor:pointer'>
+                        <svg aria-hidden="true" class="octicon octicon-tag" height="16" version="1.1" viewBox="0 0 14 16" width="14"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"></path></svg>
+                        <span class="num text-emphasized">
+                        ●
+                        </span>
+                        我的主題故事
+                    </a>
+                    </li>
+                </ul>
+            </div>
+            <hr style="width:100%">
+            <div id="list_poi_show" class="poi_show col-lg-12">
+                <h2 id="myPOI" style="display: inline">我的景點列表</h2>
+                <button class="btn btn-success" style="margin-left: 20px; margin-bottom: 10px;" onclick="document.location='/static/activites/景點匯入範例檔案.csv'">景點匯入範例檔案下載</button>
+                <button class="btn btn-success" style="margin-left: 20px; margin-bottom: 10px;" onclick="Import('/{{coi}}/ajax_dublincore');">匯入POI</button>                
+                <button class="btn btn-success" style="margin-left: 20px; margin-bottom: 10px;" id="exp_poi">匯出POI至CSV</button>
+                <button class="btn btn-success" style="float:right;" id="make_poi"><a>＋製作新景點</a></button>
+                <br>
+                <br>
+                <table>
+                    {% for x in poi_list %}
+                        <tr>
+                            <td>
+                                <a href="/{{coi}}/poi_detail/{{x.poi_id}}">{{x.poi_title}}</a>
+                                {% if x.verification == 0 %}
+                                    <p style="color:#010; display:inline;" class="Unverified">(尚未驗證 /</p>
+                                    {% elif x.verification == 1 %}
+                                    <p style="color:#00F; display:inline;" class="verified">(已驗證通過 /</p>
+                                    {% else %}
+                                    <p style="color:#F00; display:inline;" class="Verification_Failed">(驗證不通過 /</p>
+                                    {% endif %} {% if x.open|cut:" " == '1' %}
+                                    <p style="color:#00F; display:inline;" class="public-2">公開</p> / {% else %}
+                                    <p style="color:#F00; display:inline;" class="private">不公開</p> / {% endif %}
+                                    {% if x.format == 1 %}
+                                    <p style="color:#00F; display:inline;" id="img">相片)</p>
+                                    {% elif x.format == 2 %}
+                                    <p style="color:#00F; display:inline;" id="audio">聲音)</p>
+                                    {% elif x.format == 4 %}
+                                    <p style="color:#00F; display:inline;" id="video">影片)</p>
+                                    {% else %}
+                                    <p style="color:#00F; display:inline;" id="none_file">無多媒體檔案)</p>
+                                {% endif %}
+                                {% if group_list %}
+                                <button class="btn btn-primary GroupModal joinGroup" data-toggle="modal" data-target="#GroupModal" data-typeid="{{x.poi_id}}" data-type="poi"
+                                    style="float: right;">加入群組</button>
+                                 {% endif %}
+                                <button id="delete" class="btn btn-danger" onclick="deleteXoi({{x.poi_id}}, '/poi')" style="float: right; margin-right: 10px;">刪除</button>
+                                <button id="edit" class="btn btn-info" onclick="editXoi({{x.poi_id}}, '/poi')" style="float: right; margin-right: 10px;">修改</button>
+                                {% if x.verification == -1 %}
+                                <button id="feedback" class="btn btn-warning" data-toggle="modal" data-target="#FeedbackModal{{x.poi_id}}" style="float: right; margin-right: 10px;">反饋</button>
+                                <div class="modal fade" id="FeedbackModal{{x.poi_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style=" top:20%;">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">為什麼你沒通過</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="15" disabled="">{{x.feedback_mes}}</textarea>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">知道了!</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                {% endif %}
+                            </td>
+                        <tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+            <div id="list_loi_show" class="poi_show col-lg-12" hidden=1>
+                <h2 id="myLOI" style="display: inline">我的景線列表</h2>
+                <button class="btn btn-success" style="margin-left: 20px; margin-bottom: 10px;" id="exp_loi">匯出LOI至CSV</button>
+                <button class="btn btn-success" style="float:right;" id="make_loi">
+                    <a>＋製作新景線</a>
+                </button>
+                <br>
+                <br>
+                <table>
+                    {% for x in loi_list %}
+                    <tr>
+                        <td>
+                            <a href="/{{coi}}/loi_detail/{{x.route_id}}">{{x.route_title}}</a>
+                            {% if x.verification == 0 %}
+                                <p style="color:#010; display:inline;" class="Unverified">(尚未驗證 /</p>
+                                {% elif x.verification == 1 %}
+                                <p style="color:#00F; display:inline;" class="verified">(已驗證通過 /</p>
+                                {% else %}
+                                <p style="color:#F00; display:inline;" class="Verification_Failed">(驗證不通過 /</p>
+                                {% endif %} {% if x.open == 1 %}
+                                <p style="color:#00F; display:inline;" class="public-2">公開</p>)
+                                {% else %}
+                                <p style="color:#F00; display:inline;" class="private">不公開</p>)
+                                {% endif %}
+                             {% if group_list %}
+                            <button class="btn btn-primary GroupModal joinGroup" data-toggle="modal" data-target="#GroupModal" data-typeid="{{x.route_id}}" data-type="loi"
+                                style="float: right;">加入群組</button>
+                             {% endif %}
+                            <button class="btn btn-danger" onclick="deleteXoi({{x.route_id}}, '/loi')" style="float: right; margin-right: 10px;">刪除</button>
+                            <button class="btn btn-info" onclick="editXoi({{x.route_id}}, '/loi')" style="float: right; margin-right: 10px;">修改</button>
+                            {% if x.verification == -1 %}
+                                <button id="feedback" class="btn btn-warning" data-toggle="modal" data-target="#FeedbackModal{{x.route_id}}" style="float: right; margin-right: 10px;">反饋</button>
+                                <div class="modal fade" id="FeedbackModal{{x.route_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style=" top:20%;">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">為什麼你沒通過</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="15" disabled="">{{x.feedback_mes}}</textarea>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">知道了!</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            {% endif %}
+                        </td>
+                    <tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+            <div id="list_aoi_show" class="poi_show col-lg-12" hidden=1>
+                <h2 id="myAOI" style="display: inline">我的景區列表</h2>
+                <button class="btn btn-success" style="margin-left: 20px; margin-bottom: 10px;" id="exp_aoi">匯出AOI至CSV</button>
+                <button class="btn btn-success" style="float:right;" id="make_aoi">
+                    <a>＋製作新景區</a>
+                </button>
+                <br>
+                <br>
+                <table>
+                    {% for x in aoi_list %}
+                    <tr>
+                        <td>
+                            <a href="/{{coi}}/aoi_detail/{{x.aoi_id}}">{{x.title}}</a>
+                            {% if x.verification == 0 %}
+                                <p style="color:#010; display:inline;" class="Unverified">(尚未驗證 /</p>
+                                {% elif x.verification == 1 %}
+                                <p style="color:#00F; display:inline;" class="verified">(已驗證通過 /</p>
+                                {% else %}
+                                <p style="color:#F00; display:inline;" class="Verification_Failed">(驗證不通過 /</p>
+                                {% endif %} {% if x.open == 1 %}
+                                <p style="color:#00F; display:inline;" class="public-2">公開</p>) {% else %}
+                                <p style="color:#F00; display:inline;" class="private">不公開</p>) {% endif %}
+                             {% if group_list %}
+                            <button class="btn btn-primary GroupModal joinGroup" data-toggle="modal" data-target="#GroupModal" data-typeid="{{x.aoi_id}}" data-type="aoi"
+                                style="float: right;">加入群組</button>
+                             {% endif %}
+                            <button class="btn btn-danger" onclick="deleteXoi({{x.aoi_id}}, '/aoi')" style="float: right; margin-right: 10px;">刪除</button>
+                            <button class="btn btn-info" onclick="editXoi({{x.aoi_id}}, '/aoi')" style="float: right; margin-right: 10px;">修改</button>
+                            {% if x.verification == -1 %}
+                                <button id="feedback" class="btn btn-warning" data-toggle="modal" data-target="#FeedbackModal{{x.aoi_id}}" style="float: right; margin-right: 10px;">反饋</button>
+                                <div class="modal fade" id="FeedbackModal{{x.aoi_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style=" top:20%;">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">為什麼你沒通過</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="15" disabled="">{{x.feedback_mes}}</textarea>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">知道了!</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            {% endif %}
+                        </td>
+                    <tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+            <div id="list_soi_show" class="poi_show col-lg-12" hidden=1>
+                <h2 id="mySOI" style="display: inline">我的主題故事列表</h2>
+                <button class="btn btn-success" style="margin-left: 20px; margin-bottom: 10px;" id="exp_soi">匯出SOI至CSV</button>
+                <button class="btn btn-success" style="float:right;" id="make_soi">
+                    <a>＋製作新主題故事</a>
+                </button>
+                <br>
+                <br>
+                <table>
+                    {% for x in soi_list %}
+                    <tr>
+                        <td>
+                            <a href="/{{coi}}/soi_detail/{{x.soi_id}}">{{x.soi_title}}</a>
+                            {% if x.verification == 0 %}
+                                <p style="color:#010; display:inline;" class="Unverified">(尚未驗證 /</p>
+                                {% elif x.verification == 1 %}
+                                <p style="color:#00F; display:inline;" class="verified">(已驗證通過 /</p>
+                                {% else %}
+                                <p style="color:#F00; display:inline;" class="Verification_Failed">(驗證不通過 /</p>
+                                {% endif %} {% if x.open == 1 %}
+                                <p style="color:#00F; display:inline;" class="public-2">公開</p>) {% else %}
+                                <p style="color:#F00; display:inline;" class="private">不公開</p>) {% endif %}
+                            {% if group_list %}
+                            <button class="btn btn-primary GroupModal joinGroup" data-toggle="modal" data-target="#GroupModal" data-typeid="{{x.soi_id}}" data-type="soi"
+                                style="float: right;">加入群組</button>
+                            {% endif %}
+                            <button class="btn btn-danger" onclick="deleteXoi({{x.soi_id}}, '/soi')" style="float: right; margin-right: 10px;">刪除</button>
+                            <button class="btn btn-info" onclick="editXoi({{x.soi_id}}, '/soi')" style="float: right; margin-right: 10px;">修改</button>
+                            {% if x.verification == -1 %}
+                                <button id="feedback" class="btn btn-warning" data-toggle="modal" data-target="#FeedbackModal{{x.soi_id}}" style="float: right; margin-right: 10px;">反饋</button>
+                                <div class="modal fade" id="FeedbackModal{{x.soi_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style=" top:20%;">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">為什麼你沒通過</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="15" disabled="">{{x.feedback_mes}}</textarea>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">知道了!</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            {% endif %}
+                        </td>
+                    <tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <hr style="width:100%">
+
+        </div>
+    </div>
+    <div id="GroupModal" class="modal fade" role="dialog" style="margin-top: 300px">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <select id="group_list">
+                        {% for g in group_list %}
+                        <option value="{{g.foreignkey.group_id}}">{{g.foreignkey.group_name}}</option>
+                        {% endfor%}
+                    </select>
+                    <button id="make_player_join" class="btn btn-success" onclick="putGroups()">加入</button>
+                    <input type="hidden" name="modal-typeid" id="all_ids">
+                    <input type="hidden" name="modal-type" id="all_types">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="loading" hidden><img src="/static/images/loading.gif" style="display: block; margin:480px 800px;"></div>
+
+    <table id="exl_poi" class="table table-striped" cellspacing="0" width="100%" style="display: none;">
+        <thead>
+            <tr>
+                <th id="poi_title-1">POI 標題</th>
+                <th id="Subject-1">主題</th>
+                <th class="Region-1">地區</th>
+                <th id="Type-1">類型</th>
+                <th id="docent_period">時期</th>
+                <th id="year-1">年份</th>
+                <th id="keyword-2">關鍵字1</th>
+                <th id="keyword-3">關鍵字2</th>
+                <th id="keyword-4">關鍵字3</th>
+                <th id="keyword-5">關鍵字4</th>
+                <th id="docent_address">地址</th>
+                <th id="docent_lati">緯度</th>
+                <th id="docent_long">經度</th>
+                <th class="description">描述</th>
+                <th id="Format-1">範疇</th>
+                <th id="docent_source">參考來源</th>
+                <th id="creator-1">參考來源作者</th>
+                <th id="publisher-1">參考來源出版者</th>
+                <th id="contributor-1">景點製作貢獻者</th>
+                <th class="public-1">公開</th>
+                <th id="Picture-1">圖片一</th>
+                <th id="Picture-2">圖片二</th>
+                <th id="Picture-3">圖片三</th>
+                <th id="Picture-4">圖片四</th>
+                <th id="Picture-5">圖片五</th>
+                <th id="video">影片</th>
+                <th id="audio">聲音</th>
+            </tr>
+        </thead>
+        <tbody id="table_orders">
+            {% for p in export_poi_list %}
+            <tr>
+                <td>{{p.poi_title}}</td>
+                <td>{{p.subject}}</td>
+                <td>{{p.area_name_en}}</td>
+                <td>{{p.type1}}</td>
+                <td>{{p.period}}</td>
+                <td>{{p.year}}</td>
+                <td>{{p.keyword1}}</td>
+                <td>{{p.keyword2}}</td>
+                <td>{{p.keyword3}}</td>
+                <td>{{p.keyword4}}</td>
+                <td>{{p.poi_address}}</td>
+                <td>{{p.latitude}}</td>
+                <td>{{p.longitude}}</td>
+                <td>{{p.poi_description_1}}</td>
+                <td>{{p.format}}</td>
+                <td>{{p.poi_source}}</td>
+                <td>{{p.creator}}</td>
+                <td>{{p.publisher}}</td>
+                <td>{{p.contributor}}</td>
+                <td>{{p.open}}</td>
+                <td>{{p.picture1}}</td>
+                <td>{{p.picture2}}</td>
+                <td>{{p.picture3}}</td>
+                <td>{{p.picture4}}</td>
+                <td>{{p.picture5}}</td>
+                <td>{{p.video}}</td>
+                <td>{{p.audio}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <table id="exl_loi" class="table table-striped" cellspacing="0" width="100%" style="display: none;">
+        <thead>
+            <tr>
+                <th id="loi_title-1">LOI 標題</th>
+                <th class="Region-1">地區</th>
+                <th class="description">描述</th>
+                <th id="loi_contributor">景線製作貢獻者</th>
+                <th class="tool">交通工具</th>
+                <th class="public-1">公開</th>
+                <th id="LOI_account">該LOI擁有者帳號</th>
+                <th class="export_language">語言</th>
+                <th >內含POIs : </th>
+                
+            </tr>
+        </thead>
+        <tbody id="table_orders">
+            {% for l in user_loi %}
+            <tr>
+                <td>{{l.route_title}}</td>
+                <td>{{l.area_name_en}}</td>
+                <td>{{l.route_description}}</td>
+                <td>{{l.contributor}}</td>
+                <td>{{l.transportation}}</td>
+                <td>{{l.open}}</td>
+                <td>{{username}}</td>
+                <td>{{l.language}}</td>
+
+                
+                {% for lp in loipoi %}
+                    {% if l == lp.foreignkey and lp.poi_id %}
+                        <td>{{lp.poi_id.poi_title}}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <table id="exl_aoi" class="table table-striped" cellspacing="0" width="100%" style="display: none;">
+        <thead>
+            <tr>
+                <th id="aoi_title-1">AOI 標題</th>
+                <th class="Region-1">地區</th>
+                <th class="description">描述</th>
+                <th id="aoi_contributor">景區製作貢獻者</th>
+                <th class="tool">交通工具</th>
+                <th class="public-1">公開</th>
+                <th id="AOI_account">該AOI擁有者帳號</th>
+                <th class="export_language">語言</th>
+                <th >內含POIs : </th>
+            </tr>
+        </thead>
+        <tbody id="table_orders">
+            {% for a in user_aoi %}
+            <tr>
+                <td>{{a.title}}</td>
+                <td>{{a.area_name_en}}</td>
+                <td>{{a.description}}</td>
+                <td>{{a.contributor}}</td>
+                <td>{{a.transportation}}</td>
+                <td>{{a.open}}</td>
+                <td>{{username}}</td>
+                <td>{{a.language}}</td>
+
+
+                {% for ap in aoipoi %}
+                    {% if a == ap.aoi_id_fk and ap.poi_id %}
+                        <td>{{ap.poi_id.poi_title}}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+    <table id="exl_soi" class="table table-striped" cellspacing="0" width="100%" style="display: none;">
+        <thead>
+            <tr>
+                <th id="soi_title-1">SOI 標題</th>
+                <th class="Region-1">地區</th>
+                <th class="description">描述</th>
+                <th id="soi_contributor">主題故事製作貢獻者</th>
+                <th class="public-1">公開</th>
+                <th id="SOI_account">該SOI擁有者帳號</th>
+                <th class="export_language">語言</th>
+            </tr>
+        </thead>
+        <tbody id="table_orders">
+            {% for s in user_soi %}
+            <tr>
+                <td>{{s.soi_title}}</td>
+                <td>{{s.area_name_en}}</td>
+                <td>{{s.soi_description}}</td>
+                <td>{{s.contributor}}</td>
+                <td>{{s.open}}</td>
+                <td>{{username}}</td>
+                <td>{{s.language}}</td>
+            </tr>
+            <!--
+            <tr>
+                <td>POI:</td>
+                {% for sx in soixoi %}
+                    {% if s == sx.soi_id_fk and sx.poi_id %}
+                        <td>{{sx.poi_id.poi_title}}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>LOI:</td>
+                {% for sx in soixoi %}
+                    {% if s == sx.soi_id_fk and sx.loi_id %}
+                        <td>{{sx.loi_id.route_title}}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>AOI:</td>
+                {% for sx in soixoi %}
+                    {% if s == sx.soi_id_fk and sx.aoi_id %}
+                        <td>{{sx.aoi_id.title}}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr><td></td></tr>
+             -->
+            <tr>
+                <td>內含POIs:</td>
+                {% for sx in soixoi %}
+                    {% if s == sx.soi_id_fk %}
+                        <td>{{sx.poi_id.poi_title}}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>內含LOIs:</td>
+                {% for sx in soixoi %}
+                    {% if s == sx.soi_id_fk %}
+                        <td>{{sx.loi_id.route_title}}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>內含AOIs:</td>
+                {% for sx in soixoi %}
+                    {% if s == sx.soi_id_fk %}
+                        <td>{{sx.aoi_id.title}}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script type="text/javascript">
+        is_edit = false;
+    </script>
+    {% load static %}
+    <script src="{% static 'table2csv/src/table2csv.js' %}"></script>
+    {% with js=coi|stringformat:"s"|add:"/make_player.js" %}
+        <script src="{% static 'js/'|add:js %}"></script>
+    {% endwith %}
+    <script src="{% static 'js/huge_import_poi.js' %}"></script>
+
+    <script>
+       $(document).ready(function() {
+            if($(window).width() < 1025) {
+                $("#list_poi").css("font-size", "50%");
+                $("#list_loi").css("font-size", "50%");
+                $("#list_aoi").css("font-size", "50%");
+                $("#list_soi").css("font-size", "50%");
+            }
+       }); 
+    </script>
+
+
+
+</body>
+
+</html>

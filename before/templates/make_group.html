@@ -1,0 +1,80 @@
+{% include 'header.html' %}
+
+<body>
+    {% include 'navbar.html' %} {% include 'sidebar.html' %}
+    <div class="container">
+        <div class="row">
+            <hr>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-heading" align=center style="background-color: #4bafa9">
+                        <h3 id="create_group" style="color: #fff">建立群組</h3>
+                    </div>
+                    <form id="make_groupform">
+                        {% csrf_token %}
+                        <div class="col-lg-12">
+                            <label style="margin-top: 20px;">
+                                <p id="group_title1" style="display: inline;">群組名稱:</p>
+                                <input name="group_name" id="group_name">
+                                <img src="../static/images/question.png" data-toggle="modal" data-target="#group_infos" style="display:inline;margin-bottom: 10px;margin-left: 5px;">
+                            </label>
+                            <hr>
+                        </div>
+                        <hr>
+                        <div class="col-lg-12">
+                            <p style="display: inline; float: inherit; margin-right: 5px;">
+                                <b id="groupdescription">群組描述:</b>
+                                <textarea id="group_info" name="group_info" style="resize:none; width: 250px; height: 150px;"></textarea>
+                            </p>
+                        </div>
+                        <label class="col-md-12">
+                            <p id="ispublic" style="display: inline;">是否公開:</p>
+                            <select id="open" name="open">
+                                <option id="yes" value="1">公開</option>
+                                <option id="no" value="0">不公開</option>
+                            </select>
+                        </label>
+                        <div class="col-md-12" style="margin-top: 50px">
+                            <button type="submit" class="btn btn-default" style="margin:0 auto;" id="group_button">
+                                <p id="btn_confirm" style="display: inline;">確認</p>
+                            </button>
+                        </div>
+                        <div class="form-group" style="display: none">
+                            <input type="text" name="group_make" id="group_make" value="make">
+                            <input type="text" name="group_leader" id="group_leader" value={{username}}>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="group_infos" role="dialog" style="margin-top:200px">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <ul id="group_modal-1">
+                        <li>群組Leader可邀請成員進入群組</li>
+                        <li>User 可建立多個群組亦可申請加入多個群組</li>
+                        <li>群組Leader可解散群組</li>
+                        <li>群組Member可退出群組</li>
+                        <li>若群組為不公開則無法探索該群組</li>
+                        <li>若群組為公開且驗證通過才可在搜尋功能查詢群組</li>
+                        <li id = "group_modal_last_line">群組建立(Group Leader)者有權力修成員做的景點/線/區和主題故事的內容及各種屬性(公開<->不公開)。</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button id="close_info" type="button" class="btn btn-danger" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="loading" hidden>
+        <img src="../static/images/loading.gif" style="position: fixed; display: block; top:40%; right: 50%;">
+    </div>
+</body>
+<script>
+    
+</script> {% load static %}
+<script src="{% static 'js/make_group.js' %}"></script>
+
+</html>

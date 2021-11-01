@@ -1,0 +1,196 @@
+{% include 'header.html' %}
+<html>
+{% with navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar %} {% endwith %}
+<body>
+<div class="container" style="padding-left: 0px;">
+    <div class="row">
+        <h1 id="logo_content" class="page-header">
+            <!-- <img id="logo" src="/static/images/logo.png"> -->
+        </h1>
+        <div class="btn-group" role="group">
+            <button id="btnGroupDrop1" type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    通知
+                    <span class="badge">{{msg_count}}</span>
+                </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="btnGroupDrop1" style="width: 300px; height: 210px; overflow-y: scroll;">
+                {% if msg %}
+                <div class="btn-group" style="margin-left: calc(35%)">
+                    <button class="btn btn-success" onclick="AllAgree()">全部同意</button>
+                </div>
+                <hr>
+                {% for m in msg %}
+                <li>
+                    {% if m.group_id.group_leader_id == user_id.user_id and m.message_type == 0 %}
+                    <p name="apply_group" tabindex="-1" style="text-align: center;font-size: larger;">
+                        {% if m.sender.nickname %}
+                            <input class="sender_user_name" type="hidden" value={{m.sender.nickname}}>
+                            {{m.sender.nickname}}
+                        {% else %}
+                            <input calss="sender_user_name" type="hidden" value={{m.sender.user_name}}>
+                            {{m.sender.user_name}}
+                        {% endif %}
+                        申請加入群組: {{m.group_id.group_name}}
+                        <input class="sender_group_name" type="hidden" value={{m.group_id.group_name}}>
+                    </p>
+                    <div class="btn-group" style="margin-left: 80px">
+                        <input type="checkbox" class="chk_msg" style="position:fixed; margin-left:-30px;" checked>
+                        <button class="btn btn-success group_agree" onclick="ReplyApply('agree',{{m.group_id.group_id}},{{m.message_id}},{{m.sender.user_id}})">同意</button>
+                        <button class="btn btn-danger group_refuse" onclick="ReplyApply('refuse',{{m.group_id.group_id}},{{m.message_id}},{{m.sender.user_id}})">拒絕</button>
+                    </div>
+                    {% elif m.group_id.group_leader_id == user_id.user_id and m.message_type == -1 %}
+                    <p tabindex="-1" style="text-align: center;font-size: larger;">
+                        {% if m.sender.nickname %}
+                            {{m.sender.nickname}}
+                            <input class="sender_user_name" type="hidden" value={{m.sender.nickname}}>
+                        {% else %}
+                            {{m.sender.user_name}}
+                            <<input calss="sender_user_name" type="hidden" value={{m.sender.user_name}}>
+                        {% endif %}
+                        拒絕加入群組: {{m.group_id.group_name}}
+                        <input class="sender_group_name" type="hidden" value={{m.group_id.group_name}}>
+                    </p>
+                    <div class="btn-group" style="margin-left: 80px">
+                        <button class="btn btn-success group_confirm" onclick="ReplyApply('read',{{m.group_id.group_id}},{{m.message_id}},{{m.sender.user_id}})">確認</button>
+                    </div>
+                    {% elif m.group_id.group_leader_id != user_id.user_id and m.message_type == 0 %}
+                    <p name="invite" tabindex="-1" style="text-align: center;font-size: larger;">
+                        {% if m.sender.nickname %}
+                            {{m.sender.nickname}}
+                            <input class="sender_user_name" type="hidden" value={{m.sender.nickname}}>
+                        {% else %}
+                            {{m.sender.user_name}}
+                            <input calss="sender_user_name" type="hidden" value={{m.sender.user_name}}>
+                        {% endif %}
+                        邀請你加入群組: {{m.group_id.group_name}}
+                        <input class="sender_group_name" type="hidden" value={{m.group_id.group_name}}>
+                    </p>
+                    <div class="btn-group" style="margin-left: 80px">
+                        <input type="checkbox" class="chk_msg" style="position:fixed; margin-left:-30px;" checked>
+                        <button class="btn btn-success group_joint" onclick="ReplyInvite('yes',{{m.group_id.group_id}},{{m.message_id}},{{m.sender.user_id}})">加入</button>
+                        <button class="btn btn-danger group_refuse" onclick="ReplyInvite('no',{{m.group_id.group_id}},{{m.message_id}},{{m.sender.user_id}})">拒絕</button>
+                    </div>
+                    {% else %}
+                    <p tabindex="-1" style="text-align: center;font-size: larger;">
+                        {% if m.sender.nickname %}
+                            {{m.sender.nickname}}
+                            <input class="sender_user_name" type="hidden" value={{m.sender.nickname}}>
+                        {% else %}
+                            {{m.sender.user_name}}
+                            <input calss="sender_user_name" type="hidden" value={{m.sender.user_name}}>
+                        {% endif %}
+                        不同意你加入群組: {{m.group_id.group_name}}
+                        <input class="sender_group_name" type="hidden" value={{m.group_id.group_name}}>
+                    </p>
+                    <div class="btn-group" style="margin-left: 80px">
+                        <button class="btn btn-success group_confirm" onclick="ReplyInvite('read',{{m.group_id.group_id}},{{m.message_id}},{{m.sender.user_id}})">確認</button>
+                    </div>
+                    {% endif %}
+                </li>
+                <li class="divider"></li>
+                {% endfor %} {% else %}
+                <p id="no_msg" style="text-align: center;font-size: x-large;">無通知訊息</p>
+                {% endif %}
+            </ul>
+            <button id="group_search" class="btn btn-primary GroupModal" data-toggle="modal" data-target="#GroupModal" style="float: right;">
+                    <span class="glyphicon glyphicon-search"></span> 探索</button>
+        </div>
+    </div>
+    <div class="group_show col-lg-12" style="margin-top: 20px">
+        <h2 id="myGOI" style="display: inline;">我的群組</h2>
+        <img src="/static/images/question.png" data-toggle="modal" data-target="#group_info" style="display:inline;margin-bottom: 10px;margin-left: 5px;">
+        <button class="btn" style="float:right;" id="make_group" onclick='buttonLink("/{{coi}}/make_group")'><a>＋建立新群組</a></button>
+        <br>
+        <hr>
+        <div class="group_detail">
+            {% for g in group_list %} {% ifchanged %}
+            <table class="table table-hover">
+                <tr>
+                    <th>
+                        <p style="color:#00F; display:inline;">{{g.foreignkey.group_name}}</p>
+                        {% if g.foreignkey.verification == 0 %}
+                        <p style="color:#010; display:inline;" class="Unverified">(尚未驗證 /</p>
+                        {% elif g.foreignkey.verification == 1 %}
+                        <p style="color:#00F; display:inline;" class="verified">(已驗證通過 /</p>
+                        {% else %}
+                        <p style="color:#F00; display:inline;" class="Verification_Failed">(驗證不通過 /</p>
+                        {% endif %} {% if g.foreignkey.open == 1 %}
+                        <p style="color:#00F; display:inline;" class="public-2">公開</p>) {% else %}
+                        <p style="color:#F00; display:inline;" class="private">不公開</p>) {% endif %} {% if g.identifier == 'leader' %}
+                        <button class="btn btn-info invite_modal group_invite" class="btn btn-info btn-lg" data-toggle="modal" data-target="#inviteModal" data-id="{{g.foreignkey.group_id}}" style="float: right;">
+                                <span class="glyphicon glyphicon-user"></span>邀請</button>
+                        <button class="btn btn-danger group_dismiss" onclick="delete_group({{g.foreignkey.group_id}})" style="float: right; margin-right: 10px;">解散</button>
+                        <button class="btn btn-warning group_management" style="float: right; margin-right: 10px;" onclick='buttonLink("/{{coi}}/manage_group/{{g.foreignkey.group_id}}")'>
+                                <a>管理</a>
+                            </button> {% elif g.identifier == 'member' %}
+                        <button class="btn btn-danger group_quit" onclick="leave_group({{g.foreignkey.group_id}})" style="float: right; margin-right: 10px;">退出</button>
+                        <button class="btn btn-warning group_view" style="float: right; margin-right: 10px;" onclick='buttonLink("/{{coi}}/manage_group/{{g.foreignkey.group_id}}")'>
+                                <a>查看</a>
+                            </button> {% endif %}
+                    </th>
+                </tr>
+            </table>
+            {% endifchanged %} {% endfor %}
+        </div>
+    </div>
+    <div id="GroupModal" class="modal fade" role="dialog" style="margin-top: 300px">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <input class="modal-title" id="search_group" name="search_group" list="group_result" placeholder="Search">
+                    <datalist id="group_result"></datalist>
+                    <button id="apply_join" class="btn btn-success" onclick="JoinGroups()">申請加入</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="inviteModal" class="modal fade" role="dialog" style="margin-top: 300px">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <input class="modal-title" id="search_member" name="search_member" list="member_result" placeholder="Search">
+                    <datalist id="member_result"></datalist>
+                    <button id="send_invite" class="btn btn-success" onclick="InviteFriend()">送出邀請</button>
+                    <input type="hidden" name="modal-id" id="modal_group">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="group_info" role="dialog" style="margin-top:200px">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <ul id="group_modal-1">
+                        <li>群組Leader可邀請成員進入群組</li>
+                        <li>User 可建立多個群組亦可申請加入多個群組</li>
+                        <li>群組Leader可解散群組</li>
+                        <li>群組Member可退出群組</li>
+                        <li>若群組為不公開則無法探索該群組</li>
+                        <li>若群組為公開且驗證通過才可在搜尋功能查詢群組</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button id="close_info" type="button" class="btn btn-danger" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div id="loading" hidden><img src="/static/images/loading.gif" style="display: block; margin:480px 800px;"></div>
+
+<script>
+    const LIST_URL = '/{{coi}}/list_groups'
+    const INVITE_URL = '/{{coi}}/ajax_invite'
+</script>
+
+{% load static %}
+{% with js=coi|stringformat:"s"|add:"/list_group.js" %}
+    <script src="{% static 'js/'|add:js %}"></script>
+{% endwith %}
+<script src="{% static 'js/list_groups.js' %}"></script>
+</body>
+</html>

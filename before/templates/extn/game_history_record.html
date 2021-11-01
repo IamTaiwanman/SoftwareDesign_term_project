@@ -1,0 +1,160 @@
+{% include 'header.html' %}
+<html>
+    {% with navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar %} {% endwith %}
+    <body>
+
+    <div class="container" style="font-family: Microsoft JhengHei;">
+        <div class="row" style="padding-top: 5vh;">
+            <div class="col-sm-6" style="height: 40vh;">
+                <h3 style="height: 10%;">題目</h3>
+                {% if grading_record != None %}                
+                    <div style="height: 85%; margin-top: 10px; margin-bottom: 10px; overflow-y: auto;">
+                        <div style="display: none;">
+                            <input type="text" id="record_lat" value="{{grading_record.lat}}">
+                            <input type="text" id="record_lng" value="{{grading_record.lng}}">
+                            <input type="text" id="chest_lat" value="{{grading_record.chest_id.lat}}">
+                            <input type="text" id="chest_lng" value="{{grading_record.chest_id.lng}}">
+                            {% if grading_record.chest_id.poi_id != None %}
+                                <input type="text" id="poi_lat" value="{{grading_record.chest_id.poi_id.latitude}}">
+                                <input type="text" id="poi_lng" value="{{grading_record.chest_id.poi_id.longitude}}">
+                            {% endif %}
+                    </div>
+                        <p>{% if grading_record.chest_id.question_type == 1 %}是非題{% elif grading_record.chest_id.question_type == 2 %}單選題{% elif grading_record.chest_id.question_type == 3 %}問答題{% elif grading_record.chest_id.question_type == 5 %}闖關尋奇終點{% endif %}</p>
+                        <p>{{grading_record.chest_id.question}}</p>
+                        {% if grading_record.chest_id.question_type == 2 %}
+                            {% if grading_record.chest_id.option1 != None %}<p>A. {{grading_record.chest_id.option1}}</p>{% endif %}
+                            {% if grading_record.chest_id.option2 != None %}<p>B. {{grading_record.chest_id.option2}}</p>{% endif %}
+                            {% if grading_record.chest_id.option3 != None %}<p>C. {{grading_record.chest_id.option3}}</p>{% endif %}
+                            {% if grading_record.chest_id.option4 != None %}<p>D. {{grading_record.chest_id.option4}}</p>{% endif %}
+                        {% endif %}
+                        {% if grading_record.chest_id.question_type == 1 or grading_record.chest_id.question_type == 2 %}
+                                <p>解答: {{grading_record.chest_id.answer}}</p>
+                        {% endif %}
+                        {% if grading_record.correctness == None %}批改中{% elif grading_record.correctness %}答對{% if grading_record.point != None %}({{grading_record.point}}分){% endif %}{% else %}答錯{% endif %}
+                        {% if grading_record.chest_id.expound|length == 1 %}
+                            <hr style="color:black;background-color:black;width:100%;height:1px;">
+                            <p>語音解說</p>
+                            <audio style="max-width:90%;" controls src="/player_pictures/{{grading_record.chest_id.expound.0.ATT_url}}"></audio>
+                        {% endif %}
+                        {% if grading_record.chest_id.att|length != 0 %}
+                            <hr style="color:black;background-color:black;width:100%;height:1px;">
+                            <p>多媒體</p>
+                            {% for a in grading_record.chest_id.att %}
+                                {% if a.ATT_format == 'image' %}
+                                    <img src="/player_pictures/{{a.ATT_url}}"
+                                        onclick='preview_img("/player_pictures/{{a.ATT_url}}")'
+                                        style='display:inline; height: 70px; width: 70px; border: 1px solid black; border-radius: 5px;'>
+                                {% elif a.ATT_format == 'video' %}
+                                    <img src="/static/images/video.png"
+                                        onclick='preview_video("/player_pictures/{{a.ATT_url}}")'
+                                        style='display:inline; height: 70px; width: 70px; border: 1px solid black; border-radius: 5px; padding: 15px; background-color: gray;'>
+                                {% elif a.ATT_format == 'audio' %}
+                                    <img src="/static/images/sound.png"
+                                        onclick='preview_audio("/player_pictures/{{a.ATT_url}}")'
+                                        style='display:inline; height: 70px; width: 70px; border: 1px solid black; border-radius: 5px; padding: 15px; background-color: gray;'>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-sm-5 col-sm-offset-1 map" style="height: 40vh;">
+            </div>
+        </div>
+        <div class="row" style="padding-top: 5vh;">
+            <div class="col-sm-6" style="height: 40vh;">
+                <h3 style="height: 10%;">回答</h3>
+                <div style="height: 65%; margin-top: 10px; overflow-y: auto;">
+                    <p>{{grading_record.answer}}</p>
+                    {% for a in grading_record.att %}
+                        {% if a.ATT_format == 'image' %}
+                            <img src="/player_pictures/{{a.ATT_url}}"
+                                onclick='preview_img("/player_pictures/{{a.ATT_url}}")'
+                                style='display:inline; height: 70px; width: 70px; border: 1px solid black; border-radius: 5px;'>
+                        {% elif a.ATT_format == 'video' %}
+                            <img src="/static/images/video.png"
+                                onclick='preview_video("/player_pictures/{{a.ATT_url}}")'
+                                style='display:inline; height: 70px; width: 70px; border: 1px solid black; border-radius: 5px; padding: 15px; background-color: gray;'>
+                        {% elif a.ATT_format == 'audio' %}
+                            <img src="/static/images/sound.png"
+                                onclick='preview_audio("/player_pictures/{{a.ATT_url}}")'
+                                style='display:inline; height: 70px; width: 70px; border: 1px solid black; border-radius: 5px; padding: 15px; background-color: gray;'>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div style="height: 10%; margin-top: 10px; margin-bottom: 10px;">
+                    <button class="btn" id="back" onclick="window.location = '../../../game_history/{{group_id}}/{{game_history.room_id.id}}/1';">返回答題歷史</button>
+                </div>
+            </div>
+            <div class="col-sm-5 col-sm-offset-1" style="height: 40vh;">
+                <ul class="nav nav-tabs">
+                    <li {% if grading_record.point == None %}class="active"{% endif %}><a href="#grading" data-toggle="tab">未評分</a></li>
+                    <li {% if grading_record.point != None %}class="active"{% endif %}><a href="#graded" data-toggle="tab">已評分</a></li>
+                    <li><a href="#info" data-toggle="tab">本場資訊</a></li>
+                    <li><a href="#sort" data-toggle="tab">排序方式</a></li>                
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane {% if grading_record.point == None %}fade in active{% endif %}" id="grading">
+                        <div class="list-group list-group-flush" style="padding-top: 10px;">
+                        </div>                        
+                    </div>
+                    <div class="tab-pane {% if grading_record.point != None %}fade in active{% endif %}" id="graded">
+                        <div class="list-group list-group-flush" style="padding-top: 10px;">
+                        </div>                        
+                    </div>
+                    <div class="tab-pane" id="info">
+                        <div style="padding-top: 10px;">
+                            <p style="color:#00F;">{{game_history.room_id.group_id.group_name}}</p>
+                            <p style="color:#00F;">{{game_history.room_id.room_name}}</p>
+                            <p style="color:#00F;">{{game_history.start_time|date:"Y-m-d H:i"}}</p>
+                            <p style="color:#00F;">{{game_history.end_time|date:"Y-m-d H:i"}}</p>
+                            <p style="color:#00F;">{{game_history.play_time}}分鐘</p>
+                            <p style="color:#00F;">{% if game_history.state == 0 %}進行中{% elif game_history.state == 1 %}批改中{% elif game_history.state == 2 %}已結算{% endif %}</p>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="sort">
+                        <div style="padding-top: 10px;">
+                            <div>
+                                <input type="radio" name="sort" id="sort_chest" value="sort_chest">
+                                <label for="sort_chest">題目</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="sort" id="sort_user" value="sort_user">
+                                <label for="sort_user">成員</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+    <div id="loading" style="position:fixed;top:0;left:0;right:0;bottom:0;background-color:white;">
+        <img src="/static/images/loading.gif" style="position:relative;top:50%;transform:translateY(-50%);display:block;margin:auto;">
+    </div>
+    <div class="shady" onclick="hidden_preview()"
+        style="height: 100vh; width: 100vw; position: fixed; left: 0px; top: 0px;
+                display: none; padding: 25vh 0; z-index: 99; background-color:rgba(0, 0, 0, 0.5)">
+        <img style="display: none; margin: auto; height: 100%;">
+        <audio controls style="display: none; margin: auto; height: 100%;"></audio>
+        <video controls style="display: none; margin: auto; height: 100%;"></video>
+    </div>   
+</body>
+{% load static %}
+ <script type="text/javascript">
+    game_record = [];
+    {% for r in game_record %}
+        game_record.push({
+            "id": {{r.id}},
+            "active": {% if grading_record == r %}true{% else %}false{% endif %},
+            "user_name": "{{r.user_id.user_name}}",
+            "point": {% if r.point == None %}null{% else %}{{r.point}}{% endif %},
+            "answer_time": new Date({{r.answer_time.year}}, {{r.answer_time.month}} - 1, {{r.answer_time.day}}, {{r.answer_time.hour}}, {{r.answer_time.minute}}, {{r.answer_time.second}}, {{r.answer_time.microsecond}} / 1000),
+            "answer_time_string": '{{r.answer_time|date:"Y-m-d H:i:s.u"}}',
+            "chest_id": {{r.chest_id.id}},
+            "chest_question": '{{r.chest_id.question|slice:":15"}}{% if r.chest_id.question|length > 15 %}...{% endif %}'
+        });
+    {% endfor %}
+ </script>
+ <script src="{% static 'js/game_history.js' %}"></script>
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrH6PFm6YsUakE6OxkTi3ekc_bp827osQ"></script>
+</html>

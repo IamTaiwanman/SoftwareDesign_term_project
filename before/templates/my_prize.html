@@ -1,0 +1,47 @@
+{% include 'header.html' %}
+<html>
+<body>
+    {% include 'navbar.html' %} {% include 'sidebar.html' %}
+    <div class="container" style="padding-left: 0px;">
+        <div class="row">
+            <h1 id="logo_content" class="page-header"></h1>
+        </div>
+        <div class="My_Prize_List" style="margin-top: 20px">
+            <h2 id="myPrizeList" style="display: inline;"><span id="myPrize">我所獲得的獎品列表</span></h2>
+            
+            <div class="my_prize_list"><br>
+                {% for pl in prize_list %} {% ifchanged %}
+                
+                <table class="table table-hover">
+                    <tr>
+                        <th>
+                            <label style="display: none;">{{pl.PTP_id}}</label>
+                            <a href="/prize_detail/{{pl.prize_id}}" style="color:#00F; display:inline;">{{pl.prize_name}}</a>
+                            <h5 style="float: right; margin-right: 10px;">獎品數量： {{pl.prize_amount}}</h5>
+
+                            {% if pl.is_exchanged %}
+                            <h5 style="float: right; color: red; margin-right: 10px;"><strong>您已兌換過此獎品</strong></h5>
+                            {% else %}
+                            <h5 style="float: right; color:seagreen; margin-right: 10px;"><strong>您尚未兌換此獎品</strong></h5>
+                            {% endif %}
+
+                            <h5 style="float: right; margin-right: 30px;">遊玩時間 : {{pl.start_time}}</h5>
+                            <h5 style="float: right; margin-right: 30px;">場次名稱 : {{pl.game_name}}</h5>
+                            <h5 style="float: right; margin-right: 30px;">活動名稱 : {{pl.eventName}}</h5>
+                            
+                        </th>
+                    </tr>
+                </table>
+                {% endifchanged %} {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div id="loading" hidden><img src="/static/images/loading.gif" style="position: fixed; display: block; top:40%; right: 50%;"></div>
+
+<!--script>
+    const LIST_URL = '/list_prize'
+    const RELOCATE_URL = '/list_prize';
+</script-->
+
+</body>
+</html>

@@ -1,0 +1,240 @@
+{% include 'header.html' %}
+<html>
+    {% with navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar %} {% endwith %}
+    <body>
+    <div class="container" style="margin-bottom: 250px;">
+        <div class="col-lg-12" id="makePOI" style="margin-left: 50px;"> <br>
+            <input type="hidden" value="chinese" class="lang-1">
+            <h2 id="make_poiform-1">景點製作</h2>
+            <form id="make_poiform" enctype="multipart/form-data">
+                <div class="mypoi_make">
+                    <div class="form-group">
+                        <label id="title-1">標題</label>
+                        <input type="" name="poi_title" id="poi_title">
+                    </div>
+
+                    <div class=" form-inline form-group ">
+                        <label  id="Subject-1"  style="display: inline;">主題</label>
+
+                        <select id="subject" name="subject" style="width: 15%; display: inline;">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            <option id="disappeared" value="消逝的">消逝的</option>
+                            <option id="experiential" value="體驗的">體驗的</option>
+                            <option id="activation" value="活化與再造的">活化與再造的</option>
+                        </select>
+
+                    </div>
+                    <div class="form-group">
+                        <b id="Region-1" style="display: inline;">地區  </b>
+
+                        <select id="city" name="city" style="width: 14%; display: inline;">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            <option value="高雄市">高雄市</option>
+                            <option value="嘉義市">嘉義市</option>
+                            <option value="嘉義縣">嘉義縣</option>
+                            <option value="臺南市">臺南市</option>
+                        </select>
+
+
+                        <select id="areas" name="my_areas" style="width: 35%; display: inline;"></select>
+
+                    </div>
+                    <div class="form-group">
+                        <label id="Type-1">類型</label>
+                        <select id="type1" name="type1">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            <option class="natural" value="自然景觀">自然景觀</option>
+                            <option id="human" value="人文景觀">人文景觀</option>
+                            <option id="event" value="事件">事件</option>
+                            <option id="figure" value="人物">人物</option>
+                            <option id="industry" value="產業">產業</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label id="docent_period">時期</label>
+                        <select id="period" name="period">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            <option id="Prehistory-1" value="史前時期">史前時期</option>
+                            <option id="Dutch-1" value="荷西時期">荷西時期</option>
+                            <option id="Ming-1" value="明鄭時期">明鄭時期</option>
+                            <option id="Qing-1" value="清朝時期">清朝時期</option>
+                            <option id="japanese_Occ-1" value="日本時期">日本時期</option>
+                            <option id="Modem-1" value="現代台灣">現代台灣</option>
+                            <option id="BC-1" value="西元前~0">西元前~0</option>
+                            <option value="0~99">0~99</option>
+                            <option value="100~199">100~199</option>
+                            <option value="200~299">200~299</option>
+                            <option value="300~399">300~399</option>
+                            <option value="400~499">400~499</option>
+                            <option value="500~599">500~599</option>
+                            <option value="600~699">600~699</option>
+                            <option value="700~799">700~799</option>
+                            <option value="800~899">800~899</option>
+                            <option value="900~999">900~999</option>
+                            <option value="1000~1099">1000~1099</option>
+                            <option value="1100~1199">1100~1199</option>
+                            <option value="1200~1299">1200~1299</option>
+                            <option value="1300~1399">1300~1399</option>
+                            <option value="1400~1499">1400~1499</option>
+                            <option value="1500~1599">1500~1599</option>
+                            <option value="1600~1699">1600~1699</option>
+                            <option value="1700~1799">1700~1799</option>
+                            <option value="1800~1899">1800~1899</option>
+                            <option value="1900~1999">1900~1999</option>
+                            <option value="2000~">2000~</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label id="year-1">年份</label>
+                        <select type="number" name="year" id="year"></select>
+                    </div>
+                    <div class="form-group">
+                        <label id="keyword-1">關鍵字</label>
+                        <input type="" name="keyword1" id="keyword1">
+                        <input type="" name="keyword2" id="keyword2">
+                        <input type="" name="keyword3" id="keyword3">
+                        <input type="" name="keyword4" id="keyword4">
+                    </div>
+                    <div class="form-group">
+                        <label id="docent_address">地址</label>
+                        <input type="text" name="poi_address" id="poi_address">
+                        <br>
+                        <small id="Changhua_map">(ex:彰化縣鹿港鎮民族路228號)可利用地圖自動取得地址與經緯度(在地圖上按左鍵)</small>
+                        <div id="map_poi" style="width:500px;height:500px"></div>
+                        <div style="margin-top: 5px;">
+                            <p style="display: inline;" id="lati">緯度:</p>
+                            <input type="number" name="latitude" id="latitude" step="0.0000000000000001">
+                            <p style="display: inline;" id="long">經度:</p>
+                            <input type="number" name="longitude" id="longitude" step="0.0000000000000001">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label id="description">描述</label>
+                        <textarea name="poi_description_1" id="poi_description_1"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label id="Format-1">範疇</label>
+                        <select id="format" name="format">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            <option id="Historical" value="古蹟、歷史建築、聚落">古蹟、歷史建築、聚落</option>
+                            <option id="Ruins" value="遺址">遺址</option>
+                            <option id="Cultural-1" value="文化景觀">文化景觀</option>
+                            <option class="natural" value="自然景觀">自然景觀</option>
+                            <option id="Folk" value="民俗及有關文物">民俗及有關文物</option>
+                            <option id="Antique" value="古物">古物</option>
+                            <option id="Traditional" value="傳統藝術">傳統藝術</option>
+                            <option id="Food" value="食衣住行育樂">食衣住行育樂</option>
+                            <option id="Others" value="其他">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label id="docent_source">參考來源</label>
+                        <input type="text" name="poi_source" id="poi_source">
+                    </div>
+                    <div class="form-group">
+                        <label id="creator-1">參考來源作者</label>
+                        <input type="text" name="creator" id="creator">
+                    </div>
+                    <div class="form-group">
+                        <label id="publisher-1">參考來源出版者</label>
+                        <input type="text" name="publisher" id="publisher">
+                    </div>
+                    <div class="form-group">
+                        <label id="contributor-1">景點製作貢獻者</label>
+                        <input type="text" name="contributor" id="contributor">
+                    </div>
+                    <div class="form-group">
+                        <input type="radio" id="public" name="isPublic"  class="selectPublic" value="1" checked> <label id="poi_public" for="public">公開</label>
+                        <input type="radio" id="private" name="isPublic" class="selectPublic" value="0">  <label id="poi_private" for="private">不公開</label>
+                        <input type="hidden" value="1" id="open">
+                    </div>
+                    <div class="form-group" style="display: none">
+                        <input type="text" name="poi_make" id="poi_make" value="make">
+                        <input type="text" name="language" id="language" value="chinese">
+                        <input type="text" name="identifier" id="identifier" value="{{role}}">
+                        <input type="text" name="rights" id="rights" value={{username}}>
+                    </div>
+                    <div class="form-group">
+                        <label id="upload_guide">上傳語音導覽解說</label>
+                        <br>
+                        <input type="radio" id="none_file" name="sounds" value="none" checked>
+                        <label id="no_file" for="none_file">  無</label>
+                        <!-- <input type="radio" name="sounds" value="none" checked>
+                        <p id="none_file" style="display: inline;"> 無</p> -->
+                        <input type="radio" id="audio_guide-1" name="sounds" value="sound">
+                        <label id="audio_guide" for="audio_guide-1">  語音導覽</label>
+                        <br>
+                        <p id="restrict1"></p>
+                        <div class="upload_nothing"></div>
+                        <div class="upload_sound"></div>
+                    </div>
+                    <div class="form-group">
+                        <label id="upload_media">上傳照片/聲音/影片</label>
+                        <br>
+                        <input type="radio" name="media" value="none" hidden>
+                        <!-- 無 -->
+                        <input type="radio" id="img_file-1" name="media" value="image">
+                        <label id="img_file" class="img_file" for="img_file-1">相片</label>
+                        <input type="radio" id="video_file-1" name="media" value="video">
+                        <label id="video_file-1" for="video_file-1">影片</label>
+                        <input type="radio" id="audio_file-1" name="media" value="audio">
+                        <label id="audio_file-1" for="audio_file-1">聲音</label>
+                        <br>
+                        <p id="restrict"></p>
+                        <div class="upload_none" hidden></div>
+                        <div class="upload_image"></div>
+                        <div class="upload_video"></div>
+                        <div class="upload_audio"></div>
+                    </div>
+                    <input type="hidden" name="user" value="{{username}}">
+                    <button type="submit" class="btn btn-default">
+                        <p id="btn_confirm" style="display: inline;">確認</p>
+                    </button>
+                    <button type="reset" class="btn btn-danger " id="clear">
+                        <p id="btn_reset" style="display: inline;">清除</p>
+                    </button>
+                    <div class="alert alert-danger" hidden></div>
+                    <div class="alert alert-success" hidden></div>
+                </div>
+            </form>
+            <div id="loading" hidden><img src="/static/images/loading.gif" style="display: block; margin:1500px 400px;"></div>
+            <div class="modal fade" id="poi_msg" role="dialog">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content" style="margin-top:100px">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title" style="font-weight: bold;">Poi 製作需知</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p style="display: inline;">景點設定為
+                                <p style="color:#00f; display: inline;">公開</p>時，經驗證通過後可予大眾觀看</p>
+                            <p style="display: inline;">景點設定為
+                                <p style="color:#f00; display: inline;">不公開</p>(私有景點)時，則不驗證</p>
+                            <p style="display: inline;"><b>地區</b>與<b>地址</b>需一致</p>
+                            <p>按住鍵盤<b>Ctrl</b>同時點選圖片即可選取多張(最多五張)圖片</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        const POI_URL = '/{{coi}}/ajax_dublincore';
+        const HOME_URL = '/{{coi}}/make_player';
+        const COI_NAME = '{{coi}}';
+    </script>
+    {% load static %}
+    <script src="{% static 'js/make_player_poi.js' %}"></script>
+    <script src="{% static 'js/get_year.js' %}"></script>
+    <script src="{% static 'js/exif.js' %}"></script>
+    <script id="language_script"></script>
+    {% with js=coi|stringformat:"s"|add:"/nav.js" %}
+    <script src="{% static 'js/'|add:js %}"></script>
+    {% endwith %}
+</body>
+
+</html>

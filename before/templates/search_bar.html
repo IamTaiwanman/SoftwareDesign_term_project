@@ -1,0 +1,231 @@
+{% include 'header.html' %}
+
+<body>
+    {% include 'navbar.html' %}
+    <div class="container">
+        <form>
+            <div class="form-group">
+                <div class="input-group" style="margin-top:5px">
+                    <div class="input-group-btn">
+                        <button class="btn btn-warning" type="submit" id="advance-search">Advanced <span class="glyphicon glyphicon-hand-up"></span></button>
+                    </div>
+                    <input type="text" class="form-control" name="srch_term" id ="srch_term_advance" value="{{search_words_str}}">
+                    <div class="input-group-btn">
+                        <button class="btn btn-primary" type="submit" id="advance_srch_submit" onclick="modifyInput()"><span class="glyphicon glyphicon-search"></span></button>
+                    </div>
+                </div>
+            </div>
+            <div class="well form-group" style="display:none">
+                <fieldset>
+                    <legend class="the-legend">進階搜尋</legend>
+                    <div class="form-group" >
+                            <label style="height:100%">身份</label>
+                            <label class="radio-inline">
+                                <input name="map_role" type="radio" value="0" checked = " ">全部
+                            </label>
+                            <label class="radio-inline">
+                                <input name="map_role" type="radio" value="user">玩家
+                            </label>
+                            <label class="radio-inline">
+                                <input name="map_role" type="radio" value="expert">專家
+                            </label>
+                            <label class="radio-inline">
+                                <input name="map_role" type="radio" value="docent">解說員
+                            </label>
+                    </div>
+                    <div class="form-group form-inline row">
+                      <div class="col-sm-4 form-group">
+                        <label>貢獻者搜尋</label>
+                        <input type="text" class="form-control" name="contributor_search">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                        <label>地區</label>
+                        <select name="city">
+                          {% if language != '中文' %}
+                              <option value="0">all</option>
+                          {% else %}
+                              <option value="0">全部</option>
+                          {% endif %}
+                          {% for city in cities %}
+                          {% if language != '中文' %}
+                              <option value="{{city.area_country}}">{{city.area_country_en}}</option>
+                          {% else %}
+                              <option value="{{city.area_country}}">{{city.area_country}}</option>
+                          {% endif %}
+                        {% endfor %}
+                        </select>
+                        {% for x in area_list %}
+                          <select  name="area" id="{{x.0.area_country}}" style="display:none" disabled>
+                            {% if language != '中文' %}
+                              <option value="0">all</option>
+                              {% for area in x.1 %}
+                              <option value="{{area.1}}">{{area.1}}</option>
+                              {% endfor %}
+                            {% else %}
+                              <option value="0">全部</option>
+                              {% for area in x.1 %}
+                                <option value="{{area.1}}">{{area.0}}</option>
+                                {% endfor %}
+                            {% endif %}
+                          </select>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-2" hidden="">
+                            <label>主題</label>
+                            <select name="topic">
+                                <option value="0">全部</option>
+                                <option value="體驗的">體驗的</option>
+                                <option value="活化與再造的">活化與再造的</option>
+                                <option value="消逝的">消逝的</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2" hidden="">
+                            <label>類型</label>
+                            <select name="ttype">
+                                <option value="0">全部</option>
+                                <option value="人物">人物</option>
+                                <option value="事件">事件</option>
+                                <option value="人文景觀">人文景觀</option>
+                                <option value="自然景觀">自然景觀</option>
+                                <option value="產業">產業</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label>範疇</label>
+                            <select name="category">
+                                <option value="0">全部</option>
+                                <option value="古蹟、歷史建築、聚落">古蹟、歷史建築、聚落</option>
+                                <option value="遺址">遺址</option>
+                                <option value="文化景觀">文化景觀</option>
+                                <option value="傳統藝術">傳統藝術</option>
+                                <option value="民俗及有關文物">民俗及有關文物</option>
+                                <option value="古物">古物</option>
+                                <option value="自然景觀">自然景觀</option>
+                                <option value="食衣住行育樂">食衣住行育樂</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" >
+                            <label>媒體類型</label>
+                            <label class="radio-inline">
+                                <input name="media" type="radio" value="0" checked = " ">全部
+                            </label>
+                            <label class="radio-inline">
+                                <input name="media" type="radio" value="1">相片
+                            </label>
+                            <label class="radio-inline">
+                                <input name="media" type="radio" value="2">聲音
+                            </label>
+                            <label class="radio-inline">
+                                <input name="media" type="radio" value="4">影片
+                            </label>
+                            <label class="radio-inline">
+                                <input name="media" type="radio" value="8">語音導覽
+                            </label>
+                    </div>
+                </fieldset>
+            </div>
+        </form>
+        <ul class="nav nav-tabs" role="tablist" style="margin-top:5px">
+            <li role="presentation" class="active"><a href="#poi" aria-controls="poi" role="tab" data-toggle="tab" style="font-size:20px">景點(POI)</a></li>
+            <li role="presentation"><a href="#loi" aria-controls="loi" role="tab" data-toggle="tab" style="font-size:20px">景線(LOI)</a></li>
+            <li role="presentation"><a href="#aoi" aria-controls="aoi" role="tab" data-toggle="tab" style="font-size:20px">景區(AOI)</a></li>
+            <li role="presentation"><a href="#soi" aria-controls="soi" role="tab" data-toggle="tab" style="font-size:20px">故事(SOI)</a></li>
+            <li role="presentation"><a href="#group" aria-controls="group" role="tab" data-toggle="tab" style="font-size:20px">群組(Group)</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade in active" id="poi">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>共有{{poi_num}}個景點</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size:25px">
+                        {% for x in poi_ans %}
+                        <tr>
+                            <td><a href="/poi_detail/{{x.poi_id}}">{{x.poi_title}}</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="loi">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>共有{{loi_num}}個景線</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size:25px">
+                        {% for x in loi_ans %}
+                        <tr>
+                            <td><a href="/loi_detail/{{x.route_id}}">{{x.route_title}}</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="aoi">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>共有{{aoi_num}}個景區</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size:25px">
+                        {% for x in aoi_ans %}
+                        <tr>
+                            <td><a href="/aoi_detail/{{x.aoi_id}}">{{x.title}}</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="soi">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>共有{{soi_num}}個故事</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size:25px">
+                        {% for x in soi_ans %}
+                        <tr>
+                            <td><a href="/soi_detail/{{x.soi_id}}">{{x.soi_title}}</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="group">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>共有{{group_num}}個群組</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size:25px">
+                        {% for x in group_ans %}
+                        <tr>
+                            <td><a href="/manage_group/{{x.group_id}}">{{x.group_name}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        </div>
+        {% load static %}
+        <script src="{% static 'js/search_bar.js' %}"></script>
+</body>
+
+</html>

@@ -1,0 +1,551 @@
+ {% include 'header.html' %}
+
+<body>
+    {% include 'navbar.html' %} {% include 'sidebar.html' %}
+    <div class="container">
+        <div class="shady" onclick="hidden_preview()"
+            style="height: 100vh; width: 100vw; position: fixed; left: 0px; top: 0px;
+                   display: none; padding: 25vh 0; z-index: 99; background-color:rgba(0, 0, 0, 0.5)">
+            <img style="display: none; margin: auto; height: 100%;">
+            <audio controls style="display: none; margin: auto; height: 100%;"></audio>
+            <video controls style="display: none; margin: auto; height: 100%;"></video>
+        </div>
+        <div class="align-items-center justify-content-center">
+            <h1 id="logo_content" class="page-header">
+                <img id="logo" src="/static/images/logo.png">
+            </h1>
+            <h3 id="title" style="font-weight: 700;">
+                <span class="label label-primary" style="margin-right: 15px;">活動</span>
+                <span id="event_name">{{event.Event_name}}</span>
+                <span id="event_id" hidden>{{event.Event_id}}</span>
+                <span id="room_id" hidden>{{room_id}}</span>
+            </h3>
+            <br>
+            <form id="game_setting" enctype="multipart/form-data"  style="width:90%">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3>走讀設定</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="container">
+                        <div class="row">
+
+                        {% csrf_token %}
+                        <div id="is_playing" hidden>{{ game_setting.is_playing }}</div>
+                        <div class="col-lg-12 ">
+                        <div class="form-group">
+                            <h3></h3>場次名稱</h3>
+                            <input type="text" id="room_name" value="{{ game_setting.room_name }}" required>
+                        </div>
+                        </div>
+                        <div class="col-lg-12 ">
+                        <div class="form-group" id="givePrize" >
+                            <h2 style="display: inline;">是否頒發獎品</h2>
+                            {% if game_setting.game_prize_detail %}
+                                {% if game_setting.game_prize_detail != '沒有設置獎品' %}
+                                    <input type="radio" name="givePrize" value="yes" checked>
+                                    <h3 style="display: inline;">是</h3>
+                                    <input type="radio" name="givePrize" value="no">
+                                    <h3 style="display: inline;">否</h3>
+                                {%endif%}
+                                {% if game_setting.game_prize_detail == '沒有設置獎品' %}
+                                    <input type="radio" name="givePrize" value="yes">
+                                    <h3 style="display: inline;">是</h3>
+                                    <input type="radio" name="givePrize" value="no" checked>
+                                    <h3 style="display: inline;">否</h3>
+                                {%endif%}
+                            {% else %}
+                                <input type="radio" name="givePrize" value="yes">
+                                <h3 style="display: inline;">是</h3>
+                                <input type="radio" name="givePrize" value="no" checked>
+                                <h3 style="display: inline;">否</h3>
+                            {% endif %}
+                            <img src="../../static/images/question.png" data-toggle="modal" data-target="#setPrize" style="display:inline; margin-bottom: 10px;margin-left: 5px;">
+                            <div class="form-group" id="addPrize" hidden>
+                                <br>
+                                {% if game_setting.game_prize_detail != '沒有設置獎品'%}
+                                    {% for sh in show_prize_detail %}
+                                    <div id="prize{{sh.rank}}" >
+                                        <h3 style="display: inline;">獲獎名稱:</h3><input type="text" id="prize_name" style="display: inline;" value="{{ sh.prize_detail }}" required>
+                                        <h3 style="display: inline;">選擇獎品</h3>
+                                        <select id = "game_prize_name" name="game_prize_name" style="display: inline;">
+                                            <option value = "{{ sh.prize_id }}">{{ sh.prize_name }}</option>
+                                            <option value = "1">無</option>
+                                            {% for p in prize_can_use %}
+                                                {%if p.prize_name != game_setting.game_prize_name%}
+                                                    <option value = "{{ p.prize_id }}">{{ p.prize_name }}</option>
+                                                {%endif%}
+                                            {% endfor %}
+                                        </select>
+                                        <h3 id="prize_num" style="display: inline;">獎品數量</h3>
+                                        <input type="number" min="0" style="display: inline;" value = "{{ sh.prize_count }}" required> 
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div id="prize1">
+                                        <h3 style="display: inline;">獲獎名稱:</h3><input type="text" id="prize_name" style="display: inline;" value="" required>
+                                        <h3 style="display: inline;">選擇獎品</h3>
+                                    <select id = "game_prize_name" name="game_prize_name" style="display: inline;">
+                                        <option value = "1">無</option>
+                                            {% for p in prize_can_use %}
+                                                <option value = "{{p.prize_id}}">{{p.prize_name}}</option>
+                                            {% endfor %}
+                                    </select>
+                                    <h3 id="prize_num" style="display: inline;">獎品數量</h3>
+                                    <input id = "input_prize_num" type="number" min="0" style="display: inline;" value="" required> 
+                                </div>
+                                {% endif %}
+                            </div>
+                            <input type="button" id="increasePrize" value="新增獎品" onclick="IncreasePrize()" hidden>
+                            <input type="button" id="delPrize" value="刪除獎品" onclick="DelPrize()" hidden>
+                        </div>
+                        </div>
+
+                        
+                        <div class="form-group">
+                            <div class="col-lg-12 ">
+                            <h2>開始方式 :</h2>
+                            </div>
+                            <div class="col-lg-4"><br>
+                            <input type="radio" name="auto_start" id="manual" value="manual" {% if game_setting == None or not game_setting.auto_start %}checked{% endif %}>
+                            <label for="manual">透過App開始</label>
+                            <br>
+                            <input type="radio" name="auto_start" id="auto" value="auto" {% if game_setting != None and game_setting.auto_start %}checked{% endif %}>
+                            <label for="auto">
+                                <input type="datetime-local" id="start_time" value="{% if game_setting != None and game_setting.auto_start %}{{ game_setting.start_time|date:'Y-m-d\TH:i' }}{% endif %}" {% if game_setting == None or not game_setting.auto_start %}{{ 'readonly' }}{% endif %}>
+                            </label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4">
+                        <div class="form-group">
+                            <h3>答題時間(分鐘)</h3>
+                            <input type="number" min="1" id="play_time"  value="{{ game_setting.play_time }}" required>
+                        </div>     
+                        </div>   
+                        <div class="col-lg-4">
+                        </div> 
+                    </div>
+                    </div>
+                    </div>
+                    <div class="panel-footer" hidden>
+                        <input type="submit" class="btn btn-default" value="儲存，下一步">
+                    </div>
+                </div>                
+            </form>
+            
+            <form id="game_chest_setting" style="width:90%">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3>走讀題目</h3>
+                    </div>
+                    <div class="panel-body" id="chests">      
+                        {% csrf_token %}                            
+                        {% for p in poi %}
+                            <div id="poi_{{ p.poi_title }}" hidden>   
+                                <input type="number" class="poi_id" value="{{ p.poi_id }}">                                       
+                                <input type="number" class="poi_lat" value="{{ p.latitude }}">
+                                <input type="number" class="poi_lng" value="{{ p.longitude }}">
+                            </div>
+                        {% endfor %}
+                        <div class="form-group chest" id="chest0" hidden>
+                            <div class="panel panel-default">
+                                <div class="panel-heading clearfix">
+                                    <h3 class="pull-left title">題目</h3>
+                                    <span class="chest_id" hidden></span>
+                                    <div class="pull-right btn" style="margin-right: 10px;" onclick="RemoveChest($(this).closest('.chest'))">刪除</div>
+                                    <div class="pull-right btn toggle" style="margin-right: 10px;" onclick="ToggleChest($(this))">隱藏</div>
+                                    <div class="pull-right btn" style="margin-right: 10px;" onclick="CopyChest($(this).closest('.chest'))">複製到其他場次</div>
+                                </div>                                   
+                                <div class="panel-body">
+                                    <div class="container">
+                                    <div class="row">
+                                    <div class="col-lg-12 ">
+                                    <div class="form-group">
+                                        <h3>題型</h3>
+                                        <select class="chest_question_type">
+                                            <option value="1">是非題</option>
+                                            <option value="2">單選題</option>
+                                            <option value="3">問答題</option>
+                                            <option value="4">闖關尋奇</option>
+                                            <option value="5">闖關尋奇終點</option>
+                                        </select>
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-12 ">
+                                    <div class="form-group">
+                                        <h3>題目座標位置</h3>
+                                        <p>1. 請在地圖上按左鍵設定題目座標位置</p>
+                                        <div class="chest_poi_random">
+                                            <p>
+                                                2. <strong>或在</strong>離POI
+                                                <select class="chest_poi">
+                                                    <option></option>
+                                                    {% for p in poi %}
+                                                        <option>{{ p.poi_title }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </p>
+                                            <p>
+                                                <input type="number" class="poi_distance" style="text-align:right;" min="50" value="50" step="50">公尺內
+                                            </p>
+                                            <p><input type="button" value="點擊按鈕隨機產生題目座標位置" class="random_position"></p>
+                                        </div>
+                                        <div class="map_poi" style="width:45vw;height:50vh"></div>
+                                        <div style="margin-top: 5px;">
+                                            <p>緯度:<input type="number" class="chest_lat" readonly></p>                                            
+                                            <p>經度:<input type="number" class="chest_lng" readonly></p>                                            
+                                        </div>                                                       
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-3 ">
+                                    <div class="form-group">
+                                        <h3>題目可被發現距離(公尺)(選填)</h3>
+                                        <input type="number" class="chest_distance" min="50" step="50">
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-3 ">
+                                    <div class="form-group">
+                                        <h3>可答題人數(題)(選填)</h3>
+                                        <input type="number" class="chest_num" min="1">
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-3 ">
+                                    <div class="form-group">
+                                        <h3>答題積分(分)(選填)</h3>
+                                        <input type="number" class="chest_point" min="1">
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-3 ">
+                                        <p></p>
+                                    </div>
+                                    <div class="col-lg-12 ">
+                                    <div class="form-group">
+                                        <h3>題目</h3>
+                                        <textarea class="chest_question"  style="width:40vw;height:35vh"></textarea>
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-12 ">
+                                    <div class="form-group chest_TF">
+                                        <h3>答案(請勾選一項正確答案)</h3>
+                                        <input id="chest0_TF_1" type="radio" name="chest0_TF" value="T" checked>
+                                        <label for="chest0_TF_1">T</label><br/>
+                                        <input id="chest0_TF_2" type="radio" name="chest0_TF" value="F">
+                                        <label for="chest0_TF_2">F</label>
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-12 ">
+                                    <div class="form-group chest_option">
+                                        <h3>選項與答案(請在填完選項後勾選一項正確答案，並依選項A~D順序至少填入兩項)</h3>
+                                        <input id="chest0_option_1" type="radio" name="chest0_option" value="A" checked>
+                                        <label for="chest0_option_1">A.&nbsp;</label><br/>                                        
+                                        <input type="text" class="chest_option1" style="max-width:60%"><br/>
+                                        <input id="chest0_option_2" type="radio" name="chest0_option" value="B">
+                                        <label for="chest0_option_2">B.&nbsp;</label><br/>
+                                        <input type="text" class="chest_option2" style="max-width:60%"><br/>
+                                        <input id="chest0_option_3" type="radio" name="chest0_option" value="C">
+                                        <label for="chest0_option_3">C.&nbsp;</label><br/>
+                                        <input type="text" class="chest_option3" style="max-width:60%"><br/>
+                                        <input id="chest0_option_4" type="radio" name="chest0_option" value="D">
+                                        <label for="chest0_option_4">D.&nbsp;</label><br/>
+                                        <input type="text" class="chest_option4" style="max-width:60%">
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-12 ">
+                                    <div class="form-group chest_level">
+                                        <h3>選項與指示(請依選項A~D順序至少填入一項)</h3>
+                                        <label>A.&nbsp;</label><br/>
+                                        <input type="text" class="chest_level1" style="max-width:60%"><br/>
+                                        <label>指示.&nbsp;</label><br/>
+                                        <textarea class="chest_hint1"></textarea><br/>
+                                        <label>B.&nbsp;</label><br/>
+                                        <input type="text" class="chest_level2" style="max-width:60%"><br/>
+                                        <label>指示.&nbsp;</label><br/>
+                                        <textarea class="chest_hint2"></textarea><br/>
+                                        <label>C.&nbsp;</label><br/>
+                                        <input type="text" class="chest_level3" style="max-width:60%"><br/>
+                                        <label>指示.&nbsp;</label><br/>
+                                        <textarea class="chest_hint3"></textarea><br/>
+                                        <label>D.&nbsp;</label><br/>
+                                        <input type="text" class="chest_level4" style="max-width:60%"><br/>
+                                        <label>指示.&nbsp;</label><br/>
+                                        <textarea class="chest_hint4"></textarea><br/>
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-12 ">
+                                    <div class="form-group">
+                                        <h3>語音解說上傳(選填)</h3>
+                                        <input type="file" class="expound" accept="audio/*" onchange="review_expound($(this))">
+                                        <span class="spam_expound_review" style="display: none;">
+                                            <audio controls class='expound_review'></audio>
+                                            <img src="/static/images/delete.png" style="width: 20px; position: absolute;" onclick="deleteExpound($(this))">
+                                        </span>
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-12 ">
+                                    <div class="form-group">
+                                        <h3>多媒體上傳(照片/影片/音檔)(選填)</h3>
+                                        <br>
+                                        <div id="attachmentNum" hidden>1</div>
+                                        <div id="FormAttachment">
+                                            <input type="file" class="attachment" id="attachment_1" style="display: none;">
+                                        </div>
+                                        <output id="attachment_review" style="display: inline-block;"></output>
+                                        <img id="add_attachment" src="/static/images/add.png" onclick="upload_media($(this),1)" style="height: 70px; width: 70px; border: 2px dashed gray; border-radius: 7px; padding: 10px; margin: 4px;">
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                                </div>
+                            </div>                                                                               
+                        </div>  
+
+                        {% for c in game_chest_setting %}{% ifchanged %}
+  
+                        <div class="form-group chest" id="chest{{ forloop.counter }}">
+                            <div class="panel panel-default">
+                                <div class="panel-heading clearfix">
+                                    <h3 class="pull-left title">題目</h3>
+                                    <span class="chest_id" hidden>{{ c.id }}</span>
+                                    <div class="pull-right btn" style="margin-right: 10px;" onclick="RemoveChest($(this).closest('.chest'))">刪除</div>
+                                    <div class="pull-right btn toggle" style="margin-right: 10px;" onclick="ToggleChest($(this))">顯示</div>
+                                    <div class="pull-right btn" style="margin-right: 10px;" onclick="CopyChest($(this).closest('.chest'))">複製到其他場次</div>
+                                </div>                                   
+                                <div class="panel-body" hidden>
+                                    <div class="container">
+                                    <div class="row">
+                                    <div class="col-lg-12 ">
+                                    <div class="form-group">
+                                        <h3>題型</h3>
+                                        <select class="chest_question_type">
+                                            <option value="1" {% if c.question_type == 1 %}selected{% endif %}>是非題</option>
+                                            <option value="2" {% if c.question_type == 2 %}selected{% endif %}>單選題</option>
+                                            <option value="3" {% if c.question_type == 3 %}selected{% endif %}>問答題</option>
+                                            <option value="4" {% if c.question_type == 4 %}selected{% endif %}>闖關尋奇</option>
+                                            <option value="5" {% if c.question_type == 5 %}selected{% endif %}>闖關尋奇終點</option>
+                                        </select>
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-12 ">
+                                    <div class="form-group">
+                                        <h3>題目座標位置</h3>
+                                        <p>1. 請在地圖上按左鍵設定題目座標位置</p>
+                                        <div class="chest_poi_random">
+                                            <p>
+                                                2. <strong>或在</strong>離POI
+                                                <select class="chest_poi">
+                                                    <option></option>
+                                                    {% for p in poi %}
+                                                        <option {% if p == c.poi_id %}selected{% endif %}>{{ p.poi_title }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </p>
+                                            <p>
+                                                <input type="number" class="poi_distance" style="text-align:right;" min="50" value="50" step="50">公尺內
+                                            </p>
+                                            <p><input type="button" value="點擊按鈕隨機產生題目座標位置" class="random_position"></p>
+                                        </div>
+                                        <div class="map_poi" style="width:45vw;height:50vh"></div>
+                                        <div style="margin-top: 5px;">
+                                            <p>緯度:<input type="number" class="chest_lat" value="{{ c.lat }}" readonly></p>                                            
+                                            <p>經度:<input type="number" class="chest_lng" value="{{ c.lng }}" readonly></p>                                            
+                                        </div>                                                       
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-3 ">
+                                    <div class="form-group">
+                                        <h3>題目可被發現距離(公尺)(選填)</h3>
+                                        <input type="number" class="chest_distance" min="50" step="50" value="{% if c.distance != None %}{{ c.distance }}{% endif %}">
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-3 ">
+                                    <div class="form-group">
+                                        <h3>可答題人數(題)(選填)</h3>
+                                        <input type="number" class="chest_num" min="1" value="{% if c.num != None %}{{ c.num }}{% endif %}">
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-3 ">
+                                    <div class="form-group">
+                                        <h3>答題積分(分)(選填)</h3>
+                                        <input type="number" class="chest_point" min="1" value="{% if c.point != None %}{{ c.point }}{% endif %}">
+                                    </div>
+                                    </div>
+                                    
+                                    <div class="col-lg-3 ">
+                                        <p></p>
+                                    </div>
+                                    <div class="col-lg-12 ">
+                                    <div class="form-group">
+                                        <h3>題目</h3>
+                                        <textarea class="chest_question" style="width:40vw;height:35vh">{{ c.question }}</textarea>
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-12 ">
+                                    <div class="form-group chest_TF">
+                                        <h3>答案(請勾選一項正確答案)</h3>
+                                        <input type="radio" id="chest{{ forloop.counter }}_TF_1" name="chest{{ forloop.counter }}_TF" value="T" {% if c.question_type != 1 or c.answer == 'T' %}checked{% endif %}>
+                                        <label for="chest{{ forloop.counter }}_TF_1">T</label><br/>
+                                        <input type="radio" id="chest{{ forloop.counter }}_TF_2" name="chest{{ forloop.counter }}_TF" value="F" {% if c.question_type == 1 and c.answer == 'F' %}checked{% endif %}>
+                                        <label for="chest{{ forloop.counter }}_TF_2">F</label>
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-12 ">
+                                    <div class="form-group chest_option">
+                                        <h3>選項與答案(請在填完選項後勾選一項正確答案，並依選項A~D順序至少填入兩項)</h3>
+                                        <input type="radio" id="chest{{ forloop.counter }}_option_1" name="chest{{ forloop.counter }}_option" value="A" {% if c.question_type != 2 or c.answer == 'A' %}checked{% endif %}>
+                                        <label for="chest{{ forloop.counter }}_option_1">A.&nbsp;</label><br/>
+                                        <input type="text" class="chest_option1" value="{% if c.question_type == 2 and c.option1 != None %}{{ c.option1 }}{% endif %}" style="max-width:60%"><br/>
+                                        <input type="radio" id="chest{{ forloop.counter }}_option_2" name="chest{{ forloop.counter }}_option" value="B" {% if c.question_type == 2 and c.answer == 'B' %}checked{% endif %}>
+                                        <label for="chest{{ forloop.counter }}_option_2">B.&nbsp;</label><br/>
+                                        <input type="text" class="chest_option2" value="{% if c.question_type == 2 and c.option2 != None %}{{ c.option2 }}{% endif %}" style="max-width:60%"><br/>
+                                        <input type="radio" id="chest{{ forloop.counter }}_option_3" name="chest{{ forloop.counter }}_option" value="C" {% if c.question_type == 2 and c.answer == 'C' %}checked{% endif %}>
+                                        <label for="chest{{ forloop.counter }}_option_3">C.&nbsp;</label><br/>
+                                        <input type="text" class="chest_option3" value="{% if c.question_type == 2 and c.option3 != None %}{{ c.option3 }}{% endif %}" style="max-width:60%"><br/>
+                                        <input type="radio" id="chest{{ forloop.counter }}_option_4" name="chest{{ forloop.counter }}_option" value="D" {% if c.question_type == 2 and c.answer == 'D' %}checked{% endif %}>
+                                        <label for="chest{{ forloop.counter }}_option_4">D.&nbsp;</label><br/>
+                                        <input type="text" class="chest_option4" value="{% if c.question_type == 2 and c.option4 != None %}{{ c.option4 }}{% endif %}" style="max-width:60%">
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-12 ">
+                                    <div class="form-group chest_level">
+                                        <h3>選項與指示(請依選項A~D順序至少填入一項)</h3>
+                                        <label>A.&nbsp;</label><br/>
+                                        <input type="text" class="chest_level1" value="{% if c.question_type == 4 and c.option1 != None %}{{ c.option1 }}{% endif %}" style="max-width:60%"><br/>
+                                        <label>指示.&nbsp;</label><br/>
+                                        <textarea class="chest_hint1">{% if c.question_type == 4 and c.hint1 != None %}{{ c.hint1 }}{% endif %}</textarea><br/>
+                                        <label>B.&nbsp;</label><br/>
+                                        <input type="text" class="chest_level2" value="{% if c.question_type == 4 and c.option2 != None %}{{ c.option2 }}{% endif %}" style="max-width:60%"><br/>
+                                        <label>指示.&nbsp;</label><br/>
+                                        <textarea class="chest_hint2">{% if c.question_type == 4 and c.hint2 != None %}{{ c.hint2 }}{% endif %}</textarea><br/>
+                                        <label>C.&nbsp;</label><br/>
+                                        <input type="text" class="chest_level3" value="{% if c.question_type == 4 and c.option3 != None %}{{ c.option3 }}{% endif %}" style="max-width:60%"><br/>
+                                        <label>指示.&nbsp;</label><br/>
+                                        <textarea class="chest_hint3">{% if c.question_type == 4 and c.hint3 != None %}{{ c.hint3 }}{% endif %}</textarea><br/>
+                                        <label>D.&nbsp;</label><br/>
+                                        <input type="text" class="chest_level4" value="{% if c.question_type == 4 and c.option4 != None %}{{ c.option4 }}{% endif %}" style="max-width:60%"><br/>
+                                        <label>指示.&nbsp;</label><br/>
+                                        <textarea class="chest_hint4">{% if c.question_type == 4 and c.hint4 != None %}{{ c.hint4 }}{% endif %}</textarea>
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-12 ">
+                                    <div class="form-group">
+                                        <h3>語音解說上傳(選填)</h3>
+                                        <br>
+                                        {% if c.expound|length == 1 %}
+                                            <input type="file" class="expound oldMedia media_{{c.expound.0.ATT_id}}" accept="audio/*" onchange="review_expound($(this))" style="display: none;">
+                                            <span class="spam_expound_review">
+                                                <audio controls class='expound_review' src="/player_pictures/{{c.expound.0.ATT_url}}"></audio>
+                                                <img src="/static/images/delete.png" style="width: 20px; position: absolute;" onclick="deleteOldExpound($(this), {{c.expound.0.ATT_id}})">
+                                            </span>
+                                        {% else %}
+                                            <input type="file" class="expound" accept="audio/*" onchange="review_expound($(this))">
+                                            <span class="spam_expound_review" style="display: none;">
+                                                <audio controls class='expound_review'></audio>
+                                                <img src="/static/images/delete.png" style="width: 20px; position: absolute;" onclick="deleteExpound($(this))">
+                                            </span>                                    
+                                        {% endif %}
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-12 ">
+                                    <div class="form-group">
+                                        <h3>多媒體上傳(照片/影片/音檔)(選填)</h3>
+                                        <br>
+                                        <div id="attachmentNum" hidden>1</div>
+                                        <div id="FormAttachment">
+                                            <input type="file" class="attachment" id="attachment_1" accept="audio/*,image/*,video/*" style="display: none;">
+                                        </div>
+                                        <output id="attachment_review" style="display: inline-block;">
+                                            {% for attNum in c.att %}
+                                                {% if c == attNum.chest_id %}
+                                                    <span class='att_span' style='margin: 4px; position: relative'>
+                                                        {% if attNum.ATT_format == 'image' %}
+                                                            <img src="/player_pictures/{{ attNum.ATT_url }}"
+                                                                 onclick='preview_img("/player_pictures/{{ attNum.ATT_url }}")'
+                                                                 style='display:inline; height: 70px; width: 70px; border: 1px solid black; border-radius: 5px;'>
+                                                        {% elif attNum.ATT_format == 'video' %}
+                                                            <img src="/static/images/video.png"
+                                                                 onclick='preview_video("/player_pictures/{{ attNum.ATT_url }}")'
+                                                                 style='display:inline; height: 70px; width: 70px; border: 1px solid black; border-radius: 5px; padding: 15px; background-color: gray;'>
+                                                        {% elif attNum.ATT_format == 'audio' %}
+                                                            <img src="/static/images/sound.png"
+                                                                 onclick='preview_audio("/player_pictures/{{ attNum.ATT_url }}")'
+                                                                 style='display:inline; height: 70px; width: 70px; border: 1px solid black; border-radius: 5px; padding: 15px; background-color: gray;'>
+                                                        {% endif %}
+                                                        <img class='delAtt oldMedia media_{{ attNum.ATT_id }}' src='/static/images/delete.png'
+                                                             onclick='deleteOldMedia($(this), "{{ attNum.ATT_id }}")'
+                                                             style='position: absolute; right: -15px; top: -45px; height: 30px; width: 30px;'>
+                                                    </span>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </output>
+                                        <img id="add_attachment" src="/static/images/add.png" onclick="upload_media($(this),1)" style="height: 70px; width: 70px; border: 2px dashed gray; border-radius: 7px; padding: 10px; margin: 4px;">
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                                </div>
+                            </div>                                                                               
+                        </div>  
+
+                        {% endifchanged %}{% endfor %}
+                                                   
+                    </div>
+                    <div class="panel-footer">
+                        <input type="button" class="btn btn-default" id="increaseChest" value="新增題目" onclick="IncreaseChest()">
+                        <input type="submit" class="btn btn-default"  value="儲存">
+                    </div>  
+                </div>
+            </form>
+
+        </div>
+    </div>    
+    <div id="loading" style="position:fixed;top:0;left:0;right:0;bottom:0;background-color:white;">
+        <img src="/static/images/loading.gif" style="position:relative;top:50%;transform:translateY(-50%);display:block;margin:auto;">
+    </div>
+    <div id="Modal" class="modal fade" role="dialog" style="margin-top: 300px">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>請選擇場次(可複選)</h3>
+                    {% for r in rooms %}
+                        <div>
+                            <input name="copyChest" type="checkbox" id="copyChest_{{r.id}}" value="{{r.id}}">
+                            <label for="copyChest_{{r.id}}">活動名稱: {{r.event_id.Event_name}} 場次名稱: {{r.room_name}}</label>
+                        </div>
+                    {% endfor%}
+                    <br>
+                    <button class="btn btn-success copy" data-dismiss="modal">複製</button>
+                    <button class="btn btn-danger" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="setPrize" role="dialog" style="margin-top:200px">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><strong>獎品設定說明</strong></h3>
+                </div>
+                <div class="modal-body">
+                    <b style="color: #286090"><strong>若此場次需給予獎品，則點選"是"並填寫獎品選項</strong></b>
+                    <br>
+                    <b style="color: #5151A2"><strong>新增獎品說明</strong></b>
+                    <ul>
+                        <li>獲獎名稱，例如：冠軍/亞軍/季軍、第一/二/三名、特優/優等/佳作...</li>
+                        <li>獎品項目，可以選擇的獎品項目為已授權給此群組的獎品</li>
+                        <li>獎品數量，不可為0且須超過現有的獎品數才可以設置</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button id="close_info" type="button" class="btn btn-danger" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+ {% load static %}
+ <script src="{% static 'js/game_setting.js' %}"></script>
+ <script src="{% static 'js/exif.js' %}"></script>
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrH6PFm6YsUakE6OxkTi3ekc_bp827osQ"></script>
+</html>

@@ -1,0 +1,45 @@
+{% include 'header.html' %}
+<!DOCTYPE HTML>
+<!--
+	Binary by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+    {% with navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar %} {% endwith %}
+	<body>
+		<!-- Main -->
+			<section id="main">
+				<div class="inner">
+					 <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    <!-- <img id="logo" src="/static/images/logo.png"> -->
+                </h1>
+            </div>
+            <hr>
+            <div class="inner">
+                <form id="login_form" action="." method="POST">
+
+                    <div class="field">
+                        <label for="fieldUser" id="login_account">輸入您的帳號</label>
+                        <input type="text" id="fieldUser" class="input" name="username" required pattern=.*\S.* /><br>
+                    </div>
+                    <div class="field">
+                        <label for="fieldPassword" id="login_password">電子信箱</label>
+                        <input type="password" id="fieldPassword" class="input" name="password" required pattern=.*\S.* /><br>
+                    </div>
+                    <input type='submit' value='確認' id="login-1">
+                    <br/>
+                    <label>
+                         <a href="login" class="btn btn-link" id="forget_password">返回登入</a>
+                    </label>
+
+                </form>
+            </div>
+        </div>
+				</div>
+			</section>
+	</body>
+</html>

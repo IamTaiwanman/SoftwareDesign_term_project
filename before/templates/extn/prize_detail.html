@@ -1,0 +1,116 @@
+{% include 'header.html' %}
+<html>
+    {% with navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar %} {% endwith %}
+<body>
+    <div class="container">
+        <div class="row">
+            <h1 class="page-header">
+                <img src="/static/images/logo.png">
+            </h1>
+            
+            <div class="col-lg-6" style="height: 400px;">
+                <h2 id="title-1" class="page-header" style="display: inline; font-weight: 700;">標題</h2>
+                <h3 id="prize_title" style="display: inline; color:#0E7771;margin-left: 20px;">{{prize.prize_name}}</h3>
+                <input id="back" type=button class="btn btn-link" value="返回上一頁" onClick="javascript:history.go(-1);">
+                <h4 id="Prize_description">獎品描述</h4>
+                <p>{{prize.prize_description}}</p>
+            </div>
+            
+            <div class="col-lg-6">
+                <table class="table table-striped">
+                    <tr>
+                        <th id="media_file">媒體檔案</th>
+                        <td class="thumbnail">
+                            <span id="img_file" class="label label-success img_file">圖片</span>
+                            <!--img style="width: 100%; height: 100%;" src='../{{prize.picture_url}}'-->
+                            <img style="width: 100%; height: 100%;" src='../{{prize.prize_url}}'>
+                        </td>
+                    </tr>
+                    
+                </table>
+            </div>
+            <div class="col-lg-6">
+                <table class="table table-striped">
+                    <tr>
+                        <th id="prize_number">目前數量</th>
+                        <td>{{prize.prize_number}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--div class="modal fade" id="docent_modal" role="dialog">
+        <div class="modal-dialog"-->
+            <!-- Modal content-->
+            <!--div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="name" style="display: inline;">姓名:</p>
+                    <p style="display: inline;">{{poi_docent.name}}</p>
+                    </p>
+                    <p id="telphone" style="display: inline;">電話:</p>
+                    <p style="display: inline;">{{poi_docent.telphone}}</p>
+                    </p>
+                    <p id="cellphone" style="display: inline;">手機:</p>
+                    <p style="display: inline;">{{poi_docent.cellphone}}</p>
+                    </p>
+                    <p>email:{{info.email}}</p>
+                    <p id="social_id" style="display: inline;">FB/LINE或其他帳號:</p>
+                    <p style="display: inline;">{{poi_docent.social_id}}</p>
+                    </p>
+                    <p id="user_address" style="display: inline;">地址:</p>
+                    <p style="display: inline;">{{info.user_address}}</p>
+                    </p>
+                    <p id="docent_language" style="display: inline;">導覽解說使用語言:</p>
+                    <p style="display: inline;">{{poi_docent.docent_language}}</p>
+                    </p>
+                    <p id="charge" style="display: inline;">收費標準:</p>
+                    <p style="display: inline;">{{poi_docent.charge}}</p>
+                    </p>
+                    <p id="docent_intro" style="display: inline;">自我介紹:</p>
+                    <p style="display: inline;">{{poi_docent.introduction}}</p>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div-->
+    <script>
+        function PoiMap() {
+            is_edit = false;
+            var lati = parseFloat($("#docent_lati").text());
+            var long = parseFloat($("#docent_long").text());
+            var title = $("#poi_title").text();
+            console.log(lati + " " + long);
+            var poi = new google.maps.LatLng(lati, long);
+            var mapOptions = {
+                center: poi,
+                zoom: 10
+            };
+            var map = new google.maps.Map(document.getElementById("googleMap"), mapOptions);
+            var marker = new google.maps.Marker({
+                position: poi,
+                // icon: '../static/images/map-icon.png'
+            });
+            marker.setMap(map);
+
+            // Zoom to 9 when clicking on marker
+            google.maps.event.addListener(marker, 'click', function () {
+                map.setZoom(15);
+                map.setCenter(marker.getPosition());
+                var infowindow = new google.maps.InfoWindow({
+                    content: title
+                });
+                infowindow.open(map, marker);
+            });
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqPYQN7x5wDi_hOIoS0DiOHSC4i66IcDY&callback=PoiMap"></script>
+</body>
+
+</html>

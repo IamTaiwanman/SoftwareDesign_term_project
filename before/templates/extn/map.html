@@ -1,0 +1,148 @@
+{% include 'header.html' %}
+
+<html>
+    {% with coi=coi navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar with coi=coi%} {% endwith %}
+    <body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 id="guide_map" class="page-header expert_map">導覽地圖</h1>
+            </div>
+            <div class="col-lg-12">
+                <div class="panel panel-default" id="css_table" style="width: 1000px">
+                    <div id="heading" class="panel-heading css_tr panel-css-1" >
+                        <sapn id="Map_role-1" class="css_td" style="position: relative; left: 25px;">地圖類別</sapn>
+                        <sapn id="Category-1" class="css_td" >內容型態</sapn>
+                        <sapn id="Region-1" class="css_td" style="position: relative; left: 25px;">地區</sapn>
+                        <sapn id="Subject-1" class="css_td">主題</sapn>
+                        <sapn id="Type-1" class="css_td" style="position: relative; left: 25px;">類型</sapn>
+                        <sapn id="Format-1" class="css_td" style="position: relative; left: 25px;">範疇</sapn>
+                        <sapn id="Media Type-1" class="css_td" style="position: relative; left: 5px;">媒體類別</sapn>
+                    </div>
+                    <div class="css_tr css_map_player">
+                        <div class="css_td">
+                            <select id="map_role" >
+                                <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                                <option id="role_player" value="user">學生</option>
+                                <option id="role_expert" value="expert">專家</option>
+                                <option id="role_docent" value="docent">解說員</option>
+                            </select>
+                        </div>
+                        <div class="css_td">
+                            <select id="content">
+                                <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                                <option id="s_poi" value="s_poi">景點</option>
+                                <option id="s_loi" value="s_loi">景線</option>
+                                <option id="s_aoi" value="s_aoi">景區</option>
+                                <option id="s_soi" value="s_soi">故事</option>
+                            </select>
+                        </div>
+                        <div class="css_td">
+                            <select id="city">
+                                <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                                        <!-- <option value="其他國家及地區">其他國家及地區</option>
+                                        <option value="宜蘭縣">宜蘭縣</option>
+                                        <option value="花蓮縣">花蓮縣</option>
+                                        <option value="金門縣">金門縣</option>
+                                        <option value="南投縣">南投縣</option>
+                                        <option value="南海諸島">南海諸島</option>
+                                        <option value="屏東縣">屏東縣</option>
+                                        <option value="苗栗縣">苗栗縣</option>
+                                        <option value="桃園市">桃園市</option> -->
+                                        <option value="高雄市">高雄市</option>
+                                        <!-- <option value="基隆市">基隆市</option>
+                                        <option value="連江縣">連江縣</option>
+                                        <option value="雲林縣">雲林縣</option>
+                                        <option value="新北市">新北市</option>
+                                        <option value="新竹市">新竹市</option>
+                                        <option value="新竹縣">新竹縣</option> -->
+                                        <option value="嘉義市">嘉義市</option>
+                                        <option value="嘉義縣">嘉義縣</option>
+                                        <!-- <option value="彰化縣">彰化縣</option>
+                                        <option value="臺中市">臺中市</option>
+                                        <option value="臺北市">臺北市</option>
+                                        <option value="臺東縣">臺東縣</option> -->
+                                        <option value="臺南市">臺南市</option>
+                                        <!-- <option value="澎湖縣">澎湖縣</option> -->
+                            </select>
+                            <br>
+                            <select id="areas">
+                            </select>
+                        </div>
+                        <div class="css_td" >
+                            <select id="topic">
+                                <option class="all" value="all">全部</option>
+                                <option id="experiential" value="體驗的">體驗的</option>
+                                <option id="activation" value="活化與再造的">活化與再造的</option>
+                                <option id="disappeared" value="消逝的">消逝的</option>
+                            </select>
+                        </div>
+                        <div class="css_td" >
+                            <select id="type">
+                                <option class="all" value="all">全部</option>
+                                <option id="figure" value="人物">人物</option>
+                                <option id="event" value="事件">事件</option>
+                                <option id="human" value="人文景觀">人文景觀</option>
+                                <option class="natural" value="自然景觀">自然景觀</option>
+                                <option id="industry" value="產業">產業</option>
+                            </select>
+                        </div>
+                        <div class="css_td" >
+                            <select id="category">
+                                <option class="all" value="all">全部</option>
+                                <option id="Historical" value="古蹟、歷史建築、聚落">古蹟、歷史建築、聚落</option>
+                                <option id="Ruins" value="遺址">遺址</option>
+                                <option id="Cultural-1" value="文化景觀">文化景觀</option>
+                                <option id="Traditional" value="傳統藝術">傳統藝術</option>
+                                <option id="Folk" value="民俗及有關文物">民俗及有關文物</option>
+                                <option id="Antique" value="古物">古物</option>
+                                <option class="natural" value="自然景觀">自然景觀</option>
+                                <option id="Food" value="食衣住行育樂">食衣住行育樂</option>
+                                <option id="Others" value="其他">其他</option>
+                            </select>
+                        </div>
+                        <div class="css_td" >
+                            <select id="medias">
+                                <option class="all" value="all">全部</option>
+                                <option id="images-3" value="1">相片</option>
+                                <option id="audio-3" value="2">聲音</option>
+                                <option id="video-3" value="4">影片</option>
+                                <option id="audio_guide" value="8">語音導覽</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--panel body-->
+                </div>
+            </div>
+            <div class="xoi_show">
+                <div id="poi_show" class="col-lg-12">
+                    <h2 id="poi_show-1" class="poi_detail">景點列表</h2>
+                    <table id='poi_table' class="table table-hover" style="margin-bottom:0px;"></table>
+                </div>
+                <div id="loi_show" class="col-lg-12">
+                    <h2 id="loi_show-1" class="loi_detail" hidden>景線列表</h2>
+                    <table id='loi_table' class="table table-hover" style="margin-bottom:0px;"></table>
+                </div>
+                <div id="aoi_show" class="col-lg-12">
+                    <h2 id="aoi_show-1" class="aoi_detail" hidden>景區列表</h2>
+                    <table id='aoi_table' class="table table-hover" style="margin-bottom:0px;"></table>
+                </div>
+                <div id="soi_show" class="col-lg-12">
+                    <h2 id="soi_show-1" class="soi_detail" hidden>故事列表</h2>
+                    <table id='soi_table' class="table table-hover" style="margin-bottom:0px;"></table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% load static %}
+    <script type="text/javascript">
+        const COI = '/{{coi}}/'
+        var user_role = "identifier";
+    </script>
+    {% with js=coi|stringformat:"s"|add:"/map.js" %}
+        <script src="{% static 'js/'|add:js %}"></script>
+    {% endwith %}
+</body>
+
+</html>

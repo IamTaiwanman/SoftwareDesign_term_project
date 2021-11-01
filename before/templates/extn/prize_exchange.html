@@ -1,0 +1,48 @@
+{% include 'header.html' %}
+<html>
+    {% with navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar %} {% endwith %}
+    <body>
+    <!--此為獎品兌換的網頁測試頁面，若需要測試，請在網址最後加上獎品兌換的ID(PTP_id)-->
+    <div class="container" style="margin-bottom: 250px;">
+        <div class="col-lg-12" id="makePOI" style="margin-left: 50px;"> <br>
+            <input type="hidden" value="chinese" class="lang-1">
+            <h2 id="make_prizeform-1">獎品兌換測試</h2>
+            <form id="PTP_test" enctype="multipart/form-data">
+                <div>
+                    <div class="form-group">
+                        <label>兌獎ID</label>
+                        <input type="" name="PTP_id" id="PTP_id" value="{{PTP.PTP_id}}" readonly>
+                    </div>                    
+                                       
+                    <button type="submit" class="btn btn-default">
+                        <p id="btn_confirm" style="display: inline;" onclick='buttonLink("/{{coi}}/prize_exchange/{{PTP.PTP_id}}")'>確認</p>
+                    </button>
+
+                </div>
+            </form>
+
+            <div id="loading" hidden><img src="/static/images/loading.gif" style="display: block; margin:1500px 400px;"></div>
+
+        </div>
+    </div>
+    </div>
+    <script>
+        const POI_URL = '/{{coi}}/prize_exchange';
+        const HOME_URL = '/{{coi}}/list_prize';
+        const COI_NAME = '{{coi}}';
+        $('#PTP_test').submit((event) => { SubmitForm(event) });
+        
+        function SubmitForm(event) {
+            alert('兌換成功！')
+        }
+    </script>
+    {% load static %}
+    <script src="{% static 'js/get_year.js' %}"></script>
+    <script src="{% static 'js/exif.js' %}"></script>
+    <script id="language_script"></script>
+    {% with js=coi|stringformat:"s"|add:"/nav.js" %}
+    <script src="{% static 'js/'|add:js %}"></script>
+    {% endwith %}
+</body>
+
+</html>

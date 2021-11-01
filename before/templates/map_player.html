@@ -1,0 +1,152 @@
+{% include 'header.html' %}
+
+<body>
+    {% include 'navbar.html' %}
+    <div class="container">
+        <div class="row">
+            {% if map_role == "user" %}
+                <h1 id="logo_content_player" class="page-header user_map">玩家地圖</h1>
+            {% elif map_role == "docent" %}
+                <h1 id="logo_content_docent" class="page-header docent_map">導覽員地圖</h1>
+            {% else %}
+                <h1 id="logo_content_expert" class="page-header expert_map" >專家地圖</h1>
+            {% endif %}
+            <div class="panel panel-default" id="css_table" style="width: 100%">
+                <input name="map_role" id="map_role" value="{{ map_role }}" hidden>
+                <div class="panel-heading css_tr panel-css-1">
+                    <sapn id="Category-1" class="css_td">內容型態</sapn>
+                    <sapn id="Region-1" class="css_td" style="position: relative; ">地區</sapn>
+                    <!--sapn id="Subject-1" class="css_td">主題</sapn>
+                    <sapn id="Type-1" class="css_td" style="position: relative; left: 25px;">類型</sapn-->
+                    <sapn id="Format-1" class="css_td" style="position: relative; ">範疇</sapn>
+                    <sapn id="Media Type-1" class="css_td" style="position: relative; ">媒體類別</sapn>
+                </div>
+                <div class="css_tr css_map_player">
+                    <div class="css_td">
+                        <select id="content">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            <option id="s_poi" value="s_poi">景點</option>
+                            <option id="s_loi" value="s_loi">景線</option>
+                            <option id="s_aoi" value="s_aoi">景區</option>
+                            <option id="s_soi" value="s_soi">故事</option>
+                        </select>
+                    </div>
+                    <div class="css_td">
+                        <select id="city">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            {% for x in areas %}
+                                {% if language == '英文'%}
+                                   <option value="{{x.area_country}}" 
+                                        {% if x.area_country == '臺南市' %} 
+                                        selected="selected" 
+                                        {% endif %}>
+                                    {{x.area_country_en}}</option>
+                                {% else %}
+                                    <option value="{{x.area_country}}" {% if x.area_country == '臺南市' %} 
+                                    selected="selected" 
+                                    {% endif %}>{{x.area_country}}</option>
+                                {%endif%}
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <select id="areas">
+                        </select>
+                    </div>
+                    <!--div class="css_td">
+                        <select id="topic">
+                            <option class="all" value="all" selected = "selected">全部</option>
+                            <option id="experiential" value="體驗的">體驗的</option>
+                            <option id="activation" value="活化與再造的">活化與再造的</option>
+                            <option id="disappeared" value="消逝的">消逝的</option>
+                        </select>
+                    </div>
+                    <div class="css_td">
+                        <select id="type">
+                            <option class="all" value="all" selected = "selected">全部</option>
+                            <option id="figure" value="人物">人物</option>
+                            <option id="event" value="事件">事件</option>
+                            <option id="human" value="人文景觀">人文景觀</option>
+                            <option class="natural" value="自然景觀">自然景觀</option>
+                            <option id="industry" value="產業">產業</option>
+                        </select>
+                    </div-->
+                    <div class="css_td">
+                        <select id="category">
+                            <option class="all" value="all" selected = "selected">全部</option>
+                            <option id="Historical" value="古蹟">古蹟</option>
+                            <option id="historical_buildings" value="歷史建築">歷史建築</option>
+                            <option id="Memorial_building" value="紀念建築">紀念建築</option>
+                            <option id="Settlement_buildings" value="聚落建築群">聚落建築群</option>
+                            <option id="Ruins" value="考古遺址">考古遺址</option>
+                            <option id="Historical_site" value="史蹟">史蹟</option>
+                            <option id="Cultural-1" value="文化景觀">文化景觀</option>
+                            <option id="Antique" value="古物">古物</option>
+                            <option class="natural" value="自然地景、自然紀念物">自然地景、自然紀念物</option>
+                            <option id="Traditional" value="傳統表演藝術">傳統表演藝術</option>
+                            <option id="Traditional2" value="傳統工藝">傳統工藝</option>
+                            <option id="Traditional3" value="口述傳統">口述傳統</option>
+                            <option id="Folk" value="民俗">民俗</option>
+                            <option id="Traditional-knowledge" value="傳統知識與實踐">傳統知識與實踐</option>
+                            <option id="General_landscape" value="一般景觀(建築/人工地景/自然地景)">一般景觀(建築/人工地景/自然地景)</option>
+                            <option id="Plants" value="植物">植物</option>
+                            <option id="Animals" value="動物">動物</option>
+                            <option id="biological" value="生物">生物</option>
+                            <option id="Food" value="食衣住行育樂">食衣住行育樂</option>
+                            <option id="Others" value="其他">其他</option>
+                        </select>
+                    </div>
+                    <div class="css_td">
+                        <select id="medias">
+                            <option class="all" value="all" selected = "selected">全部</option>
+                            <option id="images-3" value="1">相片</option>
+                            <option id="audio-3" value="2">聲音</option>
+                            <option id="video-3" value="4">影片</option>
+                            <option id="audio_guide" value="8">語音導覽</option>
+                        </select>
+                    </div>
+                </div>
+                <!--panel body-->
+            </div>
+            <div>
+                {% if map_role == "docent"%}
+                    <p id="serch_docent">搜尋導覽員:</p>
+                    <select id="docents">
+                        <option class="all" value="all" selected = "selected">全部</option>
+                        {% for d in docent_info %}
+                        {% if d.name != '' %}
+                            <option value="{{d.fk_userid.user_name}}">{{d.name}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                {% endif %}
+            </div>
+            <div class="poi_show" hidden>
+                <div class="col-lg-12">
+                    <h2 id="poi_show-1" class="poi_detail">景點列表</h2>
+                </div>
+            </div>
+            <div class="loi_show" hidden>
+                <div class="col-lg-12">
+                    <h2 id="loi_show-1" class="loi_detail">景線列表</h2>
+                </div>
+            </div>
+            <div class="aoi_show" hidden>
+                <div class="col-lg-12">
+                    <h2 id="aoi_show-1" class="aoi_detail">景區列表</h2>
+                </div>
+            </div>
+            <div class="soi_show" hidden>
+                <div class="col-lg-12">
+                    <h2 id="soi_show-1" class="soi_detail">故事列表</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% load static %}
+    <script src="{% static 'js/map_player.js' %}"></script>
+    <script type="text/javascript">
+        var user_role = "{{role}}";
+    </script>
+</body>
+
+</html>

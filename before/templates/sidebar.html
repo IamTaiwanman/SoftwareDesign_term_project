@@ -1,0 +1,137 @@
+<nav id="mySidenav" class="sidenav easy-sidebar-active">
+	<div class="copen">
+
+	</div>
+	<a id="sidenav-toggle"></a>
+	<ul>
+		<li>
+			<a href="/make_player" id="myall">我的景點/景線/景區/主題故事</a>
+		</li>
+		<li>
+			<a href="/list_groups" id="mygroup">群組管理</a>
+		</li>
+		<li>
+			<a href="/make_player_poi" id="createPOI">製作景點</a>
+		</li>
+		<li>
+			<a href="/make_player_loi" id="createLOI">製作景線</a>
+		</li>
+		<li>
+			<a href="/make_player_aoi" id="createAOI">製作景區</a>
+		</li>
+		<li>
+			<a href="/make_player_soi" id="createSOI">製作主題故事</a>
+		</li>
+		<li>
+			<a href="/make_group" id="createGroup">建立群組</a>
+		</li>
+		<li>
+			<a href="/my_history" id="historyIntro">歷史記錄</a>
+		</li>
+		<div id="list_events">
+			<li>
+            	<a href="/list_events">文資學堂</a>
+        	</li>
+		</div>
+		{% if user.is_prizeadder == 1%}
+		<li>
+			<a href="/list_prize">獎項登錄</a>
+		</li>
+		{% endif %}
+		<!-- <li>
+			<a href='/prize_exchange'>獎品派發</a>
+		</li> -->
+		<li>
+			<a href="/my_prize">我的獎品</a>
+		</li>
+        
+	</ul>
+</nav>
+<img id='arrow' src="/static/images/next.png" style="height: 50px;width: 50px;" display="none">
+
+
+
+<style>
+	@media screen and (max-width: 1500px) {
+		#mySidenav {
+			position: fixed;
+			padding-top: 0px;
+			margin-top: 47px;
+			width: auto;
+		}
+		#mySidenav>ul {
+			display: none;
+		}
+		#sidenav-toggle {
+			display: block;
+		}
+		#mySidenav:hover>ul {
+        display: block;
+        margin-top: 10px;
+    }
+	}
+	#arrow{
+        width: 30px;
+        height: 30px;
+        position: fixed;
+        top: 30%;
+        cursor: pointer;
+        z-index: 2147483647;
+    }
+</style>
+
+<script>
+	$(document).ready(function () {
+		if ($(window).width() < 1600) {
+			$('#mySidenav').hide();
+			$('#arrow').show();
+		} else {
+			$('#mySidenav').show();
+			$('#arrow').hide();
+		}
+
+
+		$(window).resize(function () {
+			if ($(window).width() < 1600) {
+				$('#mySidenav').hide();
+				$('#arrow').show();
+			}
+			else {
+				$('#mySidenav').show();
+				$('#arrow').hide();
+			}
+			// $('#arrow').click(function(){
+			// 	$('#mySidenav ul').css('display', 'block');
+			// 	$('#mySidenav').show();
+			// });
+		});
+
+		if ($(window).width() < 1600) {
+			$('#mySidenav').hide();
+			$('#arrow').show();
+		}
+
+
+
+		//   	if ($("#mySidenav").is(":visible")){
+		//   		console.log('ha');
+		// 	$('.container').click(function(){
+		// 		console.log('he');
+		// 		$('#mySidenav').hide();
+		// 	});
+		// }
+	});
+	$('#arrow').click(function () {
+		if ($("#mySidenav").css("display") == "none"){
+			$('#mySidenav ul').css('display', 'block');
+			$('#mySidenav').show();
+			
+
+		}else if ($("#mySidenav").css("display") == "block") {
+			$('#mySidenav').css('display', 'none');
+			// $('.container').click(function () {
+			// 	$('#mySidenav').hide();
+			// });
+		}
+	});
+</script>

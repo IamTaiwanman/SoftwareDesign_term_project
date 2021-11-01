@@ -1,0 +1,267 @@
+{% include 'header.html' %}
+
+<html style = "background-color: #1c1c1c">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="/static/css/main.css" />
+		<!-- <link rel="stylesheet" href="/static/css/style.css" />	 -->
+	</head>
+
+	{% load static %}
+	<script src="{% static 'js/jquery.scrolly.min.js' %}"></script>
+	<script src="{% static 'js/skel.min.js' %}"></script>
+	<script src="{% static 'js/util.js' %}"></script>
+	<script src="{% static 'js/main.js' %}"></script>
+
+	<!-- Header -->
+	<header id="header">
+		<a id="head_logo" href="/{{coi}}/index" class="logo">
+			<!--span>
+				<img src="/static/images/DEH.jpg" width="30px" height="30px" style="vertical-align:text-bottom; ">
+				<img src="/static/images/extn.png" width="30px" height="30px" style="vertical-align:text-bottom; ">
+			</span--> SDC-DEH</a>
+		<nav>
+			{% if username %}
+	            <a href="/{{coi}}/userinfo" id="username">
+				{% if nickname %}
+					{{nickname}}
+				{% else %}
+					{{username}}
+				{% endif %}
+				{% if role == "user" %}
+				
+	            	<p id="user" class="role" style="display: inline">(玩家)</p>
+	            {%　elif role == "expert" %}
+	            	<p id="Expert" class="role" style="display: inline">(專家)</p>
+	            {%　elif role == "docent" %}
+	            	<p id="Narrator" class="role" style="display: inline">(導覽員)</p>
+	            {%　elif role == "identifier" %}
+	            	<p id="(Verifier)" class="role" style="display: inline">(驗證者)</p>
+	            {%　elif role == "admin" %}
+	            	<p id="(Admin)" class="role" style="display: inline">(Admin)</p>
+	            {% endif %}
+	            </a>
+
+            	<a href="/{{coi}}/logout" onclick="return confirm('確定登出?')" id="logout-1">登出</a>
+
+		        {%if role == "identifier" or role == "admin" or is_leader == "is_leader" %}
+		            <a id="verifier" href="/{{coi}}/verification">驗證系統</a>
+		        {% if role == 'admin'%}
+		            <a id="contents_cal" href="/contents_cal/all">Contents統計表</a>
+	        	{% endif %} {% endif %}
+	        {% else %}
+	         	<a id="login" href="/{{coi}}/login">登入</a>
+	        {% endif %}
+
+			<a href="#menu">Menu</a>
+		</nav>
+	</header>
+
+	<!-- Nav -->
+	<nav id="menu">
+		<ul class="links">
+			<li>
+				<a id="home" href="/{{coi}}/index">首頁</a>
+			</li>
+			<li>
+				<a id="guideMap" href="/{{coi}}/map">導覽地圖</a>
+			</li>
+			<li>
+				<a id="createSpace" href="/{{coi}}/make_player">創作空間</a>
+			</li>
+			<li>
+				<a id="group" href="/{{coi}}/list_groups">群組管理</a>
+			</li>
+			<li>
+				<a id="historyIntro" href="/{{coi}}/my_history">歷史紀錄</a>
+			</li>
+			<li>
+				<a id="game" href="/{{coi}}/list_events">文資學堂</a>
+			</li>
+			<li>
+				<a id="useinfo" href="/{{coi}}/intro">使用簡介</a>
+			</li>
+			<li>
+				<a id="DEH" href="/">文史脈流網站</a>
+			</li>
+			<li>
+				<a id="contactInfo" href="/{{coi}}/index/#contact">聯絡資訊</a>
+			</li>
+			<li>
+				<div class="btn-group btn-group-toggle" data-toggle="buttons">
+					<label class="btn btn-lgn">
+						<input type="radio" name="langs" id="chinese" value="chinese" autocomplete="off"> 中文
+					</label>
+					<label class="btn btn-lgn">
+						<input type="radio" name="langs" id="english" value="english" autocomplete="off"> English
+					</label>
+					<label class="btn btn-lgn">
+						<input type="radio" name="langs" id="japan" value="japanese" autocomplete="off"> 日本語
+					</label>
+				</div>
+				<input id="coilanguage" type="hidden">
+			</li>
+		</ul>
+
+	</nav>
+	<body>
+		<!-- Banner -->
+			<section id="banner">
+				<div class="inner">
+					<h1 id="sdc"><a id="sdc" href="http://exptainan.liberal.ncku.edu.tw/index.php?lang=cht&task=home/">校本課程</a></h1>
+					<ul class="actions">
+						<li><a id="more" href="#one" class="button alt scrolly big">觀看更多</a></li>
+					</ul>
+				</div>
+			</section>
+
+		<!-- One -->
+			<article id="one" class="post style2">
+				<div class="image">
+					<img src="/static/images/Map.jpg" alt="" data-position="45% center" />
+				</div>
+				<div class="content">
+					<div class="inner">
+						<header>
+							<h2><a id="map" href=#>行動數位文化資產地圖</a></h2>
+							<hr>
+						</header>
+						<ul>
+							<li><p id="poi" align = "left">景點(POI): 單一景點介紹,導覽的最基本單位 </p></li>
+							<li><p id="loi" align = "left">景線(LOI): 以導覽情境為考量,設計出具地域關聯性的一條有參訪先後次序規劃的景點路線 </p></li>
+							<li><p id="aoi" align = "left">景區(AOI): 以一特定區域之文化資產為主軸,設計出有地域關聯性的 一組導覽景點區域</p></li>
+						</ul>
+
+						<ul class="actions" hidden>
+							<li><a id="view" href="/{{coi}}/map" class="button alt">前往察看</a></li>
+						</ul>
+					</div>
+					<div class="postnav">
+						<a href="#" class="prev disabled"><span class="icon fa-chevron-up"></span></a>
+						<a href="#two" class="scrolly next"><span class="icon fa-chevron-down"></span></a>
+					</div>
+				</div>
+			</article>
+
+
+		<!-- Two -->
+			<article id="two" class="post invert style1 alt">
+				<div class="image">
+					<img src="/static/images/creative.jpg" width="auto" alt="" data-position="10% center" />
+				</div>
+				<div class="content">
+					<div class="inner">
+						<header>
+							<h2><a id="makeplayer" href="make_player">創作空間</a></h2>
+							<hr>
+						</header>
+						<ul>
+							<li>
+								<p id="makeplayer-1" align = "left">文史專家/玩家/解說員創作景點、景線、景區、主題故事。</p>
+							</li>
+							<li>
+								<p id="makeplayer-2" align = "left">可使用中文製作及導覽全世界國家及地區的景點/景線/景區。</p>
+							</li>
+							<li>
+								<p id="makeplayer-3" align = "left">台灣: 以縣/市-鄉/鎮/區為單位區域。</p>
+							</li>
+						</ul>
+						<ul class="actions" hidden>
+							<li><a id="create" href="/{{coi}}/make_player" class="button alt">前往創作</a></li>
+						</ul>
+					</div>
+					<div class="postnav">
+						<a href="#one" class="scrolly prev"><span class="icon fa-chevron-up"></span></a>
+						<a href="#three" class="scrolly next"><span class="icon fa-chevron-down"></span></a>
+					</div>
+				</div>
+			</article>
+
+		<!-- Three -->
+			<article id="three" class="post style2">
+				<div class="image">
+					<img src="/static/images/group.jpg" alt="" data-position="80% center" />
+				</div>
+				<div class="content">
+					<div class="inner">
+						<header>
+							<h2><a id="listgroup" href="list_groups">群組管理</a></h2>
+							<hr>
+						</header>
+						<ul>
+							<li>
+								<p id="listgroup-1" align = "left">User 可建立多個群組亦可申請加入多個群組。</p>
+							</li>
+							<li>
+								<p id="listgroup-2" align = "left">若群組為不公開則無法探索該群組。</p>
+							</li>
+							<li>
+								<p id="listgroup-3" align = "left">若群組為公開且驗證通過才可在搜尋功能查詢群組。</p>
+							</li>
+						</ul>
+						<ul class="actions" hidden>
+							<li><a id="gogroup" href="/{{coi}}/list_groups" class="button alt">前往群組</a></li>
+						</ul>
+					</div>
+					<div class="postnav">
+						<a href="#two" class="scrolly prev"><span class="icon fa-chevron-up"></span></a>
+						<a href="#" class="next disabled"><span class="icon fa-chevron-down"></span></a>
+					</div>
+				</div>
+			</article>
+
+			<hr>
+			<hr>
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="inner">
+					<h2 id="contact">聯絡我們:</h2>
+					<ul class="actions">
+						<li><span class="icon fa-phone"></span> <a href="#">:06-2757575 ext. 62520/62530 轉 2303</a></li>
+						<li><span class="icon fa-envelope"></span> <a href="#">dehmaster00@gmail.com</a></li>
+
+					</ul>
+				</div>
+				<div><a>總瀏覽次數: {{pageviews}}</a></div>
+				<div class="copyright">
+					&copy; Untitled. Design: <a href="https://templated.co">TEMPLATED</a>. Images: <a href="https://unsplash.com">Unsplash</a>.
+				</div>
+			</footer>
+	<script>
+		const COINAME = '{{coi}}';
+		document.title = '校本課程';
+	</script>
+	{% load static %}
+    <script>
+        is_edit = false;
+        check_login = $('#login').text();
+        if(check_login == '登入'){
+            $('.check_login').show();
+        }else{
+            $('.check_login').hide();
+        }
+        $('.carousel').carousel({
+            interval: 5000 //changes the speed
+        });
+	</script>
+	{% with index=coi|stringformat:"s"|add:"/index.js" nav=coi|stringformat:"s"|add:"/nav.js"%}
+	<script src="{% static 'js/'|add:index %}"></script>
+	<script src="{% static 'js/'|add:nav %}"></script>
+	{% endwith %}
+	<script>
+		$(".btn-group-toggle").click(function(){
+		  $(this).button('toggle');
+
+		});
+	</script>
+	<script>
+		$(document).ready(function() {
+			if($(window).width() < 600) {
+				$("#head_logo").css("font-size", "50%");
+			}
+		});
+	</script>
+	</body>
+</html>

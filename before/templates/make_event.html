@@ -1,0 +1,89 @@
+{% include 'header.html' %}
+
+<body>
+    {% include 'navbar.html' %} {% include 'sidebar.html' %}
+    <div class="container">
+        <div class="row">
+            <hr>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-heading" align=center style="background-color: #4bafa9">
+                        <h3 id="create_event" style="color: #fff">建立學堂活動</h3>
+                    </div>
+                    <form id="make_eventform">
+                        {% csrf_token %}
+                        <div class="col-lg-12">
+                            <label style="margin-top: 20px;">
+                                <p id="event_title1" style="display: inline; font-size: 18px;">活動名稱:</p>
+                                <input name="event_name" id="event_name">
+                                <img src="../static/images/question.png" data-toggle="modal" data-target="#event_infos" style="display:inline;margin-bottom: 10px;margin-left: 5px;">
+                            </label>
+                            <hr>
+                        </div>
+                        <hr>
+                        <div class="col-lg-12">
+                            <p style="display: inline; float: inherit; margin-right: 5px; font-size: 18px;">
+                                <b id="eventdescription">活動描述:</b>
+                                <textarea id="event_info" name="event_info" style="resize:none; width: 250px; height: 150px;"></textarea>
+                            </p>
+                        </div>
+                        <label class="col-md-12" style="margin-top: 20px; font-size: 18px;">
+                            <p id="ispublic" style="display: inline;">是否公開:</p>
+                            <select id="open" name="open">
+                                <option id="yes" value="1">公開</option>
+                                <option id="no" value="0">不公開</option>
+                            </select>
+                        </label>
+                        <label class="col-md-12" style="margin-top: 20px;">
+                            <p style="display: inline; font-size: 18px;">設定活動時間:</p>
+                            <label>從</label>
+                            <input type="datetime-local" id="event_start_time">
+                            <label>開始，到</label>
+                            <input type="datetime-local" id="event_end_time"> 
+                            <label>結束</label>
+                            
+                        </label>
+                        <div class="col-md-12" style="margin-top: 50px">
+                            <button type="submit" class="btn btn-default" style="margin:0 auto;" id="event_button">
+                                <p id="btn_confirm" style="display: inline;">確認</p>
+                            </button>
+                        </div>
+                        <div class="form-event" style="display: none">
+                            <input type="text" name="event_make" id="event_make" value="make">
+                            <input type="text" name="event_leader" id="event_leader" value={{username}}>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="event_infos" role="dialog" style="margin-top:200px">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <ul id="event_modal-1">
+                        <li>活動Leader可邀請成員進入群組</li>
+                        <li>User 可建立多個活動亦可申請加入多個活動</li>
+                        <li>活動Leader可解散活動</li>
+                        <li>活動Member可退出活動</li>
+                        <li>若活動為不公開則只有特定群組能夠探索該活動</li>
+                        <li>若活動為公開才可在搜尋功能查詢活動</li>
+                        <li id = "event_modal_last_line">活動建立(Event Leader)者有權力修成員做的景點/線/區和主題故事的內容及各種屬性(公開<->不公開)。</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button id="close_info" type="button" class="btn btn-danger" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="loading" hidden>
+        <img src="../static/images/loading.gif" style="position: fixed; display: block; top:40%; right: 50%;">
+    </div>
+</body>
+<script>
+    
+</script> {% load static %}
+<script src="{% static 'js/make_event.js' %}"></script>
+
+</html>
