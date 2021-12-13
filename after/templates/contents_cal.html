@@ -1,0 +1,329 @@
+{% include 'header.html' %}
+<body>
+    {% include 'navbar.html' %}
+    <div class="container">
+        <div class="btn-group" style="margin-top: 25px;">
+            <button type="button" class="btn btn-primary" value='all' onclick="SendRole(this)">全部</button>
+            <button type="button" class="btn btn-primary" value='expert' onclick="SendRole(this)">專家</button>
+            <button type="button" class="btn btn-primary" value='user' onclick="SendRole(this)">玩家</button>
+            <button type="button" class="btn btn-primary" value='docent' onclick="SendRole(this)">解說員</button>
+        </div>
+        <h2>Contents Table : <p style="color: yellow; background-color: #4bafa9; display: inline;">{{filterRole}}</p></h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Contents</th>
+                    <th>Total</th>
+                    <th>Verified&Open</th>
+                    <th>Not verified&Open</th>
+                    <th>private</th>
+                    <th>Failed</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>POI</td>
+                    <td>{{poi_count.count}}</td>
+                    <td>{{pvo_count.count}}</td>
+                    <td>{{puo_count.count}}</td>
+                    <td>{{pp_count.count}}</td>
+                    <td>{{pf_count.count}}</td>
+                </tr>
+                <tr>
+                    <td>LOI</td>
+                    <td>{{loi_count.count}}</td>
+                    <td>{{lvo_count.count}}</td>
+                    <td>{{luo_count.count}}</td>
+                    <td>{{lp_count.count}}</td>
+                    <td>{{lf_count.count}}</td>
+                </tr>
+                <tr>
+                    <td>AOI</td>
+                    <td>{{aoi_count.count}}</td>
+                    <td>{{avo_count.count}}</td>
+                    <td>{{auo_count.count}}</td>
+                    <td>{{ap_count.count}}</td>
+                    <td>{{af_count.count}}</td>
+                </tr>
+                <tr>
+                    <td>SOI</td>
+                    <td>{{soi_count.count}}</td>
+                    <td>{{svo_count.count}}</td>
+                    <td>{{suo_count.count}}</td>
+                    <td>{{sp_count.count}}</td>
+                    <td>{{sf_count.count}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2>北部地區</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Country</th>
+                    <th>Total(POI/LOI/AOI/SOI)</th>
+                    <th>Verified &　Open(POI/LOI/AOI/SOI)</th>
+                    <th>Not verified &　Open(POI/LOI/AOI/SOI)</th>
+                    <th>private(POI/LOI/AOI/SOI)</th>
+                    <th>Failed(POI/LOI/AOI/SOI)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>基隆市</td>
+                    <td>{{poi_tnorth0}}/{{loi_tnorth0}}/{{aoi_tnorth0}}/{{soi_tnorth0}}</td>
+                    <td>{{pvo_tnorth0}}/{{lvo_tnorth0}}/{{avo_tnorth0}}/{{svo_tnorth0}}</td>
+                    <td>{{puo_tnorth0}}/{{luo_tnorth0}}/{{auo_tnorth0}}/{{suo_tnorth0}}</td>
+                    <td>{{pp_tnorth0}}/{{lp_tnorth0}}/{{ap_tnorth0}}/{{sp_tnorth0}}</td>
+                    <td>{{pf_tnorth0}}/{{lf_tnorth0}}/{{af_tnorth0}}/{{sf_tnorth0}}</td>
+                </tr>
+                <tr>
+                    <td>臺北市</td>
+                    <td>{{poi_tnorth1}}/{{loi_tnorth1}}/{{aoi_tnorth1}}/{{soi_tnorth1}}</td>
+                    <td>{{pvo_tnorth1}}/{{lvo_tnorth1}}/{{avo_tnorth1}}/{{svo_tnorth1}}</td>
+                    <td>{{puo_tnorth1}}/{{luo_tnorth1}}/{{auo_tnorth1}}/{{suo_tnorth1}}</td>
+                    <td>{{pp_tnorth1}}/{{lp_tnorth1}}/{{ap_tnorth1}}/{{sp_tnorth1}}</td>
+                    <td>{{pf_tnorth1}}/{{lf_tnorth1}}/{{af_tnorth1}}/{{sf_tnorth1}}</td>
+                </tr>
+                <tr>
+                    <td>新北市</td>
+                    <td>{{poi_tnorth2}}/{{loi_tnorth2}}/{{aoi_tnorth2}}/{{soi_tnorth2}}</td>
+                    <td>{{pvo_tnorth2}}/{{lvo_tnorth2}}/{{avo_tnorth2}}/{{svo_tnorth2}}</td>
+                    <td>{{puo_tnorth2}}/{{luo_tnorth2}}/{{auo_tnorth2}}/{{suo_tnorth2}}</td>
+                    <td>{{pp_tnorth2}}/{{lp_tnorth2}}/{{ap_tnorth2}}/{{sp_tnorth2}}</td>
+                    <td>{{pf_tnorth2}}/{{lf_tnorth2}}/{{af_tnorth2}}/{{sf_tnorth2}}</td>
+                </tr>
+                <tr>
+                    <td>桃園市</td>
+                    <td>{{poi_tnorth3}}/{{loi_tnorth3}}/{{aoi_tnorth3}}/{{soi_tnorth3}}</td>
+                    <td>{{pvo_tnorth3}}/{{lvo_tnorth3}}/{{avo_tnorth3}}/{{svo_tnorth3}}</td>
+                    <td>{{puo_tnorth3}}/{{luo_tnorth3}}/{{auo_tnorth3}}/{{suo_tnorth3}}</td>
+                    <td>{{pp_tnorth3}}/{{lp_tnorth3}}/{{ap_tnorth3}}/{{sp_tnorth3}}</td>
+                    <td>{{pf_tnorth3}}/{{lf_tnorth3}}/{{af_tnorth3}}/{{sf_tnorth3}}</td>
+                </tr>
+                <tr>
+                    <td>新竹市</td>
+                    <td>{{poi_tnorth4}}/{{loi_tnorth4}}/{{aoi_tnorth4}}/{{soi_tnorth4}}</td>
+                    <td>{{pvo_tnorth4}}/{{lvo_tnorth4}}/{{avo_tnorth4}}/{{svo_tnorth4}}</td>
+                    <td>{{puo_tnorth4}}/{{luo_tnorth4}}/{{auo_tnorth4}}/{{suo_tnorth4}}</td>
+                    <td>{{pp_tnorth4}}/{{lp_tnorth4}}/{{ap_tnorth4}}/{{sp_tnorth4}}</td>
+                    <td>{{pf_tnorth4}}/{{lf_tnorth4}}/{{af_tnorth4}}/{{sf_tnorth4}}</td>
+                </tr>
+                <tr>
+                    <td>新竹縣</td>
+                    <td>{{poi_tnorth5}}/{{loi_tnorth5}}/{{aoi_tnorth5}}/{{soi_tnorth5}}</td>
+                    <td>{{pvo_tnorth5}}/{{lvo_tnorth5}}/{{avo_tnorth5}}/{{svo_tnorth5}}</td>
+                    <td>{{puo_tnorth5}}/{{luo_tnorth5}}/{{auo_tnorth5}}/{{suo_tnorth5}}</td>
+                    <td>{{pp_tnorth5}}/{{lp_tnorth5}}/{{ap_tnorth5}}/{{sp_tnorth5}}</td>
+                    <td>{{pf_tnorth5}}/{{lf_tnorth5}}/{{af_tnorth5}}/{{sf_tnorth5}}</td>
+                </tr>
+                <tr>
+                    <td>苗栗縣</td>
+                    <td>{{poi_tnorth6}}/{{loi_tnorth6}}/{{aoi_tnorth6}}/{{soi_tnorth6}}</td>
+                    <td>{{pvo_tnorth6}}/{{lvo_tnorth6}}/{{avo_tnorth6}}/{{svo_tnorth6}}</td>
+                    <td>{{puo_tnorth6}}/{{luo_tnorth6}}/{{auo_tnorth6}}/{{suo_tnorth6}}</td>
+                    <td>{{pp_tnorth6}}/{{lp_tnorth6}}/{{ap_tnorth6}}/{{sp_tnorth6}}</td>
+                    <td>{{pf_tnorth6}}/{{lf_tnorth6}}/{{af_tnorth6}}/{{sf_tnorth6}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2>中部地區</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Country</th>
+                    <th>Total(POI/LOI/AOI/SOI)</th>
+                    <th>Verified &　Open(POI/LOI/AOI/SOI)</th>
+                    <th>Not verified &　Open(POI/LOI/AOI/SOI)</th>
+                    <th>private(POI/LOI/AOI/SOI)</th>
+                    <th>Failed(POI/LOI/AOI/SOI)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>雲林縣</td>
+                    <td>{{poi_tmid0}}/{{loi_tmid0}}/{{aoi_tmid0}}/{{soi_tmid0}}</td>
+                    <td>{{pvo_tmid0}}/{{lvo_tmid0}}/{{avo_tmid0}}/{{svo_tmid0}}</td>
+                    <td>{{puo_tmid0}}/{{luo_tmid0}}/{{auo_tmid0}}/{{suo_tmid0}}</td>
+                    <td>{{pp_tmid0}}/{{lp_tmid0}}/{{ap_tmid0}}/{{sp_tmid0}}</td>
+                    <td>{{pf_tmid0}}/{{lf_tmid0}}/{{af_tmid0}}/{{sf_tmid0}}</td>
+                </tr>
+                <tr>
+                    <td>臺中市</td>
+                    <td>{{poi_tmid1}}/{{loi_tmid1}}/{{aoi_tmid1}}/{{soi_tmid1}}</td>
+                    <td>{{pvo_tmid1}}/{{lvo_tmid1}}/{{avo_tmid1}}/{{svo_tmid1}}</td>
+                    <td>{{puo_tmid1}}/{{luo_tmid1}}/{{auo_tmid1}}/{{suo_tmid1}}</td>
+                    <td>{{pp_tmid1}}/{{lp_tmid1}}/{{ap_tmid1}}/{{sp_tmid1}}</td>
+                    <td>{{pf_tmid1}}/{{lf_tmid1}}/{{af_tmid1}}/{{sf_tmid1}}</td>
+                </tr>
+                <tr>
+                    <td>彰化縣</td>
+                    <td>{{poi_tmid2}}/{{loi_tmid2}}/{{aoi_tmid2}}/{{soi_tmid2}}</td>
+                    <td>{{pvo_tmid2}}/{{lvo_tmid2}}/{{avo_tmid2}}/{{svo_tmid2}}</td>
+                    <td>{{puo_tmid2}}/{{luo_tmid2}}/{{auo_tmid2}}/{{suo_tmid2}}</td>
+                    <td>{{pp_tmid2}}/{{lp_tmid2}}/{{ap_tmid2}}/{{sp_tmid2}}</td>
+                    <td>{{pf_tmid2}}/{{lf_tmid2}}/{{af_tmid2}}/{{sf_tmid2}}</td>
+                </tr>
+                <tr>
+                    <td>南投縣</td>
+                    <td>{{poi_tmid3}}/{{loi_tmid3}}/{{aoi_tmid3}}/{{soi_tmid3}}</td>
+                    <td>{{pvo_tmid3}}/{{lvo_tmid3}}/{{avo_tmid3}}/{{svo_tmid3}}</td>
+                    <td>{{puo_tmid3}}/{{luo_tmid3}}/{{auo_tmid3}}/{{suo_tmid3}}</td>
+                    <td>{{pp_tmid3}}/{{lp_tmid3}}/{{ap_tmid3}}/{{sp_tmid3}}</td>
+                    <td>{{pf_tmid3}}/{{lf_tmid3}}/{{af_tmid3}}/{{sf_tmid3}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2>南部地區</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Country</th>
+                    <th>Total(POI/LOI/AOI/SOI)</th>
+                    <th>Verified &　Open(POI/LOI/AOI/SOI)</th>
+                    <th>Not verified &　Open(POI/LOI/AOI/SOI)</th>
+                    <th>private(POI/LOI/AOI/SOI)</th>
+                    <th>Failed(POI/LOI/AOI/SOI)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>嘉義縣</td>
+                    <td>{{poi_tsouth0}}/{{loi_tsouth0}}/{{aoi_tsouth0}}/{{soi_tsouth0}}</td>
+                    <td>{{pvo_tsouth0}}/{{lvo_tsouth0}}/{{avo_tsouth0}}/{{svo_tsouth0}}</td>
+                    <td>{{puo_tsouth0}}/{{luo_tsouth0}}/{{auo_tsouth0}}/{{suo_tsouth0}}</td>
+                    <td>{{pp_tsouth0}}/{{lp_tsouth0}}/{{ap_tsouth0}}/{{sp_tsouth0}}</td>
+                    <td>{{pf_tsouth0}}/{{lf_tsouth0}}/{{af_tsouth0}}/{{sf_tsouth0}}</td>
+                </tr>
+                <tr>
+                    <td>嘉義市</td>
+                    <td>{{poi_tsouth1}}/{{loi_tsouth1}}/{{aoi_tsouth1}}/{{soi_tsouth1}}</td>
+                    <td>{{pvo_tsouth1}}/{{lvo_tsouth1}}/{{avo_tsouth1}}/{{svo_tsouth1}}</td>
+                    <td>{{puo_tsouth1}}/{{luo_tsouth1}}/{{auo_tsouth1}}/{{suo_tsouth1}}</td>
+                    <td>{{pp_tsouth1}}/{{lp_tsouth1}}/{{ap_tsouth1}}/{{sp_tsouth1}}</td>
+                    <td>{{pf_tsouth1}}/{{lf_tsouth1}}/{{af_tsouth1}}/{{sf_tsouth1}}</td>
+                </tr>
+                <tr>
+                    <td>臺南市</td>
+                    <td>{{poi_tsouth2}}/{{loi_tsouth2}}/{{aoi_tsouth2}}/{{soi_tsouth2}}</td>
+                    <td>{{pvo_tsouth2}}/{{lvo_tsouth2}}/{{avo_tsouth2}}/{{svo_tsouth2}}</td>
+                    <td>{{puo_tsouth2}}/{{luo_tsouth2}}/{{auo_tsouth2}}/{{suo_tsouth2}}</td>
+                    <td>{{pp_tsouth2}}/{{lp_tsouth2}}/{{ap_tsouth2}}/{{sp_tsouth2}}</td>
+                    <td>{{pf_tsouth2}}/{{lf_tsouth2}}/{{af_tsouth2}}/{{sf_tsouth2}}</td>
+                </tr>
+                <tr>
+                    <td>高雄市</td>
+                    <td>{{poi_tsouth3}}/{{loi_tsouth3}}/{{aoi_tsouth3}}/{{soi_tsouth3}}</td>
+                    <td>{{pvo_tsouth3}}/{{lvo_tsouth3}}/{{avo_tsouth3}}/{{svo_tsouth3}}</td>
+                    <td>{{puo_tsouth3}}/{{luo_tsouth3}}/{{auo_tsouth3}}/{{suo_tsouth3}}</td>
+                    <td>{{pp_tsouth3}}/{{lp_tsouth3}}/{{ap_tsouth3}}/{{sp_tsouth3}}</td>
+                    <td>{{pf_tsouth3}}/{{lf_tsouth3}}/{{af_tsouth3}}/{{sf_tsouth3}}</td>
+                </tr>
+                <tr>
+                    <td>屏東縣</td>
+                    <td>{{poi_tsouth4}}/{{loi_tsouth4}}/{{aoi_tsouth4}}/{{soi_tsouth4}}</td>
+                    <td>{{pvo_tsouth4}}/{{lvo_tsouth4}}/{{avo_tsouth4}}/{{svo_tsouth4}}</td>
+                    <td>{{puo_tsouth4}}/{{luo_tsouth4}}/{{auo_tsouth4}}/{{suo_tsouth4}}</td>
+                    <td>{{pp_tsouth4}}/{{lp_tsouth4}}/{{ap_tsouth4}}/{{sp_tsouth4}}</td>
+                    <td>{{pf_tsouth4}}/{{lf_tsouth4}}/{{af_tsouth4}}/{{sf_tsouth4}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2>東部地區</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Country</th>
+                    <th>Total(POI/LOI/AOI/SOI)</th>
+                    <th>Verified &　Open(POI/LOI/AOI/SOI)</th>
+                    <th>Not verified &　Open(POI/LOI/AOI/SOI)</th>
+                    <th>private(POI/LOI/AOI/SOI)</th>
+                    <th>Failed(POI/LOI/AOI/SOI)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>宜蘭縣</td>
+                    <td>{{poi_teast0}}/{{loi_teast0}}/{{aoi_teast0}}/{{soi_teast0}}</td>
+                    <td>{{pvo_teast0}}/{{lvo_teast0}}/{{avo_teast0}}/{{svo_teast0}}</td>
+                    <td>{{puo_teast0}}/{{luo_teast0}}/{{auo_teast0}}/{{suo_teast0}}</td>
+                    <td>{{pp_teast0}}/{{lp_teast0}}/{{ap_teast0}}/{{sp_teast0}}</td>
+                    <td>{{pf_teast0}}/{{lf_teast0}}/{{af_teast0}}/{{sf_teast0}}</td>
+                </tr>
+                <tr>
+                    <td>花蓮縣</td>
+                    <td>{{poi_teast1}}/{{loi_teast1}}/{{aoi_teast1}}/{{soi_teast1}}</td>
+                    <td>{{pvo_teast1}}/{{lvo_teast1}}/{{avo_teast1}}/{{svo_teast1}}</td>
+                    <td>{{puo_teast1}}/{{luo_teast1}}/{{auo_teast1}}/{{suo_teast1}}</td>
+                    <td>{{pp_teast1}}/{{lp_teast1}}/{{ap_teast1}}/{{sp_teast1}}</td>
+                    <td>{{pf_teast1}}/{{lf_teast1}}/{{af_teast1}}/{{sf_teast1}}</td>
+                </tr>
+                <tr>
+                    <td>臺東縣</td>
+                    <td>{{poi_teast2}}/{{loi_teast2}}/{{aoi_teast2}}/{{soi_teast2}}</td>
+                    <td>{{pvo_teast2}}/{{lvo_teast2}}/{{avo_teast2}}/{{svo_teast2}}</td>
+                    <td>{{puo_teast2}}/{{luo_teast2}}/{{auo_teast2}}/{{suo_teast2}}</td>
+                    <td>{{pp_teast2}}/{{lp_teast2}}/{{ap_teast2}}/{{sp_teast2}}</td>
+                    <td>{{pf_teast2}}/{{lf_teast2}}/{{af_teast2}}/{{sf_teast2}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2>離島地區</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Country</th>
+                    <th>Total(POI/LOI/AOI/SOI)</th>
+                    <th>Verified &　Open(POI/LOI/AOI/SOI)</th>
+                    <th>Not verified &　Open(POI/LOI/AOI/SOI)</th>
+                    <th>private(POI/LOI/AOI/SOI)</th>
+                    <th>Failed(POI/LOI/AOI/SOI)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>金門縣</td>
+                    <td>{{poi_tisland0}}/{{loi_tisland0}}/{{aoi_tisland0}}/{{soi_tisland0}}</td>
+                    <td>{{pvo_tisland0}}/{{lvo_tisland0}}/{{avo_tisland0}}/{{svo_tisland0}}</td>
+                    <td>{{puo_tisland0}}/{{luo_tisland0}}/{{auo_tisland0}}/{{suo_tisland0}}</td>
+                    <td>{{pp_tisland0}}/{{lp_tisland0}}/{{ap_tisland0}}/{{sp_tisland0}}</td>
+                    <td>{{pf_tisland0}}/{{lf_tisland0}}/{{af_tisland0}}/{{sf_tisland0}}</td>
+                </tr>
+                <tr>
+                    <td>連江縣</td>
+                    <td>{{poi_tisland1}}/{{loi_tisland1}}/{{aoi_tisland1}}/{{soi_tisland1}}</td>
+                    <td>{{pvo_tisland1}}/{{lvo_tisland1}}/{{avo_tisland1}}/{{svo_tisland1}}</td>
+                    <td>{{puo_tisland1}}/{{luo_tisland1}}/{{auo_tisland1}}/{{suo_tisland1}}</td>
+                    <td>{{pp_tisland1}}/{{lp_tisland1}}/{{ap_tisland1}}/{{sp_tisland1}}</td>
+                    <td>{{pf_tisland1}}/{{lf_tisland1}}/{{af_tisland1}}/{{sf_tisland1}}</td>
+                </tr>
+                <tr>
+                    <td>澎湖縣</td>
+                    <td>{{poi_tisland2}}/{{loi_tisland2}}/{{aoi_tisland2}}/{{soi_tisland2}}</td>
+                    <td>{{pvo_tisland2}}/{{lvo_tisland2}}/{{avo_tisland2}}/{{svo_tisland2}}</td>
+                    <td>{{puo_tisland2}}/{{luo_tisland2}}/{{auo_tisland2}}/{{suo_tisland2}}</td>
+                    <td>{{pp_tisland2}}/{{lp_tisland2}}/{{ap_tisland2}}/{{sp_tisland2}}</td>
+                    <td>{{pf_tisland2}}/{{lf_tisland2}}/{{af_tisland2}}/{{sf_tisland2}}</td>
+                </tr>
+                <tr>
+                    <td>南海諸島</td>
+                    <td>{{poi_tisland3}}/{{loi_tisland3}}/{{aoi_tisland3}}/{{soi_tisland3}}</td>
+                    <td>{{pvo_tisland3}}/{{lvo_tisland3}}/{{avo_tisland3}}/{{svo_tisland3}}</td>
+                    <td>{{puo_tisland3}}/{{luo_tisland3}}/{{auo_tisland3}}/{{suo_tisland03}}</td>
+                    <td>{{pp_tisland3}}/{{lp_tisland3}}/{{ap_tisland3}}/{{sp_tisland3}}</td>
+                    <td>{{pf_tisland3}}/{{lf_tisland3}}/{{af_tisland3}}/{{sf_tisland3}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="../static/bootstrap/js/jquery.js"></script>
+    <script src="../static/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        is_edit = false;
+        function SendRole(obj) {
+            role = obj.value;
+            window.location = '/contents_cal/' + role;
+        }
+    </script>
+</body>
+
+</html>

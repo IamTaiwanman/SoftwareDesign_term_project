@@ -285,26 +285,41 @@ def ajax_area(request, coi=''):
         all_xoi = FilterCoiPoint(content[2:], coi, 1)
 
         if content == 's_poi':
+
+            
+            #area
+            if (area == "全部"):
+                all_poi = all_xoi.filter(identifier=map_role, language=language, open=1, area_name_en__in=get_all)
+            else:
+                all_poi = all_xoi.filter(identifier=map_role, language=language, open=1, area_name_en=area)
+            #type
+            if (not (ttype == None or ttype == 'all')):
+                all_poi = all_poi.filter(type1=ttype)
+            #topic
+            if (not (topic == None or topic == 'all')):
+                all_poi = all_poi.filter(subject=topic)
+            #category
+            if (not(category == None or category == 'all')):
+                all_poi = all_poi.filter(format=category)
+            #media
+            if (not(media == None or media == 'all')):
+                all_mpeg = models.Mpeg.objects.values('foreignkey').filter(format=media)
+                all_poi = all_poi.filter(Q(poi_id__in=all_mpeg) | Q(orig_poi__in=all_mpeg))
+
             # topic(all) area(all) ttype(all) category(all) media(all)
             if (area == '全部') and (topic == None or topic == 'all') and (ttype == None or ttype == 'all') and (category == None or category == 'all') and (media == None or media == 'all'):
-                all_poi = all_xoi.filter(
-                    identifier=map_role, open=1, area_name_en__in=get_all, language=language)  # open= 1 (公開)
+                all_poi = all_xoi.filter(identifier=map_role, open=1, area_name_en__in=get_all, language=language)  # open= 1 (公開)
             # topic(all) area(all) ttype(all) category(all) media(not all)
             elif (area == '全部') and (topic == None or topic == 'all') and (ttype == None or ttype == 'all') and (category == None or category == 'all') and (not(media == None or media == 'all')):
-                all_mpeg = models.Mpeg.objects.values(
-                    'foreignkey').filter(format=media)
-                all_poi = all_xoi.filter(identifier=map_role, open=1, area_name_en__in=get_all, language=language).filter(
-                    Q(poi_id__in=all_mpeg) | Q(orig_poi__in=all_mpeg))  # open= 1 (公開)
+                all_mpeg = models.Mpeg.objects.values('foreignkey').filter(format=media)
+                all_poi = all_xoi.filter(identifier=map_role, open=1, area_name_en__in=get_all, language=language).filter(Q(poi_id__in=all_mpeg) | Q(orig_poi__in=all_mpeg))  # open= 1 (公開)
             # topic(all) area(all) ttype(not all) category(all) media(all)
             elif (area == '全部') and (topic == None or topic == 'all') and (not (ttype == None or ttype == 'all')) and (category == None or category == 'all') and (media == None or media == 'all'):
-                all_poi = all_xoi.filter(identifier=map_role, open=1, type1=ttype,
-                                         area_name_en__in=get_all, language=language)  # open= 1 (公開)
+                all_poi = all_xoi.filter(identifier=map_role, open=1, type1=ttype, area_name_en__in=get_all, language=language)  # open= 1 (公開)
             # topic(all) area(all) ttype(not all) category(all) #media(not all)
             elif (area == '全部') and (topic == None or topic == 'all') and (not (ttype == None or ttype == 'all')) and (category == None or category == 'all') and (not(media == None or media == 'all')):
-                all_mpeg = models.Mpeg.objects.values(
-                    'foreignkey').filter(format=media)
-                all_poi = all_xoi.filter(identifier=map_role, open=1, type1=ttype, area_name_en__in=get_all, language=language).filter(
-                    Q(poi_id__in=all_mpeg) | Q(orig_poi__in=all_mpeg))  # open= 1 (公開)
+                all_mpeg = models.Mpeg.objects.values('foreignkey').filter(format=media)
+                all_poi = all_xoi.filter(identifier=map_role, open=1, type1=ttype, area_name_en__in=get_all, language=language).filter(Q(poi_id__in=all_mpeg) | Q(orig_poi__in=all_mpeg))  # open= 1 (公開)
             # topic(all) area(all) ttype(all) category(not all) media(all)
             elif (area == '全部') and (topic == None or topic == 'all') and (ttype == None or ttype == 'all') and (not(category == None or category == 'all')) and (media == None or media == 'all'):
                 all_poi = all_xoi.filter(identifier=map_role, open=1, format=category,
@@ -377,8 +392,7 @@ def ajax_area(request, coi=''):
                     Q(poi_id__in=all_mpeg) | Q(orig_poi__in=all_mpeg))  # open= 1 (公開)
             # topic(all) area(not all) ttype(not all) category(all) media(all)
             elif (not (area == '全部')) and (topic == None or topic == 'all') and (not (ttype == None or ttype == 'all')) and (category == None or category == 'all') and (media == None or media == 'all'):
-                all_poi = all_xoi.filter(
-                    identifier=map_role, open=1, area_name_en=area, type1=ttype, language=language)  # open= 1 (公開)
+                all_poi = all_xoi.filter(identifier=map_role, open=1, area_name_en=area, type1=ttype, language=language)  # open= 1 (公開)
             # topic(all) area(not all) ttype(not all) category(all) media(not all)
             elif (not (area == '全部')) and (topic == None or topic == 'all') and (not (ttype == None or ttype == 'all')) and (category == None or category == 'all') and (not(media == None or media == 'all')):
                 all_mpeg = models.Mpeg.objects.values(

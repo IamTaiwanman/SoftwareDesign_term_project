@@ -1,0 +1,65 @@
+{% include 'header.html' %}
+
+<body>
+    {% include 'navbar.html' %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    <img src="../static/images/logo.png">
+                </h1>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-heading" align=center style="background-color: #4bafa9 ">
+                        <h3 id="docent_info-1" style="color: #fff">導覽員資訊</h3>
+                    </div>
+                    <div class="panel panel-body">
+                        <form id="edit_docent" enctype="multipart/form-data">
+                            <span id="name">姓名</span>
+                            <input type="text" name="name" value="{{docent_info.name}}">
+                            <br>
+                            <br>
+                            <span id="telphone">電話</span>
+                            <input type="number" name="telphone" value="{{docent_info.telphone}}">
+                            <br>
+                            <br>
+                            <span id="cellphone">手機</span>
+                            <input type="number" name="cellphone" value="{{docent_info.cellphone}}">
+                            <br>
+                            <br>
+                            <span id="languagebox">導覽語言</span>
+                            <input type="checkbox" name="language" value="Chinese">  中文
+                            <input type="checkbox" name="language" value="English">  英文
+                            <input type="checkbox" name="language" value="Japanese"> 日文
+                            <input type="checkbox" name="language" value="Others">   其他
+                            <br>
+                            <br>
+                            <span id="social_id">FB/LINE或其他帳號</span>
+                            <input type="text" name="social_id" value="{{docent_info.social_id}}">
+                            <br>
+                            <br>
+                            <span id="person_introduction">個人簡介</span>
+                            <textarea name="introduction">{{docent_info.introduction}}</textarea>
+                            <br>
+                            <br>
+                            <span id="charge">收費標準</span>
+                            <input type="text" name="charge" value="{{docent_info.charge}}">
+                            <br>
+                            <br>
+                            <button id="confirm" type="submit" class="btn btn-default">確認</button>
+                        </form>
+                        <div class="alert alert-danger" hidden></div>
+                        <div class="alert alert-success" hidden></div>
+                        <div id="loading" hidden><img src="/static/images/loading.gif" style="display: block; margin:800px 400px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% load static %}
+<script src="{% static 'js/edit_docent.js' %}"></script>
+
+</html>

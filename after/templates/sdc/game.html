@@ -1,0 +1,52 @@
+{% include 'header.html' %}
+<html>
+    {% with navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar %} {% endwith %}
+    <body>
+
+    <div class="container" style="font-family: Microsoft JhengHei;">
+        <div style="margin-top: 20px">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <h2 style="display: inline">走讀群組</h2>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+            {% for g in group_list %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <p style="color:#00F; display:inline;">{{g.foreignkey.group_name}}</p>
+                                <p style="color:#00F; display:inline;">(
+                                    {% if g.foreignkey.verification == 0  %}
+                                        尚未驗證 /
+                                    {% elif g.foreignkey.verification == 1  %}
+                                        已驗證通過 /
+                                    {% else %}
+                                        驗證不通過 /
+                                    {% endif %} 
+
+                                    {% if g.foreignkey.open == 1 %}
+                                        公開
+                                    {% else %}
+                                        不公開
+                                    {% endif %}
+                                )</p>
+                                <div class="btn btn-success" style="float: right; margin-right: 10px;" onclick="document.location='game_room/{{g.foreignkey.group_id}}'">選擇群組</div>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            {% endfor %}
+        </div>    
+    </div>
+    <div id="loading" style="position:fixed;top:0;left:0;right:0;bottom:0;background-color:white;" hidden>
+        <img src="/static/images/loading.gif" style="position:relative;top:50%;transform:translateY(-50%);display:block;margin:auto;">
+    </div>
+
+</body>
+{% load static %}
+</html>

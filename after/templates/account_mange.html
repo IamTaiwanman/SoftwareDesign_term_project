@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>DEH帳號管理</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bootstrap/css/modern-business.css" rel="stylesheet">
+    <link href="bootstrap/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="dist/css/style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="bootstrap-select/dist/css/bootstrap-select.min.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" id="draw-1" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" id="brand-1" href="index.html">DEH</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right" id="brand-2">
+                    <li>
+                        <a href="index.html">首頁</a>
+                    </li>
+                    <li>
+                        <a href="deh_intro.html">平台使用簡介</a>
+                    </li>
+                    <li>
+                        <select class="lang-1">
+                            <option>中文(繁體)</option>
+                            <option>英文</option>
+                            <option>日文</option>
+                        </select>
+                    </li>
+                     <li>
+                        <a href="account_mange.html">User ID</a>
+                    </li>
+                    <li>
+                        <a href="index.html">登出</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    <img src="images/logo.png">
+                </h1>
+            </div>
+            <hr>
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6 content">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th scope="row">用戶名稱</th>
+                            <td>User ID</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">變更密碼</th>
+                            <td>
+                                <input type="password" name="">
+                                <p style="display: inline;">密碼需5~20字</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">確認密碼</th>
+                            <td>
+                                <input type="password" name="">
+                                <p style="display: inline;">密碼須相同</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">用戶暱稱</th>
+                            <td>
+                                <input type="text" name="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">E-mail</th>
+                            <td>
+                                <input type="text" name="">
+                                <input style="display: inline;" type="checkbox" name="">
+                                <p style="display: inline;">不公開我的電子郵件</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">生日</th>
+                            <td>
+                                <select name="year">
+                                    <option>1995</option>
+                                    <option>1996</option>
+                                    <option>1997</option>
+                                    <option>1998</option>
+                                    <option>1999</option>
+                                    <option>2000</option>
+                                    <option>2001</option>
+                                    <option>2002</option>
+                                </select>
+                                <select name="month">
+                                    <option value="January">一月</option>
+                                    <option value="February">二月</option>
+                                    <option value="Mars">三月</option>
+                                    <option value="April">四月</option>
+                                    <option value="May">五月</option>
+                                    <option value="June">六月</option>
+                                    <option value="July">七月</option>
+                                    <option value="Auguest">八月</option>
+                                    <option value="September">九月</option>
+                                    <option value="October">十月</option>
+                                    <option value="November">十一月</option>
+                                    <option value="December">十二月</option>
+                                </select>
+                                <select name="day">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">性別</th>
+                            <td>
+                                <select name="sex">
+                                    <option>男</option>
+                                    <option>女</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">最高學歷</th>
+                            <td>
+                                <select name="school">
+                                    <option>高中</option>
+                                    <option>大學</option>
+                                    <option>碩士</option>
+                                    <option>博士</option>
+                                    <option>其他</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button style="margin-left: 480px;">確認修改</button>
+            </div>
+        </div>
+        <!-- Footer -->
+        <footer>
+            <div class="row" style="border: 1px solid #c5b9b9;">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; mmnetlab 2016</p>
+                    <p>聯絡方式:
+                        <br>Tel:+886-6-275-7575 ext. 62523
+                        <br> E-mail: dehmaster00@gmail.com</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script src="bootstrap/js/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script>
+    $('.carousel').carousel({
+        interval: 5000 //changes the speed
+    })
+    </script>
+</body>
+
+</html>

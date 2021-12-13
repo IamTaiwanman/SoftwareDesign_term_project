@@ -1,0 +1,70 @@
+{% include 'header.html' %}
+<html>
+{% with navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar %} {% endwith %}
+<body>
+<div class="container" style="padding-left: 0px;">
+    <div class="row">
+        <h1 id="logo_content" class="page-header">
+            <!-- <img id="logo" src="/static/images/logo.png"> -->
+        </h1>
+    </div>
+    <div class="My_Prize" style="margin-top: 20px">
+        <h2 id="myPrize" style="display: inline;">提供獎品清單</h2>
+        <img src="/static/images/question.png" data-toggle="modal" data-target="#group_info" style="display:inline;margin-bottom: 10px;margin-left: 5px;">
+        <button class="btn" style="float:right;" id="make_prize" onclick='buttonLink("/{{coi}}/make_prize")'><a>新增獎品</a></button>
+        <br>
+        <hr>
+        <div class="prize_detail">
+            {% for p in prize_list %} {% ifchanged %}
+            
+            <table class="table table-hover">
+                <tr>
+                    <th>
+                        <!--a href="/{{coi}}/loi_detail/{{x.route_id}}">{{x.route_title}}</a-->
+                        <a href="/{{coi}}/prize_detail/{{p.prize_id}}" style="color:#00F; display:inline;">{{p.prize_name}}</a>
+                        <!--p style="color:#00F; display:inline;">{{p.prize_name}}</p-->
+                        
+                        <button class="btn delete_prize" onclick='delete_prize({{ p.prize_id }}, {{ p.is_allocated }})' style="float: right; margin-right: 10px; background-color: brown;">刪除</button>
+                        <button class="btn btn-warning" style="float: right; margin-right: 10px;" onclick='buttonLink("/{{coi}}/edit_prize/{{p.prize_id}}")'>修改
+                                <!--a href="/{{coi}}/edit_prize/{{p.prize_id}}">修改</a-->
+                            </button>
+                    </th>
+                </tr>
+            </table>
+            {% endifchanged %} {% endfor %}
+        </div>
+    </div>
+    <!--div class="modal fade" id="group_info" role="dialog" style="margin-top:200px">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <ul id="group_modal-1">
+                        <li>群組Leader可邀請成員進入群組</li>
+                        <li>User 可建立多個群組亦可申請加入多個群組</li>
+                        <li>群組Leader可解散群組</li>
+                        <li>群組Member可退出群組</li>
+                        <li>若群組為不公開則無法探索該群組</li>
+                        <li>若群組為公開且驗證通過才可在搜尋功能查詢群組</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button id="close_info" type="button" class="btn btn-danger" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div-->
+</div>
+</div>
+<div id="loading" hidden><img src="/static/images/loading.gif" style="display: block; margin:480px 800px;"></div>
+
+<script>
+    const LIST_URL = '/{{coi}}/list_prize'
+</script>
+
+{% load static %}
+{% with js=coi|stringformat:"s"|add:"/list_prize.js" %}
+    <script src="{% static 'js/'|add:js %}"></script>
+{% endwith %}
+<script src="{% static 'js/extn/list_prize.js' %}"></script>
+</body>
+</html>

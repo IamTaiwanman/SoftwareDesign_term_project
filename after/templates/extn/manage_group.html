@@ -1,0 +1,303 @@
+{% include 'header.html' %}
+<html>
+    {% with navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar %} {% endwith %}
+    <body>
+        <div class="container">
+            <div class="row" style="margin-top: 50px">
+                <div class="col-lg-6" style="height: 400px;">
+                    <h3 id="title" style="display: inline; font-weight: 700;">
+                        <span id="group_icon" class="label label-primary" style="margin-right: 15px;">群組</span>{{group.group_name}}
+                    </h3>
+                    {% if is_leader %}
+                    <button id="modify_group" class="btn" style="background-color: transparent;padding: 0px 10px 0px 0px;
+                    margin-bottom: 10px;" data-toggle="modal" data-target="#group_modal">
+                        <img src="/static/images/gear.png" style="width:20px;" title="編輯"></button> {%endif%}
+                    <p style="margin-top: 20px; width:100%; height:300px; padding:15px 15px 15px 15px; background-color: #f8ffda;">
+                        <span id="group_description" class="label label-info">群組描述</span><br>
+                        <span style="font-size: 20px;">{{group.group_info}}</span>
+                    </p>
+                </div>
+                <div class="col-lg-6">
+                    <span id="group_member" class="label label-success">成員</span>
+                    <ul class="list-group" style="margin-top: 20px;">
+                        {% for m in member%} {% ifchanged %}
+                        <li class="list-group-item" id="member{{m.user_id.user_id}}" style="font-size: 20px;">
+                            {% if m.user_id.nickname %}
+                                {{m.user_id.nickname}}
+                            {% else %}
+                                {{m.user_id.user_name}}
+                            {% endif %}
+                            ({{m.identifier}}) {% if is_leader and m.user_id.user_name != username %}
+                            <button class="btn btn-danger" style="float: right; margin-right: 10px;" onclick="Kickout({{group.group_id}},{{m.user_id.user_id}})">踢出</button>
+                            <button class="btn btn-warning group_history" style="float: right; margin-right: 10px" data-toggle="modal" data-target="#history-modal"
+                                data-username="{{m.user_id.user_name}}">歷史紀錄</button>
+                            {% endif %}
+                             {% if m.user_id.user_name == username %}
+                            <button class="btn btn-warning group_history" style="float: right; margin-right: 10px" data-toggle="modal" data-target="#history-modal"
+                                data-username="{{m.user_id.user_name}}">歷史紀錄</button>
+                            {% endif %}
+                        </li>
+                        {% endifchanged %} {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-lg-6" style="margin-top:170px">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#POI">POI</a></li>
+                        <li><a data-toggle="tab" href="#LOI">LOI</a></li>
+                        <li><a data-toggle="tab" href="#AOI">AOI</a></li>
+                        <li><a data-toggle="tab" href="#SOI">SOI</a></li>
+                        <li>
+                            <a id="group_mine" href="#">
+                                <img src="/static/images/user.png" style="width:20px;" title="自己做的"></a>
+                        </li>
+                        <li>
+                            <a id="group_all" href="#">
+                                <img src="/static/images/open.png" style="width:20px;" title="全部"></a>
+                        </li>
+                        <li style="margin:10px"><img src="/static/images/question.png" data-toggle="modal" data-target="#item_info" style="margin:10px 10x"></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="POI" class="tab-pane fade in active">
+                            {% for p in all_poi %}
+                            <table class="table table-hover {% if p.rights != username%}not_mine{% endif %}" id="poi_list{{p.poi_id}}">
+                                <tr>
+                                    <th><a href="/{{coi}}/poi_detail/{{p.poi_id}}">{{p.poi_title}}</a> {% if is_leader %}
+                                        <button class="btn group_moveout" onclick="remove_point('poi',{{p.poi_id}})" style="float: right; margin-right: 10px;">移出</button> {% endif %} {%if p.rights == username or is_leader%}
+                                        <button class="btn btn-info group_edit" onclick="edit_poi({{p.poi_id}},{{group.group_id}})" style="float: right; margin-right: 10px;">修改</button> {% endif %}
+                                    </th>
+                                </tr>
+                            </table>
+                            {% endfor%}
+                        </div>
+                        <div id="LOI" class="tab-pane fade">
+                            {% for l in all_loi %}
+                            <table class="table table-hover {% if l.route_owner != username%}not_mine{% endif %}" id="loi_list{{l.route_id}}">
+                                <tr>
+                                    <th><a href="/{{coi}}/loi_detail/{{l.route_id}}">{{l.route_title}}</a>{% if is_leader %}
+                                        <button class="btn group_moveout" onclick="remove_point('loi',{{l.route_id}})" style="float: right; margin-right: 10px;">移出</button>{% endif %}{%if l.route_owner == username or is_leader%}
+                                        <button class="btn btn-info group_edit" onclick="edit_loi({{l.route_id}},{{group.group_id}})" style="float: right; margin-right: 10px;">修改</button>{% endif %}
+                                    </th>
+                                </tr>
+                            </table>
+                            {% endfor%}
+                        </div>
+                        <div id="AOI" class="tab-pane fade">
+                            {% for a in all_aoi %}
+                            <table class="table table-hover {% if a.owner != username%}not_mine{% endif %}" id="aoi_list{{a.aoi_id}}">
+                                <tr>
+                                    <th><a href="/{{coi}}/aoi_detail/{{a.aoi_id}}">{{a.title}}</a>{% if is_leader %}
+                                        <button class="btn group_moveout" onclick="remove_point('aoi',{{a.aoi_id}})" style="float: right; margin-right: 10px;">移出</button>{% endif %}{%if a.owner == username or is_leader%}
+                                        <button class="btn btn-info group_edit" onclick="edit_aoi({{a.aoi_id}},{{group.group_id}})" style="float: right; margin-right: 10px;">修改</button>{% endif %}
+                                    </th>
+                                </tr>
+                            </table>
+                            {% endfor%}
+                        </div>
+                        <div id="SOI" class="tab-pane fade">
+                            {% for s in all_soi %}
+                            <table class="table table-hover {% if s.soi_user_name != username%}not_mine{% endif %}" id="soi_list{{s.soi_id}}">
+                                <tr>
+                                    <th><a href="/{{coi}}/soi_detail/{{s.soi_id}}">{{s.soi_title}}</a>{% if is_leader %}
+                                        <button class="btn group_moveout" onclick="remove_point('soi',{{s.soi_id}})" style="float: right; margin-right: 10px;">移出</button>{% endif %}{%if s.soi_user_name == username or is_leader%}
+                                        <button class="btn btn-info group_edit" onclick="edit_soi({{s.soi_id}},{{group.group_id}})" style="float: right; margin-right: 10px;">修改</button>{% endif %}
+                                    </th>
+                                </tr>
+                            </table>
+                            {% endfor%}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="item_info" role="dialog" style="margin-top:200px">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <ul id="group_inf">
+                            <li>群組Leader可編輯群組資訊</li>
+                            <li>群組Leader還有該製作成員可看到成員製做之不公開之景點/景線/景區/主題故事</li>
+                            <li>非群組成員只可看到成員製做之公開且驗證通過之景點/景線/景區/主題故事</li>
+                            <li>群組Leader可踢出Member</li>
+                            <li>群組Leader/Member可放入自己製做之景點/景線/景區/主題故事</li>
+                            <li>群組Leader可修改/移出成員製做之景點/景線/景區/主題故事</li>
+                            <li>群組Member退出/被踢出群組後群組內之景點/景線/景區/主題故事仍會存在群組，若刪除後則會消失</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">關閉</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if is_leader %}
+        <div class="modal fade" id="group_modal" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 id="edit_group" class="modal-title" style="font-weight: bold;">修改群組資訊</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input id="edit_title" type="text" value="{{group.group_name}}" /><br><br>
+                        <p id="group_open">公開/不公開</p>
+                        <select id="group-open">
+                            <option value="1">公開</option>
+                            <option value="0">不公開</option>
+                        </select><br><br>
+                        <p>群組描述</p>
+                        <textarea id="group_info">{{group.group_info}}</textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="edit_info" class="btn btn-info" onclick="modify_group()">修改</button>
+                        <button id="edit_close" type="button" class="btn btn-danger" data-dismiss="modal">關閉</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="modal fade" id="history-modal" role="dialog" style="margin-top:150px">
+            <div class="modal-dialog modal-lg" style="height: 550px">
+                <div class="modal-content">
+                    <div class="modal-body" style="height: 500px">
+                        <div>
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a id="track" href="#web_history_modal" data-toggle="tab">瀏覽軌跡</a>
+                                </li>
+                                <li>
+                                    <a id="action" href="#mobile_history_modal" data-toggle="tab">行動軌跡</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="tab-content">
+                            <div id="web_history_modal" class="tab-pane fade in active">
+                                <div class="his_contents" style="margin-top: 5px">
+                                    <select id="web_contents" style="width: 150px; display: initial;">
+                                        <option id="w_poi" value="poi" selected>景點</option>
+                                        <option id="w_loi" value="loi">景線</option>
+                                        <option id="w_aoi" value="aoi">景區</option>
+                                        <option id="w_soi" value="soi">主題故事</option>
+                                    </select>
+                                    <input type="date" id="wstart_date" required>
+                                    <input type="time" id="wstart_time" required>
+                                    <input type="date" id="wend_date" required>
+                                    <input type="time" id="wend_time" required>
+                                    <button type="button" id="web_search" class="btn btn-info">查詢</button>
+                                </div>
+                                <div class="col-lg-6" id="web-history-map" style="width: 50%; height: 370px"></div>
+                                <div id="web_search_result" style="margin-left: 51%; height: 400px; overflow: auto">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <td id="group_time" style="width: 30%">時間</td>
+                                                <td id="group_title">標題</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="web_table">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id="mobile_history_modal" class="tab-pane fade">
+                                <div class="his_contents" style="margin-top: 5px">
+                                    <input type="hidden" id="mobile_contents" value="mobile">
+                                    <input type="date" id="mstart_date" required>
+                                    <input type="time" id="mstart_time" required>
+                                    <input type="date" id="mend_date" required>
+                                    <input type="time" id="mend_time" required>
+                                    <button type="button" id="mobile_search" class="btn btn-info">查詢</button>
+                                    <button class="btn btn-warning" data-toggle="modal" data-target="#historyGroupLoi_modal">景線景區對照</button>
+                                </div>
+                                <div class="col-lg-6" id="mobile-history-map" style="width: 50%; height: 370px"></div>
+                                <div id="mobile_search_result" style="margin-left: 51%; height: 400px; overflow: auto">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <td style="width: 30%">時間</td>
+                                                <td>標題</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="mobile_table">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">關閉</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="historyGroupLoi_modal" role="dialog" style="margin-top:160px">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 id="group_loi_list" class="modal-title" style="font-weight: bold;">景線景區列表</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!-- 景點景線 -->
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label id="loi_btn" class="btn btn-primary active" style="margin-top:10px">
+                                <input type="radio" name="xoi_btn" id="lois_btn" autocomplete="off" checked> 景線
+                            </label>
+                            <label id="aoi_btn" class="btn btn-primary" style="margin-top:10px">
+                                <input type="radio" name="xoi_btn" id="aois_btn" autocomplete="off"> 景區
+                            </label>
+                            <div class="input-group">
+                                <form action="/search_bar" class="navbar-form" role="search">
+                                    <input type="text" class="form-control" placeholder="Search" name="srch_term" id="srch_term">
+                                    <div class="input-group">
+                                        <button class="btn btn-primary" type="submit" onclick="filterSearch()">
+                                            <i class="glyphicon glyphicon-search"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div id="lois" class="list-group"></div>
+                        <div id="aois" class="list-group" hidden></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">關閉</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" id="search_user">
+        {% load static %}
+        <script src="{% static 'js/manage_group.js' %}"></script>
+        <script>
+            var open = "{{group.open}}";
+            var group_id = "{{group.group_id}}";
+            const COI_NAME="{{coi}}";
+            const COI_URL = "/{{coi}}/";
+            if (open == 'True') {
+                $("#group-open").val(1);
+            } else {
+                $("#group-open").val(0);
+            }
+        </script>
+        <script>
+            $(document).ready(function() {
+                if ($(window).width() < 1025) {
+                    $("#web_search_result").css("margin-left", "0");
+                    $("#mobile_search_result").css("margin-left", "0");
+                    $("#web-history-map").css("width", "100%");
+                    $("#web-history-map").css("height", "300px");
+                    $("#mobile-history-map").css("width", "100%");
+                    $("#mobile-history-map").css("height", "300px");
+                }
+            });
+        </script>>
+    </body>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqPYQN7x5wDi_hOIoS0DiOHSC4i66IcDY&callback=initMap"></script>
+</html>

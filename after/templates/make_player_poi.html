@@ -1,0 +1,309 @@
+{% include 'header.html' %}
+
+<body>
+    {% include 'navbar.html' %} {% include 'sidebar.html' %}
+    <div class="container" style="margin-bottom: 250px;">
+        <div class="col-lg-12" id="makePOI" style="margin-left: 50px;">
+            <h2 id="make_poiform-1"><span id="makeScenario">景點製作</span>
+                <img src="../static/images/question.png" data-toggle="modal" data-target="#poi_make_notes" style="display: inline;">
+            </h2>
+            <form id="make_poiform" enctype="multipart/form-data">
+                {% csrf_token %}
+                <br>
+                <div class="mypoi_make">
+                    <div class="form-group">
+                        <b id="title-1">標題</b>
+                        <input type="" name="poi_title" id="poi_title">
+                    </div>
+                    <div class="form-group">
+                        <label id="Format-1">範疇</label>
+                        <select id="format" name="format" >
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            <div class = "format-content">
+                                <option id="Historical" value="古蹟">古蹟</option>
+                                <option id="historical_buildings" value="歷史建築">歷史建築</option>
+                                <option id="Memorial_building" value="紀念建築">紀念建築</option>
+                                <option id="Settlement_buildings" value="聚落建築群">聚落建築群</option>
+                                <option id="Ruins" value="考古遺址">考古遺址</option>
+                                <option id="Historical_site" value="史蹟">史蹟</option>
+                                <option id="Cultural-1" value="文化景觀">文化景觀</option>
+                                <option id="Antique" value="古物">古物</option>
+                                <option class="natural" value="自然地景、自然紀念物">自然地景、自然紀念物</option>
+                                <option id="Traditional" value="傳統表演藝術">傳統表演藝術</option>
+                                <option id="Traditional2" value="傳統工藝">傳統工藝</option>
+                                <option id="Traditional3" value="口述傳統">口述傳統</option>
+                                <option id="Folk" value="民俗">民俗</option>
+                                <option id="Traditional-knowledge" value="傳統知識與實踐">傳統知識與實踐</option>
+                                <option id="General_landscape" value="一般景觀(建築/人工地景/自然地景)">一般景觀(建築/人工地景/自然地景)</option>
+                                <option id="Plants" value="植物">植物</option>
+                                <option id="Animals" value="動物">動物</option>
+                                <option id="biological" value="生物">生物</option>
+                                <option id="Food" value="食衣住行育樂">食衣住行育樂</option>
+                                <option id="Others" value="其他">其他</option>
+                            </div>
+                            
+                        </select>
+                        <img src="../static/images/question.png" data-toggle="modal" data-target="#subject_notes" style="display: inline;">
+                    </div>
+                    <!--div class="form-group">
+                        <label id="Subject-1">主題</label>
+                        <select id="subject" name="subject">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            <option id="disappeared" value="消逝的">消逝的</option>
+                            <option id="experiential" value="體驗的">體驗的</option>
+                            <option id="activation" value="活化與再造的">活化與再造的</option>
+                        </select>
+                        <img src="../static/images/question.png" data-toggle="modal" data-target="#subject_notes" style="display: inline;">
+                    </div-->
+                    <div class="form-group">
+                        <b id="Region-1" style="display: inline;">地區</b>
+                        <select id="city" name="city">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            {% for x in areas %} {% if language == '英文'%}
+                            <option value="{{x.area_country}}">{{x.area_country_en}}</option>
+                            } {% else %}
+                            <option value="{{x.area_country}}">{{x.area_country}}</option>
+                            {%endif%} {% endfor %}
+                        </select>
+                        <select id="areas" name="my_areas"></select>
+                    </div>
+                    <!--div class="form-group">
+                        <label id="Type-1">類型</label>
+                        <select id="type1" name="type1">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            <option class="natural" value="自然景觀">自然景觀</option>
+                            <option id="human" value="人文景觀">人文景觀</option>
+                            <option id="event" value="事件">事件</option>
+                            <option id="figure" value="人物">人物</option>
+                            <option id="industry" value="產業">產業</option>
+                        </select>
+                    </div-->
+                    <div class="form-group">
+                        <label id="docent_period">時期</label>
+                        <select id="period" name="period">
+                            <option class="sel_option-1" selected disabled hidden>請選擇</option>
+                            <option id="Prehistory-1" value="史前時期">史前時期</option>
+                            <option id="Dutch-1" value="荷西時期">荷西時期</option>
+                            <option id="Ming-1" value="明鄭時期">明鄭時期</option>
+                            <option id="Qing-1" value="清朝時期">清朝時期</option>
+                            <option id="japanese_Occ-1" value="日本時期">日本時期</option>
+                            <option id="Modem-1" value="現代台灣">現代台灣</option>
+                            <option id="BC-1" value="西元前~0">西元前~0</option>
+                            <option value="0~99">0~99</option>
+                            <option value="100~199">100~199</option>
+                            <option value="200~299">200~299</option>
+                            <option value="300~399">300~399</option>
+                            <option value="400~499">400~499</option>
+                            <option value="500~599">500~599</option>
+                            <option value="600~699">600~699</option>
+                            <option value="700~799">700~799</option>
+                            <option value="800~899">800~899</option>
+                            <option value="900~999">900~999</option>
+                            <option value="1000~1099">1000~1099</option>
+                            <option value="1100~1199">1100~1199</option>
+                            <option value="1200~1299">1200~1299</option>
+                            <option value="1300~1399">1300~1399</option>
+                            <option value="1400~1499">1400~1499</option>
+                            <option value="1500~1599">1500~1599</option>
+                            <option value="1600~1699">1600~1699</option>
+                            <option value="1700~1799">1700~1799</option>
+                            <option value="1800~1899">1800~1899</option>
+                            <option value="1900~1999">1900~1999</option>
+                            <option value="2000~">2000~</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label id="year-1">年份</label>
+                        <select type="number" name="year" id="year"></select>
+                    </div>
+                    <div class="form-group">
+                        <label id="keyword-1">關鍵字</label>
+                        <input type="text" name="keyword1" id="keyword1">
+                        <input type="text" name="keyword2" id="keyword2">
+                        <input type="text" name="keyword3" id="keyword3">
+                        <input type="text" name="keyword4" id="keyword4">
+                    </div>
+                    <div class="form-group">
+                        <label id="docent_address">地址</label>
+                        <input type="text" name="poi_address" id="poi_address">
+                        <br>
+                        <p id="Changhua_map" style="color:#FF2D2D; margin-top: 5px;">可利用地圖自動取得地址與經緯度(在地圖上按左鍵,若地址不正確可手動修正)</p>
+                        <div id="map_poi" style="width:90%;height:450px"></div>
+                        <div style="margin-top: 5px;">
+                            <p style="display: inline;" id="lati:"><span id="weidu">緯度</span>:</p>
+                            <input type="number" name="latitude" id="latitude" step="0.0000000000000001" style="width: 25%;">
+                            <p style="display: inline;" id="long:"><span id="jingdu">經度</span>:</p>
+                            <input type="number" name="longitude" id="longitude" step="0.0000000000000001" style="width: 25%;">
+                            <button type="button" id="trans_addr_but"><span id="byAddrGenerate">根據地址自動產生</span></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label id="description">描述</label>
+                        <textarea name="poi_description_1" id="poi_description_1" style="width: 80%;height: 200px;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="poi_source_check" name="option_check" value=""><label for="poi_source_check" id="docent_source">參考來源</label>
+                        <input type="checkbox" id="creator_check" name="option_check" value=""><label for="creator_check" id="creator-1">參考來源作者</label>
+                        <input type="checkbox" id="publisher_check" name="option_check" value=""><label for="publisher_check" id="publisher-1">參考來源出版者</label><br>
+
+                        <input type="text" name="poi_source" id="poi_source" style="display:none" placeholder="請填入參考來源">
+                        <input type="text" name="creator" id="creator" style="display:none" placeholder="請填入參考來源作者">
+                        <input type="text" name="publisher" id="publisher" style="display:none" placeholder="請填入參考來源出版者">
+                    </div>
+                    <!--div class="form-group">
+                        <label id="docent_source">參考來源</label>
+                        <input type="text" name="poi_source" id="poi_source">
+                    </div>
+                    <div class="form-group">
+                        <label id="creator-1">參考來源作者</label>
+                        <input type="text" name="creator" id="creator">
+                    </div>
+                    <div class="form-group">
+                        <label id="publisher-1">參考來源出版者</label>
+                        <input type="text" name="publisher" id="publisher">
+                    </div-->
+                    <div class="form-group">
+                        <label id="contributor-1">景點製作貢獻者</label>
+                        <input type="text" name="contributor" id="contributor">
+                    </div>
+                    <div class="form-group">
+                        <label id="public-1">公開</label>
+                        <select id="open" class="selectPublic" name="open">
+                            <option id="yes" value="1">公開</option>
+                            <option id="no" value="0">不公開</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="display: none">
+                        <input type="text" name="poi_make" id="poi_make" value="make">
+                        <input type="text" name="language" id="language" value="中文">
+                        <input type="text" name="identifier" id="identifier" value="{{role}}">
+                        <input type="text" name="rights" id="rights" value={{username}}>
+                    </div>
+                    <div class="form-group">
+                        <label id="upload_guide">上傳語音導覽解說</label>
+                        <br>
+                        <input type="radio" name="sounds" value="none" checked>
+                        <p id="none_file" style="display: inline;"> 無</p>
+                        <input type="radio" name="sounds" value="sound">
+                        <p id="audio_guide-1" style="display: inline;"> 語音導覽</p>
+                        <br>
+                        <p id="restrict1"></p>
+                        <div class="upload_nothing"></div>
+                        <div class="upload_sound"></div>
+                    </div>
+                    <div class="form-group">
+                        <label id="upload_media">上傳照片/聲音/影片</label>
+                        <br>
+                        <input type="radio" name="media" value="none" hidden>
+                        <!-- 無 -->
+                        <input type="radio" name="media" value="image">
+                        <p id="img_file" style="display: inline;">相片</p>
+                        <input type="radio" name="media" value="video">
+                        <p id="video_file-1" style="display: inline;">影片</p>
+                        <input type="radio" name="media" value="audio">
+                        <p id="audio_file-1" style="display: inline;">聲音</p>
+                        <br>
+                        <p id="restrict"></p>
+                        <div class="upload_none" hidden></div>
+                        <div class="upload_image"></div>
+                        <div class="upload_video" style="width: 70%; height: auto;"></div>
+                        <div class="upload_audio"></div>
+                    </div>
+                    <input type="text" name="user" value="{{username}}" hidden>
+                    <button type="submit" class="btn btn-default submit_poiform">
+                        <p id="btn_confirm" style="display: inline;">確認</p>
+                    </button>
+                    <button type="reset" class="btn btn-danger" id="clear">
+                        <p id="btn_reset" style="display: inline;">清除</p>
+                    </button>
+                    <div class="alert alert-danger" hidden></div>
+                    <div class="alert alert-success" hidden></div>
+                </div>
+            </form>
+            <div id="loading" hidden>
+                <img src="../static/images/loading.gif" style="position: fixed; display: block; top:40%; right: 50%;">
+            </div>
+            <div class="modal fade" id="poi_make_notes" role="dialog" style="margin-top: 250px;">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 id="poi_notes" class="modal-title" style="font-weight: bold;">Poi 製作需知</h4>
+                        </div>
+                        <div class="modal-body">
+                            1.
+                            <p id="poi_msg-7" style="display: inline;">電腦按住鍵盤
+                                <b>Ctrl</b>同時點選圖片即可選取多張(最多五張)圖片，圖片超過2MB將會被壓縮</p>
+                            <br>
+                            <br> 2.
+                            <p class="poi_msg-1" style="display: inline;">景點設定為</p>
+                            <p class="public-1" style="color:#00f; display: inline;">公開</p>
+                            <p id="poi_msg-2" style="display: inline;">時，經驗證通過後可予大眾閱聽</p>
+                            <br>
+                            <br> 3.
+                            <p class="poi_msg-1" style="display: inline;">景點設定為
+                                <p id="poi_msg-4" style="color:#f00; display: inline;">不公開</p>
+                                <p id="poi_msg-5" style="display: inline;">(私有)時，則不需驗證</p>
+                                <br>
+                                <br> 4.
+                                <p id="poi_msg-6" style="display: inline;">
+                                    <b>地區</b>與
+                                    <b>地址</b>需一致</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="subject_notes" role="dialog">
+        <div class="modal-dialog" style="width: 60vw!important">
+            <!-- Modal content-->
+            <div class="modal-content" id="subject_notes-1">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body make_poi_info" >
+                    <p><b>古蹟：</b><br>指人類為生活需要所營建之具有歷史、文化、藝術價值之建造物及附屬設施。</p>
+                    <p><b>歷史建築：</b><br>指歷史事件所定著或具有歷史性、地方性、特殊性之文化、藝術價值，應予保存之建造物及附屬設施。</p>
+                    <p><b>紀念建築：</b><br>指與歷史、文化、藝術等具有重要貢獻之人物相關而應予保存之建造物及附屬設施。</p>
+                    <p><b>聚落建築群：</b><br>指建築式樣、風格特殊或與景觀協調，而具有歷史、藝術或科學價值之建造物群或街區。</p>
+                    <p><b>考古遺址：</b><br>指蘊藏過去人類生活遺物、遺跡，而具有歷史、美學、民族學或人類學價值之場域。</p>
+                    <p><b>史蹟：</b><br>指歷史事件所定著而具有歷史、文化、藝術價值應予保存所定著之空間及附屬設施。</p>
+                    <p><b>文化景觀：</b><br>指人類與自然環境經長時間相互影響所形成具有歷史、美學、民族學或人類學價值之場域。</p>
+                    <p><b>古物：</b><br>指各時代、各族群經人為加工具有文化意義之藝術作品、生活及儀禮器物、圖書文獻及影音資料等。</p>
+                    <p><b>自然地景、自然紀念物：</b><br>指具保育自然價值之自然區域、特殊地形、地質現象、珍貴稀有植物及礦物。</p>
+                    <p><b>傳統表演藝術：</b><br>指流傳於各族群與地方之傳統表演藝能。</p>
+                    <p><b>傳統工藝：</b><br>指流傳於各族群與地方以手工製作為主之傳統技藝。</p>
+                    <p><b>口述傳統：</b><br>指透過口語、吟唱傳承，世代相傳之文化表現形式。</p>
+                    <p><b>民俗：</b><br>指與國民生活有關之傳統並有特殊文化意義之風俗、儀式、祭典及節慶。</p>
+                    <p><b>傳統知識與實踐：</b><br>指各族群或社群，為因應自然環境而生存、適應與管理，長年累積、發展出之知識、技術及相關實踐。</p>
+                    <p><b>植物：</b><br>百谷草木等的總稱。為生物的一大類。這類生物的細胞多具有細胞壁。一般有葉綠素，多以無機物為養料，沒有神經，沒有感覺。</p>
+                    <p><b>動物：</b><br>相對於植物的另一大類生物，這類生物多可自行攝食有機物以維生，有神經、感覺，並具運動能力。 生存範圍遍及世界各處。</p>
+                    <p><b>生物：</b><br>有生命的物體,具有生長、發育、繁殖等能力,能通過新陳代謝作用與周圍環境進行物質交換。動物、植物、微生物都是生物。</p>
+                    <p><b>食衣住行育樂：</b><br>民生主義中, 提到人民有六大需要是指：（一）食、衣、住、行：為物質生活所必需。(國父孫中山先生原著)（二）育、樂：為精神生活所必需。</p>
+
+                </div>
+                <div class="modal-footer">
+                    <button id="make_poi_close" type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const POI_URL = '/ajax_dublincore';
+        const HOME_URL = '/make_player';
+        const COI_NAME = 'deh';
+    </script> {% load static %}
+    <script src="{% static 'js/make_player_poi.js' %}"></script>
+    <script src="{% static 'js/get_year.js' %}"></script>
+    <script src="{% static 'js/exif.js' %}"></script>
+    <script id="language_script"></script>
+    <script src="{% static 'js/navi.js' %}"></script>
+</body>
+
+</html>

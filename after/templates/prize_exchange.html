@@ -1,0 +1,58 @@
+f{% include 'header.html' %}
+<html>
+    {% include 'navbar.html' %}
+    <body>
+    <!--此為獎品兌換的網頁測試頁面，若需要測試，請在網址最後加上獎品兌換的ID(PTP_id)-->
+    <div class="container" style="margin-bottom: 250px;">
+        <div class="col-lg-12" id="makePOI" style="margin-left: 50px;"> <br>
+            <input type="hidden" value="chinese" class="lang-1">
+            <h2 id="make_prizeform-1">獎品兌換</h2>
+            <form id="PTP_test" enctype="multipart/form-data">
+                <div>
+                    <div class="form-group">
+                        <label hidden>兌獎ID</label>
+                        <input type="" name="PTP_id" id="PTP_id" value="{{PTP.PTP_id}}" readonly hidden>
+                        <label hidden id="is_exchanged">{{is_exchanged}}</label>
+                        <h3 id="prize_title" style="display: inline; color:#0E7771;"> 獎品項目名稱 : {{prize.prize_name}}</h3><br>
+                        <h3 id="prize_title" style="display: inline; color:#0E7771;"> 獎品項目數量 : {{PTP.prize_amount}}</h3>
+                        <img style="width: 100%; height: 100%;" src='{{prize.prize_url}}'>
+                    </div>          
+
+                    {% if PTP.is_exchanged == 1 %}
+                    <h2 style="color: red;">本獎品已兌換</h2>
+                    {% endif %}
+                </div>
+            </form>
+
+            <div id="loading" hidden><img src="/static/images/loading.gif" style="position: fixed; display: block; top:40%; right: 50%;"></div>
+
+        </div>
+    </div>
+    </div>
+    <script>
+        const POI_URL = '/prize_exchange';
+        const HOME_URL = '/list_prize';
+
+        $(document).ready(function() {
+            var is_exchanged = $('#is_exchanged').text()
+            if (is_exchanged == 'Success'){
+                alert("兌換成功！");
+            }
+            else if (is_exchanged == 'Error'){
+                alert("您沒有兌獎權限！");
+            }
+            else{
+                alert("兌獎失敗！")
+            }
+        });
+    </script>
+    {% load static %}
+    <script src="{% static 'js/get_year.js' %}"></script>
+    <script src="{% static 'js/exif.js' %}"></script>
+    <script id="language_script"></script>
+    {% with js=coi|stringformat:"s"|add:"/nav.js" %}
+    <script src="{% static 'js/'|add:js %}"></script>
+    {% endwith %}
+</body>
+
+</html>

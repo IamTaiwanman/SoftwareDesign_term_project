@@ -1,0 +1,122 @@
+{% include 'header.html' %}
+
+<body>
+    {% include 'navbar.html' %} {% include 'sidebar.html' %}
+    <div class="container" style="font-family: Microsoft JhengHei;">
+        <div class="row">
+            <h1 id="logo_content" class="page-header">
+                <img id="logo" src="/static/images/logo.png">
+            </h1>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <h2 style="display: inline" id = "GAME_Room_Session">場次</h2>
+                        {% if isleader %}
+                        <input type = "button" id = "add_session" class="btn btn-warning" value = "新增場次" style="margin-left: 20px; margin-bottom: 10px;" onclick="Create_room({{event_id}});" >
+                        <!--button class="btn btn-warning" style="margin-left: 20px; margin-bottom: 10px;" onclick="Create({{group_id}});">新增場次</button-->
+                        {% endif %}
+                        <input type = "button" id = "example_download" class="btn btn-warning" value = "文資學堂匯入範例檔案下載" style="margin-left: 20px; margin-bottom: 10px;" onclick="document.location='/static/activites/文資學堂匯入範例檔案.csv'">
+                        <!--button class="btn btn-warning" style="margin-left: 20px; margin-bottom: 10px;" onclick="document.location='/static/activites/文資學堂匯入範例檔案.csv'">文資學堂匯入範例檔案下載</button-->
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        {% for g in game_list %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <p style="color:#00F; display:inline;">{{g.room_name}}</p>
+                            {% if g.event_id.Event_leader_id == user.user_id %}
+                                {% if g.is_playing == 0 %}
+                                    <div class="btn btn-warning" style="float: right; margin-right: 10px;" onclick="Remove_room({{g.id}})">刪除場次</div>
+                                {% else %}
+                                    <div class="btn btn-warning" style="float: right; margin-right: 10px;" disabled>正在進行</div>
+                                {% endif %}
+                            {% endif %}  
+                                                      
+                            <div class="btn btn-warning" style="float: right; margin-right: 10px;" onclick="document.location='../event_history/{{event_id}}/{{g.id}}/1'">答題歷史</div>
+                            {% if g.event_id.Event_leader_id == user.user_id %}
+                                <div class="btn btn-warning" style="float: right; margin-right: 10px;" onclick="Export($(this).closest('.table').find('.export'), '文資學堂設定檔案.csv');">匯出設定</div>
+                            {% endif %}
+                            {% if g.is_playing == 0 and g.event_id.Event_leader_id == user.user_id %}
+                                <div class="btn btn-warning" style="float: right; margin-right: 10px;" onclick="Import({{g.id}})">匯入設定</div>
+                                <div class="btn btn-warning" style="float: right; margin-right: 10px;" onclick="document.location='../event_setting/{{event_id}}/{{g.id}}'">走讀設定</div>
+                            {% endif %} 
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="export" hidden>
+                    <tr><td>走讀設定</td></tr>
+                    <tr>
+                        <td>場次名稱</td>
+                        <td>開始時間</td>
+                        <td>答題時間(分鐘)</td>
+                    </tr>
+                    <tr>
+                        <td>{{g.room_name}}</td>
+                        <td>{% if g.auto_start == 1 %}{{g.start_time|date:"Y-m-d H:i"}}{% endif %}</td>
+                        <td>{{g.play_time}}</td>
+                    </tr>
+                    <tr><td></td></tr>
+                    <tr><td>走讀題目</td></tr>
+                    <tr>
+                        <td>緯度</td>
+                        <td>經度</td>
+                        <td>可答題人數(題)</td>
+                        <td>答題積分(分)</td>
+                        <td>題目可被發現距離(公尺)</td>
+                        <td>題型</td>
+                        <td>題目</td>
+                        <td>答案</td>
+                        <td>選項A</td>
+                        <td>選項B</td>
+                        <td>選項C</td>
+                        <td>選項D</td>
+                        <td>指示A</td>
+                        <td>指示B</td>
+                        <td>指示C</td>
+                        <td>指示D</td>
+                    </tr>
+                    {% for c in g.chests %}
+                    <tr>
+                        <td>{{c.lat}}</td>
+                        <td>{{c.lng}}</td>
+                        <td>{% if c.num != None %}{{c.num}}{% endif %}</td>
+                        <td>{% if c.point != None %}{{c.point}}{% endif %}</td>
+                        <td>{% if c.distance != None %}{{c.distance}}{% endif %}</td>
+                        <td>
+                            {% if c.question_type == 1 %}
+                                是非題
+                            {% elif c.question_type == 2 %}
+                                單選題
+                            {% elif c.question_type == 3 %}
+                                問答題
+                            {% elif c.question_type == 4 %}
+                                闖關尋奇
+                            {% elif c.question_type == 5 %}
+                                闖關尋奇終點
+                            {% endif %}
+                        </td>
+                        <td>{{c.question}}</td>
+                        <td>{% if c.answer != None %}{{c.answer}}{% endif %}</td>
+                        <td>{% if c.option1 != None %}{{c.option1}}{% endif %}</td>
+                        <td>{% if c.option2 != None %}{{c.option2}}{% endif %}</td>
+                        <td>{% if c.option3 != None %}{{c.option3}}{% endif %}</td>
+                        <td>{% if c.option4 != None %}{{c.option4}}{% endif %}</td>
+                        <td>{% if c.hint1 != None %}{{c.hint1}}{% endif %}</td>
+                        <td>{% if c.hint2 != None %}{{c.hint2}}{% endif %}</td>
+                        <td>{% if c.hint3 != None %}{{c.hint3}}{% endif %}</td>
+                        <td>{% if c.hint4 != None %}{{c.hint4}}{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    </div>
+</body>
+ {% load static %}
+ <script src="{% static 'js/game.js' %}"></script>
+</html>

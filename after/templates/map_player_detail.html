@@ -1,0 +1,259 @@
+{% include 'header.html' %}
+
+<body>
+    {% include 'navbar.html' %}
+    <div class="container">
+        <div class="row">
+            <h1 class="page-header">
+                <img src="../static/images/logo.png">
+            </h1>
+            <!-- <h1><a href="/player" id="poi_show-1">景點列表</a></h1> -->
+            <div class="col-lg-6" style="height: 400px; overflow-y: scroll;">
+                <h2 id="title-1" class="page-header" style="display: inline; font-weight: 700;">標題</h2>
+                <h3 id="poi_title" style="display: inline; color:#0E7771;margin-left: 20px;">{{poi.poi_title}}</h3><br>
+                <div style = "float : right; ">
+                    <h7 style = "background-color : #f0ad4e;border-color: #eea236;border-radius: 4px;color : #fff; border: 1px solid; padding: 6px 12px;font-size:13px;"><span id="webViewNumber">WEB瀏覽次數</span> : {{all_poi_web_count}}</h7>
+                    <h7 style = "background-color : #d9534f;border-color: #eea236;border-radius: 4px;color : #fff; border: 1px solid; padding: 6px 12px;font-size:13px;"><span id="appViewNumber">APP瀏覽次數</span> : {{all_poi_api_count}}</h7>
+                    <h7 style = "background-color : #5bc0de;border-color: #eea236;border-radius: 4px;color : #fff; border: 1px solid; padding: 6px 12px;font-size:13px;"><span id="totalViewNumber">瀏覽總數</span> : {{all_poi_count}}</h7>
+                </div>
+                <input id="back" type=button class="btn btn-link" value="返回上一頁" onClick="javascript:history.go(-1);">
+                <h4 id="description">描述</h4>
+                <p style="overflow-y: scroll; height: 300px;">{{poi.poi_description_1}}</p>
+            </div>
+            <div class="col-lg-6" ><div id="googleMap" style="width: 30vw; height: 50vh"></div></div>
+            <div class="col-lg-6">
+                <table class="table table-striped">
+                    {% if poi.identifier == 'docent' %}
+                    <tr>
+                        <th id="docent_info-1">導覽員資訊</th>
+                        <td>
+                            <button type="button" class="choose_loi" style="margin-botton:0px; font-size:15px;" data-toggle="modal" data-target="#docent_modal">{{poi_docent.name}}</button>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <!--tr>
+                        <th id="Subject-1">主題</th>
+                        <td id="Subject-2">{{poi.subject}}</td>
+                    </tr-->
+                    <tr>
+                        <th id="time">時間</th>
+                        <td>{{poi.year}}</td>
+                    </tr>
+                    <tr>
+                        <th id="docent_period">時期</th>
+                        <td id="period-2">{{poi.period}}</td>
+                    </tr>
+                    <!--tr>
+                        <th id="Type-1">類型</th>
+                        {% if poi.type2 %}
+                        <td>{{poi.type1}} {{poi.type2}}</td>
+                        {% else %}
+                        <td>{{poi.type1}}</td>
+                        {% endif %}
+                    </tr-->
+                    <tr>
+                        <th id="Format-1">範疇</th>
+                        <td id="format-2">{{poi.format}}</td>
+                    </tr>
+                    <tr>
+                        <th id="docent_address">地址</th>
+                        <td>{{poi.poi_address}}</td>
+                    </tr>
+                    <tr>
+                        <th id="docent_lati">緯度</th>
+                        <td id="lati">{{poi.latitude}}</td>
+                    </tr>
+                    <tr>
+                        <th id="docent_long">經度</th>
+                        <td id="long">{{poi.longitude}}</td>
+                    </tr>
+                    <tr>
+                        {% if poi.poi_source %}
+                        <th id="docent_source">參考來源</th>
+                        <td>{{poi.poi_source}}</td>
+                        {% endif%}
+                    </tr>
+                    <tr>
+                        {% if poi.creator %}
+                        <th id="creator-1">參考來源作者</th>
+                        <td>{{poi.creator}}</td>
+                        {% endif%}
+                    </tr>
+                    <tr>
+                        {% if poi.publisher %}
+                        <th id="publisher-1">參考來源出版者</th>
+                        <td>{{poi.publisher}}</td>
+                        {% endif%}
+                    </tr>
+                    
+                    <tr>
+                        <th id="contributor-1">景點製作貢獻者</th>
+                        <td>{{poi.contributor}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-lg-6">
+                <table class="table table-striped">
+                    <tr>
+                        <th id="guide">導覽解說</th>
+                        <td>
+                            {% for media in mpeg %} {%　ifchanged %} {% if media.format == 8 %}
+                            <span id="audio_guide" class="label label-success">語音導覽</span>
+                            <audio controls>
+                                <source src="{{media.picture_url}}" type="audio/{{media.picture_type}}">
+                            </audio>
+                            {% endif %} {%　endifchanged %}{% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th id="media_file">媒體檔案</th>
+                        {% for media in mpeg %} {% if media.format == 1 %}
+                        <td class="thumbnail">
+                            <span id="img_file" class="img_file label label-success">圖片</span>
+                            <img style="width: 100%; height: 100%;" data-toggle="modal" data-target="#imgModal_{{media.picture_id}}" src="{{media.picture_url}}">
+                            
+                        </td>
+
+                        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="imgModal_{{media.picture_id}}" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="margin-top:8%;">
+                          <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">{{poi.poi_title}}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                            <div class="modal-body">
+                              <img style="width: 100%; height: 100%;"  src="{{media.picture_url}}">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">關閉</button>
+                               
+                            </div>
+                            </div>
+                          </div>
+                        </div>                      
+                        {% endif %} {% if media.format == 2 %}
+                        <td>
+                            <span id="audio_file" class="label label-success">聲音</span>
+                            <audio controls>
+                                <source src="{{media.picture_url}}" type="audio/{{media.picture_type}}">
+                            </audio>
+                        </td>
+                        {% endif %} {% if media.format == 4 %}
+                        <td>
+                            <span id="video_file" class="label label-success">影片</span>
+                            <video width="320" height="240" controls>
+                                <source src="{{media.picture_url}}">
+                            </video>
+                        </td>
+                    </tr>
+                    {% endif %} {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="docent_modal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="name" style="display: inline;">姓名:</p>
+                    <p style="display: inline;">{{poi_docent.name}}</p>
+                    </p>
+                    <p id="telphone" style="display: inline;">電話:</p>
+                    <p style="display: inline;">{{poi_docent.telphone}}</p>
+                    </p>
+                    <p id="cellphone" style="display: inline;">手機:</p>
+                    <p style="display: inline;">{{poi_docent.cellphone}}</p>
+                    </p>
+                    <p>email:{{info.email}}</p>
+                    <p id="social_id" style="display: inline;">FB/LINE或其他帳號:</p>
+                    <p style="display: inline;">{{poi_docent.social_id}}</p>
+                    </p>
+                    <p id="user_address" style="display: inline;">地址:</p>
+                    <p style="display: inline;">{{info.user_address}}</p>
+                    </p>
+                    <p id="docent_language" style="display: inline;">導覽解說使用語言:</p>
+                    <p style="display: inline;">{{poi_docent.docent_language}}</p>
+                    </p>
+                    <p id="charge" style="display: inline;">收費標準:</p>
+                    <p style="display: inline;">{{poi_docent.charge}}</p>
+                    </p>
+                    <p id="docent_intro" style="display: inline;">自我介紹:</p>
+                    <p style="display: inline;">{{poi_docent.introduction}}</p>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function PoiMap() {
+            is_edit = false;
+            var lati = parseFloat($("#lati").text());
+            var long = parseFloat($("#long").text());
+            var title = $("#poi_title").text();
+            var poi = new google.maps.LatLng(lati, long);
+            var mapOptions = {
+                center: poi,
+                zoom: 10
+            };
+            var map = new google.maps.Map(document.getElementById("googleMap"), mapOptions);
+            var marker = new google.maps.Marker({
+                position: poi,
+                // icon: '../static/images/map-icon.png'
+            });
+            marker.setMap(map);
+
+            // Zoom to 9 when clicking on marker
+            google.maps.event.addListener(marker, 'click', function () {
+                map.setZoom(15);
+                map.setCenter(marker.getPosition());
+                var infowindow = new google.maps.InfoWindow({
+                    content: title
+                });
+                infowindow.open(map, marker);
+            });
+
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqPYQN7x5wDi_hOIoS0DiOHSC4i66IcDY&callback=PoiMap"></script>
+    
+</body>
+
+</html>
+<script>
+    $(document).ready(function () {
+        if ($(window).width() < 450) {
+            var map = document.getElementById("googleMap")           
+            map.style.width = "100%"
+        } 
+        else {
+            var map = document.getElementById("googleMap")           
+            map.style.width = "30vw"
+        }
+        
+
+
+        $(window).resize(function () {
+            if ($(window).width() < 450) {
+                var map = document.getElementById("googleMap")           
+                map.style.width = "100%"
+            }
+            else {
+                var map = document.getElementById("googleMap")           
+                map.style.width = "30vw"
+            }
+            
+        });
+    });
+   
+</script>
+<script src=" ../static/js/navi.js "></script>

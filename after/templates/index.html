@@ -1,0 +1,267 @@
+{% include 'header.html' %}
+<body>
+    {% include 'navbar.html' %}
+
+    <header id="myCarousel" class="carousel slide">
+        <!-- Indicators -->
+        <!--
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol>
+        -->
+        <!-- Wrapper for slides -->
+
+        <div class="carousel-inner">
+            <div class="item ">
+                 <!--<div class="fill" style="background-image:url('../static/images/index123.png');"></div>-->
+                 <!--<div class="fill">
+                    <img src="../static/images/index12345.png"  srcset="../static/images/index_small.png 550w,
+          ../static/images/index12345.png 1000w" sizes="50vw"   style="width: 100vw; height:100%">
+                </div>-->
+                <div class="fill" style="background-image:url('../static/images/index12345.png');"></div>
+            </div>
+            <div class="item active">
+                <div class="fill" style="background-image:url('../static/images/ind3.png');"></div>
+            </div>
+            
+
+        </div>
+        <!-- Controls -->
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="icon-prev"></span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="icon-next"></span>
+        </a>
+    </header>
+    
+    <!-- Page Content -->
+    <div class="container">
+        <!-- Marketing Icons Section -->
+        <div class="row">
+            <div class="col-lg-12 ">
+            <div class="col-lg-4 ">
+                </div>
+            <div class="col-lg-4 ">
+                <h1 id="logo_content " class="page-header">
+                    <img id="logo" src="../static/images/logo.png" style="height: 80px; width: 300px">
+                </h1>
+            </div>
+            <div class="col-lg-4 ">
+                </div>
+            </div>
+
+            <div class="container">
+              <ul class="nav nav-pills nav-justified">
+                <li class="active"><a href="#deh_introduction_t" data-toggle="tab" id="deh_mobile_map">行動數位文化資產之導覽地圖</a></li>
+                <li><a href="#expertMape_t" data-toggle="tab" id="expertMape">文化資產之行動數位內容創作空間</a></li>
+
+              </ul>
+              <div class="tab-content" style="padding:20px;">
+                <div class="tab-pane active" id="deh_introduction_t">
+                    <div class="row">
+                        <div class="col-md-4">
+                        <a href="./pro/expert"><button class="btn btn-default" id="exp_map">專家地圖</button></a>
+                        </div>
+                        <div class="col-md-4">
+                        <a href="./player/user"><button class="btn btn-default" id="player_map">玩家地圖</button></a>
+                        </div>
+                        <div class="col-md-4">
+                        <a href="./navi/docent"><button class="btn btn-default" id="docent_map">解說員地圖</button></a>
+                        </div>
+                    </div>
+                    <br>
+                    
+                </div>
+                <div class="tab-pane" id="expertMape_t">
+                    <div class="col-md-4">
+                    <div id="expertMape_d">
+                        <a id="make_pro" class="make"><h3><span id="culturalHistoricalSpace">文史專家創作空間</span> :</h3></a>
+                        <p id="expertMape-1"><span id="expertMapeDescription">文史專家創作景點、景線、景區、主題故事</span></p>
+                    </div>
+                        
+                        <p class="alert alert-danger check_login" style="margin-top: 5px; width: 150px;" hidden>請先登入帳號</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="docentMape_d">
+                            <a id="make_navi" class="make"><h3><span id="guideSpace">導覽解說員創作空間</span> :</h3></a>
+                            <p id="docentMape-1"><span id="docentMapeDescription">導覽解說員創作景點、景線、景區、主題故事</span></p>
+                        </div>
+                        
+                        <p class="alert alert-danger check_login" style="margin-top: 5px; width: 150px;" hidden>請先登入帳號</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="userMape_d">
+                            <a id="make_player" class="make"><h3><span id="playerSpace">玩家創作空間</span> :</h3></a>
+                            <p id="userMape-1"><span id="userMapeDescription">玩家創作景點、景線、景區、主題故事</span></p>
+                        </div>
+                        
+                        <p class="alert alert-danger check_login" style="margin-top: 5px; width: 150px;" hidden>請先登入帳號</p>
+                    </div>
+
+                </div>
+                <br>
+                <div id="deh_introduction_d">
+                    <p id="deh_introduction"> 景點(Point Of Interest,POI):單一的景點介紹,導覽的最基本單位
+                            <br> 景線(Line Of Interest,LOI): 以導覽情境為考量,設計出具地域關聯性的一條有參訪先後次序規劃的景點 路線(A sequence of POIs)
+                            <br> 景區(Area Of Interest,AOI): 以一特定區域之文化資產為主軸,設計出有地域關聯性的 一組導覽景點區域(A set of POIs)
+                            <br> 主題故事(Story Of Interest,SOI): 針對一(i)跨越多個時間/空間之相關人/事/物的故事或(ii)某個特定場域之相關人/事/物的故事,設計出的一個可包涵許多景點(POIs),景線(LOIs)和景區(AOI)的主題故事
+                    </p>
+                    </div>
+
+            </div>
+             
+
+            <br><br>
+
+
+
+
+        <!-- /.row -->
+        <!-- Portfolio Section -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 id="todayPOI" class="page-header" style="font-weight: 800;">今日景點</h2>
+            </div>
+            {% for p in poi %}
+            <div class="col-md-4 col-sm-12">
+                <a href="/poi_detail/{{p.poi_id}}" style="color: #0023e4;font-size: 20px;">
+                    <p>{{p.poi_title}}</p>
+                    <!-- <img class="img-responsive img-portfolio img-hover" src="../static/images/a-1.jpg" alt=""> -->
+                </a>
+            </div>
+            {% endfor %}
+            <br>
+            <br>
+            <div class="col-lg-12">
+                <h2 id="todayLOI" class="page-header" style="font-weight: 800;">今日景線</h2>
+            </div>
+            {% for l in loi %}
+            <div class="col-md-4 col-sm-12">
+                <a href="/loi_detail/{{l.route_id}}" style="color: #0023e4;font-size: 20px;">
+                    <p>{{l.route_title}}</p>
+                    <!-- <img class="img-responsive img-portfolio img-hover" src="../static/images/a-1.jpg" alt=""> -->
+                </a>
+            </div>
+            {% endfor %}
+            <br>
+            <br>
+            <div class="col-lg-12">
+                <h2 id="todayAOI" class="page-header" style="font-weight: 800;">今日景區</h2>
+            </div>
+            {% for a in aoi %}
+            <div class="col-md-4 col-sm-12">
+                <a href="/aoi_detail/{{a.aoi_id}}" style="color: #0023e4;font-size: 20px;">
+                    <p>{{a.title}}</p>
+                    <!-- <img class="img-responsive img-portfolio img-hover" src="../static/images/a-1.jpg" alt=""> -->
+                </a>
+            </div>
+            {% endfor %}
+            <br>
+            <br>
+            <div class="col-lg-12">
+                <h2 id="todaySOI" class="page-header" style="font-weight: 800;">今日主題故事</h2>
+            </div>
+            {% for s in soi %}
+            <div class="col-md-4 col-sm-12">
+                <a href="/soi_detail/{{s.soi_id}}" style="color: #0023e4;font-size: 20px;">
+                    <p>{{s.soi_title}}</p>
+                    <!-- <img class="img-responsive img-portfolio img-hover" src="../static/images/a-1.jpg" alt=""> -->
+                </a>
+            </div>
+            {% endfor %}
+            <br>
+            <div class="col-lg-12">
+                <h2 id="wzResultInquiry" class="page-header" style="font-weight: 800;">文資學堂成績查詢</h2>
+            </div>
+            
+            <div class="col-md-4 col-sm-12">
+                <label><span id="session">場次</span> ID : </label>
+                <input type="test" id="searchGameID">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button id="searchGrade">查詢</button>
+            </div>
+        </div>
+        <!-- /.row -->
+        <!-- Features Section -->
+        <!--div class="row">
+            <div class="col-lg-12">
+                <h2 id="app_download" class="page-header">APP 下載</h2>
+            </div>
+            <div class="col-md-12">
+                <img class="android-1" src="../static/images/android.png">
+                <ul class="android-app-1">
+                    <li><a class="link-1" href="https://play.google.com/store/apps/details?id=tw.goodhelper.dehmobile.dehmini">在Google Play上取得DEH-Mini(景點導覽)</a></li>
+                    <li><a class="link-1" href="https://play.google.com/store/apps/details?id=edu.deh.taiwan">在Google Play上取得DEH-Lite(景點導覽)</a></li>
+                    <li><a class="link-1" href="https://play.google.com/store/apps/details?id=edu.deh.make">在Google Play上取得DEH-Make(景點製作)</a></li>
+                    <li><a class="link-1" href="https://play.google.com/store/apps/details?id=mmlab.deh.Image">在Google Play上取得DEH-Image(相片景點導覽與製作)</a></li>
+                    <li><a class="link-1" href="https://play.google.com/store/apps/details?id=mmlab.deh.make.audio">在Google Play上取得DEH-Audio(聲音景點導覽與製作)</a></li>
+                    <li><a class="link-1" href="https://play.google.com/store/apps/details?id=mmlab.deh.make.video">在Google Play上取得DEH-Video(影片景點導覽與製作)</a></li>
+                    <li><a class="link-1" href="https://play.google.com/store/apps/details?id=com.mmlab.n1">在Google Play上取得DEH-Narrator(導覽解說)</a></li>
+                </ul>
+                <br>
+                <img class="apple-1" src="../static/images/apple.png">
+                <ul class="ios-app-1">
+                    <li><a class="link-1" href="https://itunes.apple.com/tw/app/new-deh-micro/id1155163944?l=zh&mt=8">在Apple Store上取得DEH Micro(景點導覽)</a></li>
+                    <li><a class="link-1" href="https://itunes.apple.com/tw/app/deh-mini/id1104615682?l=zh&mt=8">在Apple Store上取得DEH-Mini(景點導覽)</a></li>
+                    <li><a class="link-1" href="https://itunes.apple.com/tw/app/deh-lite/id1153981030?l=zh&mt=8">在Apple Store上取得DEH-Lite(景點導覽)</a></li>
+                    <li><a class="link-1" href="https://itunes.apple.com/tw/app/deh-make/id1219779998?l=zh&mt=8">在Apple Store上取得DEH-Make(景點製作)</a></li>
+                    <li><a class="link-1" href="https://itunes.apple.com/tw/app/deh-image/id1210629165?l=zh&mt=8">在Apple Store上取得DEH-Image(相片景點導覽與製作)</a></li>
+                    <li><a class="link-1" href="https://itunes.apple.com/tw/app/deh-audio/id1188566420?l=zh&mt=8">在Apple Store上取得DEH-Audio(聲音景點導覽與製作)</a></li>
+                    <li><a class="link-1" href="https://itunes.apple.com/tw/app/deh-video/id1186140832?l=zh&mt=8">在Apple Store上取得DEH-Video(影片景點導覽與製作)</a></li>
+                    <li><a class="link-1" href="https://itunes.apple.com/tw/app/deh-narrator/id1196580654?l=zh&mt=8">在Apple Store上取得DEH-Narrator(導覽解說)</a></li>
+                </ul>
+            </div>
+        </div-->
+        <!-- /.row -->
+        <!--hr-->
+        <!-- Call to Action Section -->
+        <!--div class="well">
+            <div class="row">
+                <div class="col-md-4">
+                    <a class="btn btn-lg btn-default btn-block" id="handout-2">使用手冊下載</a>
+                    <ul class="handout-1">
+                        <li><a class="link-2" href="../static/activites/DEH_Audio版_使用手冊.pptx">DEH_Audio使用手冊</a></li>
+                        <li><a class="link-2" href="../static/activites/DEH_IMAGE_版_使用手冊.pptx">DEH_IMAGE使用手冊</a></li>
+                        <li><a class="link-2" href="../static/activites/DEH_lite版_使用手冊.pptx">DEH_lite使用手冊</a></li>
+                        <li><a class="link-2" href="../static/activites/DEH_Make_II版_使用手冊.pptx">DEH_MakeII使用手冊</a></li>
+                        <li><a class="link-2" href="../static/activites/DEH_Micro版_使用手冊.pptx">DEH_Micro使用手冊</a></li>
+                        <li><a class="link-2" href="../static/activites/DEH_Mini版_II_使用手冊.pptx">DEH_MiniII使用手冊</a></li>
+                        <li><a class="link-2" href="../static/activites/DEH_Video版_使用手冊.pptx">DEH_Video使用手冊</a></li>
+                        <li><a class="link-2" href="../static/activites/DEH_Narrator版_使用手冊.pdf">DEH_Narrator使用手冊</a></li>
+                        <li><a class="link-2" href="../static/activites/DEH_桌機版網站_使用手冊.pptx">DEH網頁使用手冊</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-4">
+                    <a class="btn btn-lg btn-default btn-block" id="intro_video-2">使用情境影片</a>
+                    <ul class="intro_video-1">
+                        <li><a class="link-2" href="https://www.youtube.com/watch?v=ht5Y4-xPxT4" target="_blank">文史脈流－踏溯台南之歡樂篇</a></li>
+                        <li><a class="link-2" href="https://www.youtube.com/watch?v=yFi8ueKYpC8" target="_blank">文史脈流－踏溯台南之邂逅篇</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <hr-->
+        {% include 'footer.html' %}
+    </div>
+    {% load static %}
+    <script>
+        is_edit = false;
+        check_login = $('#login').text();
+        if(check_login == '登入'){
+            $('.check_login').show();
+        }else{
+            $('.check_login').hide();
+        }
+        $('.carousel').carousel({
+            interval: 5000 //changes the speed
+        });
+    </script>
+    <script src="{% static 'js/index.js' %}"></script>
+    <script src="{% static 'js/navi.js' %}"></script>
+</body>
+
+</html>

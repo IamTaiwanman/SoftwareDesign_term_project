@@ -1,0 +1,93 @@
+<table>
+    <tr>
+        <td>活動</td>
+        <td>場次</td>
+        <td>開始時間</td>
+        <td>結束時間</td>
+        <td>答題時間</td>
+    </tr>
+    <tr>
+        <td>{{event_history.room_id.event_id.Event_name}}</td>
+        <td>{{event_history.room_id.room_name}}</td>
+        <td>{{event_history.start_time|date:"Y-m-d H:i"}}</td>
+        <td>{{event_history.end_time|date:"Y-m-d H:i"}}</td>
+        <td>{{event_history.play_time}}分鐘</td>
+    </tr>
+    <tr><td></td></tr>
+    <tr>
+        <td>計分表</td>
+        {% for c in event_history.chests %}
+            <td>題{{forloop.counter}}</td>
+            <td>{% if c.answer != None %}{{c.answer}}{% endif %}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td>成員</td>
+        {% for c in event_history.chests %}
+            <td>回答</td>
+            <td>得分</td>
+        {% endfor %}
+        <td>總分</td>
+        <td>最終答對時間</td>
+        <td>排名</td>
+    </tr>
+    {% for m in event_history.members %}
+    <tr>
+        <td>{{m.user_id.user_name}}</td>
+        {% for r in m.records %}
+            {% if r.answer != None and r.answer != "undefined" %}
+                <td>{{r.answer}}</td>
+            {% else %}
+                <td></td>
+            {% endif %}
+            {% if r.correctness == None %}
+                <td></td>
+            {% elif r.correctness %}
+                <td>{% if r.chest_id.point != None %}{{r.chest_id.point}}{% else %}0{% endif %}</td>
+            {% else %}
+                <td>0</td>
+            {% endif %}
+        {% endfor %}
+        <td>{{m.score}}</td>
+        {% if m.last_correct_time != None %}
+            <td>{{m.last_correct_time|date:"Y-m-d H:i:s.u"}}</td>
+        {% else %}
+            <td>-</td>
+        {% endif %}
+        <td>{{m.rank}}</td>
+    </tr>                                
+    {% endfor %}
+    <tr><td></td></tr>
+    <tr>
+        <td>編號</td>
+        <td>題型</td>
+        <td>題目</td>
+        <td>分數</td>
+        <td>答案</td>
+        <td>選項A</td>
+        <td>選項B</td>
+        <td>選項C</td>
+        <td>選項D</td>
+    </tr>
+    {% for c in event_history.chests %}
+    <tr>
+        <td>{{forloop.counter}}</td>
+        <td>
+            {% if c.question_type == 1 %}
+                是非題
+            {% elif c.question_type == 2 %}
+                單選題
+            {% elif c.question_type == 3 %}
+                問答題
+            {% endif %}
+        </td>
+        <td>{{c.question}}</td>
+        <td>{% if c.point != None %}{{c.point}}{% endif %}</td>
+        <td>{% if c.answer != None %}{{c.answer}}{% endif %}</td>
+        <td>{% if c.option1 != None %}{{c.option1}}{% endif %}</td>
+        <td>{% if c.option2 != None %}{{c.option2}}{% endif %}</td>
+        <td>{% if c.option3 != None %}{{c.option3}}{% endif %}</td>
+        <td>{% if c.option4 != None %}{{c.option4}}{% endif %}</td>
+    </tr>
+    {% endfor %}                                
+</table>

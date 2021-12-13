@@ -1,0 +1,207 @@
+{% include 'header.html' %}
+<head>
+    <title>文史脈流</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/static/css/main.css" />
+    <link href="/static/css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    {% with navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar %} {% endwith %}
+    <div class="container">
+        <div class="row">
+            <h1 class="page-header">
+                <img src="/static/images/logo.png">
+            </h1>
+            <!-- <h1><a href="/player" id="aoi_list-2">景區列表</a></h1> -->
+            <div class="col-lg-6" style="height: 400px; overflow-y:scroll;">
+                <h2 id="title-1" class="page-header" style="display: inline; font-weight: 700;">標題</h2>
+                <h3 style="display: inline; color: #0E7771; margin-left: 20px;">{{aoi.title}}</h3>
+                <input id="back" type=button class="btn btn-link" value="返回上一頁" onClick="javascript:history.go(-1);">
+                <hr>
+                <h4 style="margin-top:10px;">{{aoi.description}}</h4>
+                <hr>
+            </div>
+            <div class="col-lg-6" id="googleMap" style="width: 50%; height: 400px"></div>
+            <div class="col-lg-6" style="height: 400px;">
+                {% if aoi.identifier == 'docent' %}
+                <table class="table table-hover">
+                    <tr>
+                        <th id="docent_info-1">導覽員資訊</th>
+                        <td>
+                            <button type="button" class="choose_loi" style="margin-botton:0px; font-size:15px;" data-toggle="modal" data-target="#docent_modal">{{info.user_name}}</button>
+                        </td>
+                    </tr>
+                </table>
+                {% elif aoi.identifier == 'user' %}
+                <table class="table table-hover">
+                    <tr>
+                        <th class="aoi_contributor">景區製作貢獻者</th>
+                        <td>{{aoi.contributor}}</td>
+                    </tr>
+                </table>
+                {% endif %}
+                <h4 id="poi_list-1">POI 列表</h4>
+                <p id="poi_count" hidden>{{aoipoi.count}}</p>
+                {% for p in aoipoi %}
+                <p id="p_lati_{{ forloop.counter0 }}" hidden>{{p.poi_id.latitude}}</p>
+                <p id="p_long_{{ forloop.counter0 }}" hidden>{{p.poi_id.longitude}}</p>
+                <table class="table table-hover">
+                    <tr>
+                        {% if p.poi_id.open|cut:" " == '1' or p.poi_id.identifier == "docent" or p.poi_id.rights == username %}
+                        {% if p.poi_id.verification == 1 or p.poi_id.rights == username %}
+                        <th>
+                            <a id="title_{{ forloop.counter0 }}" href="/{{coi}}/poi_detail/{{p.poi_id.poi_id}}">{{p.poi_id.poi_title}}</a>
+                        </th>
+                        <th hidden>
+                            <a id="loca_{{ forloop.counter0 }}" href="#">{{p.poi_id.poi_address}}</a>
+                        </th>
+                        {% else %}
+                        <th>
+                            <a id="title_{{ forloop.counter0 }}" data-toggle="modal" href="#aoi_unverification_modal">{{p.poi_id.poi_title}}</a>
+                        </th>
+                        <th hidden>
+                            <a id="loca_{{ forloop.counter0 }}" href="#">{{p.poi_id.poi_address}}</a>
+                        </th>
+                        {% endif %}
+                        {% else %}
+                        <th>
+                            <a id="title_{{ forloop.counter0 }}" data-toggle="modal" href="#aoi_modal">{{p.poi_id.poi_title}}</a>
+                        </th>
+                        <th hidden>
+                            <a id="loca_{{ forloop.counter0 }}" href="#">{{p.poi_id.poi_address}}</a>
+                        </th>
+                        {% endif %}
+                    </tr>
+                </table>
+                {% endfor %}
+                <div class="modal fade" id="aoi_unverification_modal" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>此景點未驗證</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="aoi_modal" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>此為私有景點，請洽製作者</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="poi_not_in_coi" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>此景點未在COI</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="docent_modal" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <p id="name" style="display: inline;">姓名:</p>{{aoi_docent.name}}</p>
+                                <p id="telphone" style="display: inline;">電話:</p>{{aoi_docent.telphone}}</p>
+                                <p id="cellphone" style="display: inline;">手機:</p>{{aoi_docent.cellphone}}</p>
+                                <p>email:{{info.email}}</p>
+                                <p id="social_id" style="display: inline;">FB/LINE或其他帳號:</p>{{aoi_docent.social_id}}</p>
+                                <p id="user_address" style="display: inline;">地址:</p>{{info.user_address}}</p>
+                                <p id="docent_language" style="display: inline;">導覽解說使用語言:</p>{{aoi_docent.docent_language}}</p>
+                                <p id="charge" style="display: inline;">收費標準:</p>{{aoi_docent.charge}}</p>
+                                <p id="docent_intro" style="display: inline;">自我介紹:</p>{{aoi_docent.introduction}}</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+                {% for x in check_list %}
+                {% if x == 0 %}
+                $('#title_{{forloop.counter0}}').attr('data-toggle', 'modal');
+                $('#title_{{forloop.counter0}}').attr('href', '#poi_not_in_coi');
+                {% endif %}
+                {% endfor %}
+        });
+        function AoiMap() {
+            is_edit = false;
+            var title = $("#aoi_title").text();
+            var p_count = parseFloat($("#poi_count").text());
+            console.log(p_count);
+            var locations = [];
+            for (var i = 0; i < p_count; i++) {
+                p_loca = $("#p_loca_" + i).text();
+                p_conf_lati = parseFloat($("#p_lati_" + 0).text());
+                p_conf_long = parseFloat($("#p_long_" + 0).text());
+                p_lati = parseFloat($("#p_lati_" + i).text());
+                p_long = parseFloat($("#p_long_" + i).text());
+                locations.push([p_loca, p_lati, p_long]);
+            }
+            var map = new google.maps.Map(document.getElementById('googleMap'), {
+                zoom: 10,
+                center: new google.maps.LatLng(p_conf_lati, p_conf_long),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+            var infowindow = new google.maps.InfoWindow();
+            var marker;
+            for (var i = 0; i < p_count; i++) {
+                // var icon_type = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (i + 1) + '|FE6256|000000';
+                marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                    map: map,
+                    //icon: icon_type
+                });
+                console.log(locations);
+                google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                    return function () {
+                        infowindow.setContent(locations[i][0]);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+            }
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqPYQN7x5wDi_hOIoS0DiOHSC4i66IcDY&callback=AoiMap"></script>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+{% include 'header.html' %}
+<body>
+    {% include 'navbar.html' %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    <img src="../static/images/logo.png">
+                </h1>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-heading" align=center style="background-color: #4bafa9 ">
+                        <h3 id="loss_password" style="color: #fff">遺失密碼</h3>
+                    </div>
+                    <div class="panel panel-body">
+                        <form id="get_pwd" enctype="multipart/form-data">
+                            <span id="current_account">目前的帳號</span>
+                            <input type="text" name="account" id="account"><br><br>
+                            <span id="findpwd_email">電子信箱</span>
+                            <input type="text" name="email" id="email"><br><br>
+                            <br><br>
+
+                            <button id="confirm" class="btn btn-default">確認</button>
+                        </form>
+                        <div class="alert alert-danger" hidden></div>
+                        <div class="alert alert-success" hidden></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% load static %}
+<script src="{% static 'js/findpwd.js' %}"></script>
+</html>

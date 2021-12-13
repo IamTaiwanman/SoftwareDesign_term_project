@@ -1,0 +1,97 @@
+{% include 'header.html' %}
+
+<body>
+    {% include 'navbar.html' %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    <img src="../static/images/logo.png">
+                </h1>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-heading" align=center style="background-color: #4bafa9 ">
+                        <h3 id="user_info" style="color: #fff">使用者資訊</h3>
+                    </div>
+                    <div class="panel panel-body">
+                        <p id="user_name" style="display: inline;">用戶名稱:</p>
+                        <p style="display: inline;">{{ username }}</p>
+                        <br>
+                        <p id="user_nickname" style="display: inline;">姓名/暱稱:</p>
+                        <p style="display: inline;">{{ profile.nickname }}</p>
+                        <br>
+                        <p id="gender" style="display: inline;">性別:</p>
+                        {%if profile.gender == 1%}
+                        <p id="boy" style="display: inline;">男</p>
+                        {% endif %}
+                        {%if profile.gender == 0%}
+                        <p id="girl" style="display: inline;">女</p>
+                        {% endif %}
+                        <p>Email:{{ profile.email}}</p>
+                        <p id="user_address" style="display: inline;">地址:</p>
+                        <p style="display: inline;">{{ profile.user_address }}</p>
+                        <br>
+                        <p id="birthday" style="display: inline;">生日:</p>
+                        <p style="display: inline;">{{ profile.birthday|date:"M d, Y" }}</p>
+                        <br>
+                        <p id="education" style="display: inline;">學歷:</p>
+                        <p style="display: inline;">{{ profile.education }}</p>
+                        <br>
+                        <p id="career" style="display: inline;">職業:</p>
+                        <p style="display: inline;">{{ profile.career }}</p>
+                        <br>
+                        <p id="homewebsite" style="display: inline;">網站:</p>
+                        <p style="display: inline;">{{ profile.homepage }}</p>
+                        <br>
+                        <p id="loginuser" style="display: inline;">登入角色:</p>
+                            <b style="color:#00f">
+                                {% if profile.role == "user" %}
+                                <p id="user_role" style="display: inline;">玩家</p>
+                                {% endif %}
+                                {% if profile.role == "expert" %}
+                                <p id="expert_role" style="display: inline;">專家</p>
+                                {% endif %}
+                                {% if profile.role == "docent" %}
+                                <p id="docent_role" style="display: inline;">解說員</p>
+                                {% endif %}
+                                {% if profile.role == "identifier" %}
+                                <p id="identifier_role" style="display: inline;">驗證者</p>
+                                {% endif %}
+                            </b>
+                        </p>
+                        <button class="btn btn-default" id="edit">編輯個人資訊</button>
+                        <br>
+                        <br>
+                        <div id="editinfo" hidden>
+                            <form name='myname' action='.' method='POST'>
+                                {% csrf_token %}
+                                <table>
+                                    {{ profile_form.as_table }}
+                                </table>
+                                <input class="btn btn-success" type='submit' value='修改個人資料' id="changePersonInfo">
+                            </form>
+                        </div>
+                        {% if profile.role == "docent" %}
+                        <input type="button" class="btn btn-info" onclick="location.href='/userinfo/docnet';" value="編輯導覽員資訊">{% endif %}
+                        <br>
+                        <br>
+                        <input id="edit_pwd-1" type="button" class="btn btn-warning" onclick="location.href='/userinfo/pwd';" value="變更密碼" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% for message in messages %}
+        <div class='alert alert-{{message.tags}}'>{{ message }}</div>
+        {% endfor %} {% include 'footer.html' %}
+    </div>
+    <script>
+    is_edit = false;
+    $('#edit').click(function(event) {
+        $('#editinfo').toggle();
+    });
+    </script>
+</body>
+
+</html>

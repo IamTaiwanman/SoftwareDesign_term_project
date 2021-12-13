@@ -1,0 +1,99 @@
+{% include 'header.html' %}
+
+<body>
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">為什麼不通過</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- Modal content -->
+            <form>
+              <div class="form-group" hidden>
+                <label for="recipient-name" class="col-form-label">content:</label>
+                <input type="text" class="form-control" id="modal-content" disabled>
+              </div>
+              <div class="form-group" hidden>
+                <label for="recipient-name" class="col-form-label">id:</label>
+                <input type="text" class="form-control" id="modal-id" disabled>
+              </div>
+              <div class="form-group" hidden>
+                <label for="recipient-name" class="col-form-label">verification:</label>
+                <input type="text" class="form-control" id="modal-verification" disabled>
+              </div>
+
+              <div class="form-group">
+                <textarea class="form-control" id="modal-feedback" rows="15"></textarea>
+              </div>
+            </form>
+            <!-- Modal content end -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" onclick="ModalVerify()"  data-dismiss="modal">送出</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <style type="text/css">
+    .modal.fade.in{
+        top:25%;  
+    }
+    </style>
+    {% with navbar=coi|stringformat:"s"|add:"/navbar.html" %} {% include navbar %} {% endwith %}
+    <div class="container">
+        <div class="row">
+            <div class="panel panel-default" style="width: 1000px">
+                <label for="ver_item">選擇驗證項目:</label>
+                <select class="form-control" id="ver_item" style="width: 160px">
+                    <option selected disabled hidden>請選擇</option>
+                    <option value="0">尚未驗證</option>
+                    <option value="-1">驗證不通過</option>
+                    <option value="1">已驗證通過</option>
+                </select>
+                <label for="role">選擇身分:</label>
+                <select class="form-control" id="role" style="width: 160px">
+                    <option selected disabled hidden>請選擇</option>
+                    <option value="user">玩家</option>
+                    <option value="docent">解說員</option>
+                    <option value="expert">專家</option>
+                </select> 
+                <label for="content">選擇型態:</label>
+                <select class="form-control" id="content" style="width: 160px">
+                    <option selected disabled hidden>請選擇</option>
+                    <option value="poi">景點</option>
+                    <option value="loi">景線</option>
+                    <option value="aoi">景區</option>
+                    <option value="soi">主題故事</option>
+                    {% if role == "docent" or role == "identifier"%}
+                    <option value="group">群組</option>
+                    {% endif %}
+                </select>
+                <label for="city">選擇縣市鄉鎮:</label>
+                <select class="form-control" id="city" style="width: 160px; display: inline;">
+                    <option selected disabled hidden>請選擇</option>
+                    {% for x in areas %}
+                    <option value="{{x.area_country}}">{{x.area_country}}</option>
+                    {% endfor %}
+                </select>
+                <select class="form-control" id="areas" name="my_areas" style="width: 160px; display: inline;"></select>
+                <br>
+                <button type="button" class="btn btn-primary" id="search">查詢</button>
+            </div><br>
+            <div class="panel content_detail"></div>
+            <div class="alert alert-danger" hidden></div>
+            <div class="alert alert-success" hidden></div>
+        </div>
+        <div id="loading" hidden><img src="/static/images/loading.gif" style="display: block; margin:800px 400px;"></div>
+    </div>
+    {% load static %}
+    {% with js=coi|stringformat:"s"|add:"/verification.js" %}
+        <script src="{% static 'js/'|add:js %}"></script>
+    {% endwith %}
+</body>
+
+</html>

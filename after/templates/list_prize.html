@@ -1,0 +1,69 @@
+{% include 'header.html' %}
+<html>
+    
+<body>
+    {% include 'navbar.html' %} {% include 'sidebar.html' %}
+    <div class="container" style="padding-left: 0px;">
+        <div class="row">
+            <h1 id="logo_content" class="page-header"></h1>
+        </div>
+        <div class="My_Prize" style="margin-top: 20px">
+            <h2 id="myPrize" style="display: inline;">我所提供的獎品清單</h2>
+            <!--img src="/static/images/question.png" data-toggle="modal" data-target="#group_info" style="display:inline;margin-bottom: 10px;margin-left: 5px;"-->
+            <button class="btn" style="float:right; font-size: 20px; background-color: #E0E0E0;" id="make_prize" onclick='buttonLink("/make_prize")'><a>獎品登錄</a></button>
+            <br>
+            <hr>
+            <div class="prize_detail">
+                {% for p in prize %} {% ifchanged %}
+                
+                <table class="table table-hover">
+                    <tr>
+                        <th>
+                            <a href="/prize_detail/{{p.prize_id}}" style="color:#00F; display:inline;">{{p.prize_name}}</a>
+                            <button class="btn delete_prize" onclick='delete_prize({{ p.prize_id }}, {{p.is_allocated}})' style="float: right; margin-right: 10px; background-color: brown; color: white;">刪除</button>
+                            <button class="btn btn-warning" style="float: right; margin-right: 10px;" onclick='buttonLink("/edit_prize/{{p.prize_id}}")'>修改</button>
+                        </th>
+                    </tr>
+                </table>
+                {% endifchanged %} {% endfor %}
+            </div>
+        </div>
+        <!--div class="My_Prize_List" style="margin-top: 20px">
+            <h2 id="myPrizeList" style="display: inline;">我所獲得的獎品</h2>
+            
+            <div class="my_prize_list"><br>
+                {% for pl in prize_list %} {% ifchanged %}
+                
+                <table class="table table-hover">
+                    <tr>
+                        <th>
+                            <label style="display: none;">{{pl.PTP_id}}</label>
+                            <a href="/prize_detail/{{pl.prize_id}}" style="color:#00F; display:inline;">{{pl.prize_name}}</a>
+                            <h5 style="float: right; margin-right: 10px;">獎品數量： {{pl.prize_amount}}</h5>
+
+                            {% if pl.is_exchanged %}
+                            <h5 style="float: right; color: red; margin-right: 10px;"><strong>您已兌換過此獎品</strong></h5>
+                            {% else %}
+                            <h5 style="float: right; color:seagreen; margin-right: 10px;"><strong>您尚未兌換此獎品</strong></h5>
+                            {% endif %}
+
+                            <h5 style="float: right; margin-right: 30px;">遊玩時間 : {{pl.start_time}}</h5>
+                            
+                        </th>
+                    </tr>
+                </table>
+                {% endifchanged %} {% endfor %}
+            </div>
+        </div-->
+    </div>
+    <div id="loading" hidden><img src="/static/images/loading.gif" style="display: block; margin:480px 800px;"></div>
+
+<script>
+    const LIST_URL = '/list_prize'
+    const RELOCATE_URL = '/list_prize';
+</script>
+
+{% load static %}
+    <script src="{% static 'js/list_prize.js' %}"></script>
+</body>
+</html>

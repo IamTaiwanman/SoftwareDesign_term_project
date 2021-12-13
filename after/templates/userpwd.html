@@ -1,0 +1,39 @@
+{% include 'header.html' %}
+
+<body>
+    {% include 'navbar.html' %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    <img src="../static/images/logo.png">
+                </h1>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="user_pwd" class="panel panel-heading" align=center style="background-color: #4bafa9 ">
+                        <h3 style="color: #fff">使用者密碼變更</h3>
+                    </div>
+                    <div class="panel panel-body">
+                        <form id="edit_pwd" enctype="multipart/form-data">
+                            <span id="current_pwd">目前的密碼</span>
+                            <input type="password" name="orig_pwd"><br><br>
+                            <span id="new_password">新密碼</span>
+                            <input type="password" name="new_pwd" id="NewPWD"><br><br>
+                            <span id="confirm_password">新密碼確認</span>
+                            <input type="password" name="confirm_pwd"><br><br>
+
+                            <button id="confirm" type="submit" class="btn btn-default" onclick="check()">確認</button>
+                        </form>
+                        <div class="alert alert-danger" hidden></div>
+                    <div class="alert alert-success" hidden></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% load static %}
+<script src="{% static 'js/edit_pwd.js' %}"></script>
+</html>
