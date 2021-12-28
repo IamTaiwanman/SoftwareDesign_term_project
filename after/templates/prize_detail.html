@@ -22,7 +22,6 @@
                         <th id="media_file">媒體檔案</th>
                         <td class="thumbnail">
                             <span id="img_file" class="label label-success img_file">圖片</span>
-                            <!--img style="width: 100%; height: 100%;" src='../{{prize.picture_url}}'-->
                             <img style="width: 100%; height: 100%;" src='{{prize.prize_url}}'/>
                         </td>
                     </tr>
@@ -40,37 +39,7 @@
         </div>
     </div>
     
-    <script>
-        /*function PoiMap() {
-            is_edit = false;
-            var lati = parseFloat($("#docent_lati").text());
-            var long = parseFloat($("#docent_long").text());
-            var title = $("#poi_title").text();
-            console.log(lati + " " + long);
-            var poi = new google.maps.LatLng(lati, long);
-            var mapOptions = {
-                center: poi,
-                zoom: 10
-            };
-            var map = new google.maps.Map(document.getElementById("googleMap"), mapOptions);
-            var marker = new google.maps.Marker({
-                position: poi,
-                // icon: '../static/images/map-icon.png'
-            });
-            marker.setMap(map);
-
-            // Zoom to 9 when clicking on marker
-            google.maps.event.addListener(marker, 'click', function () {
-                map.setZoom(15);
-                map.setCenter(marker.getPosition());
-                var infowindow = new google.maps.InfoWindow({
-                    content: title
-                });
-                infowindow.open(map, marker);
-            });
-        }*/
-    </script>
-    <!--script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqPYQN7x5wDi_hOIoS0DiOHSC4i66IcDY&callback=PoiMap"></script-->
+    
 </body>
 
 </html>

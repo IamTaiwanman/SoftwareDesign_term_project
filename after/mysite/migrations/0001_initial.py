@@ -169,7 +169,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Dublincore',
+            name='Poi',
             fields=[
                 ('poi_id', models.IntegerField(db_column='POI_id', primary_key=True, serialize=False)),
                 ('poi_name', models.CharField(blank=True, db_column='POI_name', max_length=100, null=True)),
@@ -306,7 +306,7 @@ class Migration(migrations.Migration):
                 ('hint3', models.CharField(blank=True, max_length=500, null=True)),
                 ('hint4', models.CharField(blank=True, max_length=500, null=True)),
                 ('answer', models.CharField(blank=True, max_length=500, null=True)),
-                ('poi_id', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='mysite.Dublincore')),
+                ('poi_id', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='mysite.Poi')),
             ],
             options={
                 'db_table': 'EventChestSetting',
@@ -493,7 +493,7 @@ class Migration(migrations.Migration):
                 ('hint3', models.CharField(blank=True, max_length=500, null=True)),
                 ('hint4', models.CharField(blank=True, max_length=500, null=True)),
                 ('answer', models.CharField(blank=True, max_length=500, null=True)),
-                ('poi_id', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='mysite.Dublincore')),
+                ('poi_id', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='mysite.Poi')),
             ],
             options={
                 'db_table': 'GameChestSetting',
@@ -632,7 +632,7 @@ class Migration(migrations.Migration):
                 ('picture_rights', models.CharField(blank=True, max_length=50, null=True)),
                 ('picture_upload_time', models.DateTimeField()),
                 ('format', models.SmallIntegerField()),
-                ('foreignkey', models.ForeignKey(db_column='foreignKey', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='poi', to='mysite.Dublincore')),
+                ('foreignkey', models.ForeignKey(db_column='foreignKey', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='poi', to='mysite.Poi')),
             ],
             options={
                 'db_table': 'mpeg',
@@ -707,7 +707,7 @@ class Migration(migrations.Migration):
                 ('context_content', models.CharField(blank=True, db_column='Context_content', max_length=400, null=True)),
                 ('context_picture', models.CharField(blank=True, db_column='Context_picture', max_length=50, null=True)),
                 ('foreignkey', models.ForeignKey(db_column='foreignKey', on_delete=django.db.models.deletion.CASCADE, related_name='loi', to='mysite.RoutePlanning')),
-                ('poi_id', models.ForeignKey(blank=True, db_column='POI_id', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='pois', to='mysite.Dublincore')),
+                ('poi_id', models.ForeignKey(blank=True, db_column='POI_id', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='pois', to='mysite.Poi')),
             ],
             options={
                 'db_table': 'sequence',
@@ -739,7 +739,7 @@ class Migration(migrations.Migration):
                 ('soi_xois_id', models.IntegerField(db_column='SOI_XOIs_id', primary_key=True, serialize=False)),
                 ('aoi_id', models.ForeignKey(db_column='AOI_id', default=0, on_delete=django.db.models.deletion.CASCADE, to='mysite.Aoi')),
                 ('loi_id', models.ForeignKey(db_column='LOI_id', default=0, on_delete=django.db.models.deletion.CASCADE, to='mysite.RoutePlanning')),
-                ('poi_id', models.ForeignKey(db_column='POI_id', default=0, on_delete=django.db.models.deletion.CASCADE, to='mysite.Dublincore')),
+                ('poi_id', models.ForeignKey(db_column='POI_id', default=0, on_delete=django.db.models.deletion.CASCADE, to='mysite.Poi')),
                 ('soi_id_fk', models.ForeignKey(db_column='SOI_id_fk', on_delete=django.db.models.deletion.CASCADE, to='mysite.SoiStory')),
             ],
             options={
@@ -854,7 +854,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='gamechesthistory',
             name='poi_id',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='mysite.Dublincore'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='mysite.Poi'),
         ),
         migrations.AddField(
             model_name='gameattrecord',
@@ -914,7 +914,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='eventchesthistory',
             name='poi_id',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='mysite.Dublincore'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='mysite.Poi'),
         ),
         migrations.AddField(
             model_name='eventattrecord',
@@ -939,7 +939,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='aoipois',
             name='poi_id',
-            field=models.ForeignKey(blank=True, db_column='POI_id', null=True, on_delete=django.db.models.deletion.CASCADE, to='mysite.Dublincore'),
+            field=models.ForeignKey(blank=True, db_column='POI_id', null=True, on_delete=django.db.models.deletion.CASCADE, to='mysite.Poi'),
         ),
         migrations.AlterUniqueTogether(
             name='gamerecordhistory',

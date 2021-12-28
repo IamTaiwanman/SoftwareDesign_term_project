@@ -50,73 +50,7 @@ class Area(models.Model):
     class Meta:
         db_table = 'area'
 
-
-class Area00(models.Model):
-    area_id = models.IntegerField(primary_key=True,default=0)
-    area_country = models.CharField(max_length=50, blank=True, null=True)
-    area_type = models.CharField(max_length=50, blank=True, null=True)
-    area_name_en = models.CharField(max_length=50)
-    area_name_ch = models.CharField(max_length=50)
-    area_description = models.CharField(max_length=1000, blank=True, null=True)
-    area_city = models.CharField(max_length=50, blank=True, null=True)
-    area_coordinate = models.CharField(max_length=100, blank=True, null=True)
-
-    class Meta:
-        db_table = 'area00'
-
-
-class Area2(models.Model):
-    area_id = models.IntegerField(primary_key=True,default=0)
-    area_country = models.CharField(max_length=50)
-    area_name_ch = models.CharField(max_length=50)
-    area_name_en = models.CharField(max_length=50)
-    area_count = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'area2'
-
-
-class Chapter(models.Model):
-    chapterid = models.CharField(db_column='chapterId', max_length=50,primary_key=True)  # Field name made lowercase.
-    poiid = models.CharField(db_column='POIId', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    sequence = models.IntegerField(blank=True, null=True)
-    chaptertitle = models.CharField(db_column='chapterTitle', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    chapterdescription = models.CharField(db_column='chapterDescription', max_length=500, blank=True, null=True)  # Field name made lowercase.
-    posttime = models.DateTimeField(db_column='postTime', blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        db_table = 'chapter'
-
-
-class Country(models.Model):
-    country_id = models.IntegerField(primary_key=True)
-    area_country = models.CharField(max_length=50)
-    area_country_en = models.CharField(max_length=50, blank=True, null=True)
-
-    class Meta:
-        db_table = 'country'
-
-
-class DailyXoi(models.Model):
-    xoi_id = models.IntegerField(primary_key=True)
-    sequence = models.SmallIntegerField()
-    xoi_type = models.IntegerField()
-
-    class Meta:
-        db_table = 'daily_xoi'
-
-
-
-class DocentArea(models.Model):
-    fk_userid = models.IntegerField(primary_key=True)
-    area_name_en = models.CharField(max_length=255)
-
-    class Meta:
-        db_table = 'docent_area'
-
-
-
-class Dublincore(models.Model):
+class Poi(models.Model):
     poi_id = models.IntegerField(db_column='POI_id',primary_key=True)  # Field name made lowercase.
     poi_name = models.CharField(db_column='POI_name', max_length=100, blank=True, null=True)  # Field name made lowercase.
     poi_name_old = models.CharField(db_column='POI_name_old', max_length=50, blank=True, null=True)  # Field name made lowercase.
@@ -187,7 +121,7 @@ class Mpeg(models.Model):
     picture_source = models.CharField(max_length=50, blank=True, null=True)
     picture_rights = models.CharField(max_length=50, blank=True, null=True)
     picture_upload_time = models.DateTimeField()
-    foreignkey = models.ForeignKey(Dublincore,db_column='foreignKey', related_name="poi",on_delete = models.CASCADE, null=True)  # Field name made lowercase.
+    foreignkey = models.ForeignKey(Poi,db_column='foreignKey', related_name="poi",on_delete = models.CASCADE, null=True)  # Field name made lowercase.
     format = models.SmallIntegerField()
 
     class Meta:
@@ -230,7 +164,7 @@ class Sequence(models.Model):
     context_title = models.CharField(db_column='Context_title', max_length=50, blank=True, null=True)  # Field name made lowercase.
     context_content = models.CharField(db_column='Context_content', max_length=400, blank=True, null=True)  # Field name made lowercase.
     context_picture = models.CharField(db_column='Context_picture', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    poi_id = models.ForeignKey(Dublincore,db_column='POI_id', related_name="pois",on_delete = models.CASCADE, blank=True, null=True)  # Field name made lowercase.
+    poi_id = models.ForeignKey(Poi,db_column='POI_id', related_name="pois",on_delete = models.CASCADE, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         db_table = 'sequence'
@@ -359,7 +293,7 @@ class AoiPois(models.Model):
     context_title = models.CharField(db_column='Context_title', max_length=50, blank=True, null=True)  # Field name made lowercase.
     context_content = models.CharField(db_column='Context_content', max_length=400, blank=True, null=True)  # Field name made lowercase.
     context_picture = models.CharField(db_column='Context_picture', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    poi_id = models.ForeignKey(Dublincore,db_column='POI_id', blank=True, null=True,on_delete = models.CASCADE)  # Field name made lowercase.
+    poi_id = models.ForeignKey(Poi,db_column='POI_id', blank=True, null=True,on_delete = models.CASCADE)  # Field name made lowercase.
 
     class Meta:
         db_table = 'AOI_POIs'
@@ -386,7 +320,7 @@ class SoiStory(models.Model):
 class SoiStoryXoi(models.Model):
     soi_xois_id = models.IntegerField(db_column='SOI_XOIs_id',primary_key=True)  # Field name made lowercase.
     soi_id_fk = models.ForeignKey(SoiStory,db_column='SOI_id_fk',on_delete = models.CASCADE)  # Field name made lowercase.
-    poi_id = models.ForeignKey(Dublincore,db_column='POI_id',default=0,on_delete = models.CASCADE)  # Field name made lowercase.
+    poi_id = models.ForeignKey(Poi,db_column='POI_id',default=0,on_delete = models.CASCADE)  # Field name made lowercase.
     aoi_id = models.ForeignKey(Aoi,db_column='AOI_id',default=0,on_delete = models.CASCADE)  # Field name made lowercase.
     loi_id = models.ForeignKey(RoutePlanning,db_column='LOI_id',default=0,on_delete = models.CASCADE)  # Field name made lowercase.
 
@@ -499,7 +433,7 @@ class GameSetting(models.Model):
 class GameChestSetting(models.Model):
     id = models.AutoField(primary_key=True)
     room_id = models.ForeignKey(GameSetting, on_delete=models.CASCADE)
-    poi_id = models.ForeignKey(Dublincore,blank=True, null=True, on_delete=models.SET_NULL)
+    poi_id = models.ForeignKey(Poi,blank=True, null=True, on_delete=models.SET_NULL)
     lat = models.FloatField()
     lng = models.FloatField()
     num = models.IntegerField(blank=True, null=True)
@@ -534,7 +468,7 @@ class GameHistory(models.Model):
 class GameChestHistory(models.Model):
     id = models.AutoField(primary_key=True)
     game_id = models.ForeignKey(GameHistory, on_delete=models.CASCADE)
-    poi_id = models.ForeignKey(Dublincore,blank=True, null=True, on_delete=models.SET_NULL)
+    poi_id = models.ForeignKey(Poi,blank=True, null=True, on_delete=models.SET_NULL)
     src_id = models.IntegerField(blank=True, null=True)
     lat = models.FloatField()
     lng = models.FloatField()
@@ -689,7 +623,7 @@ class EventHistory(models.Model):
 class EventChestSetting(models.Model):
     id = models.AutoField(primary_key=True)
     room_id = models.ForeignKey(EventSetting, on_delete=models.CASCADE)
-    poi_id = models.ForeignKey(Dublincore,blank=True, null=True, on_delete=models.SET_NULL)
+    poi_id = models.ForeignKey(Poi,blank=True, null=True, on_delete=models.SET_NULL)
     lat = models.FloatField()
     lng = models.FloatField()
     num = models.IntegerField(blank=True, null=True)
@@ -713,7 +647,7 @@ class EventChestSetting(models.Model):
 class EventChestHistory(models.Model):
     id = models.AutoField(primary_key=True)
     game_id = models.ForeignKey(EventHistory, on_delete=models.CASCADE)
-    poi_id = models.ForeignKey(Dublincore,blank=True, null=True, on_delete=models.SET_NULL)
+    poi_id = models.ForeignKey(Poi,blank=True, null=True, on_delete=models.SET_NULL)
     src_id = models.IntegerField(blank=True, null=True)
     lat = models.FloatField()
     lng = models.FloatField()

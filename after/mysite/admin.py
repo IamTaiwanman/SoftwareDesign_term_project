@@ -20,7 +20,7 @@ class UserAdmin(admin.ModelAdmin):
 	list_display = ('user_id','user_name','password','email')
 
 
-admin.site.register(models.Dublincore, PoiAdmin)
+admin.site.register(models.Poi, PoiAdmin)
 admin.site.register(models.RoutePlanning, LoiAdmin)
 admin.site.register(models.Aoi)
 admin.site.register(UserProfile,UserAdmin)
